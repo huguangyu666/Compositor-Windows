@@ -39,14 +39,37 @@ public sealed partial class MainWindow
             }, cancellation).WaitAsync(cancellation);
         }
         cancellation.ThrowIfCancellationRequested();
-        var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
-        bool waiting = true;
-        QueueCanvasInput(owner, () =>
+        RequireEditorTarget(args); RequireEditorIdle();
+        McpActivityPlan? plan = null;
+        if (imported is not null)
         {
-            if (!waiting || cancellation.IsCancellationRequested) return;
-            try
+            var manifest = owner.Snapshot.Manifest;
+            plan = new(new() { Origin = new(Math.Floor((manifest.Width - imported.Width) / 2d), Math.Floor((manifest.Height - imported.Height) / 2d)),
+                Size = new(imported.Width, imported.Height) }, "Mcp_Creating", Creating: true);
+        }
+        else if (Guid.TryParse(args["layerId"]?.GetValue<string>(), out var targetId)
+            && owner.Snapshot.Manifest.Layers.FirstOrDefault(l => l.Id == targetId) is { } target)
+        {
+            if (name == "editor_layer_transform")
             {
-                RequireEditorTarget(args); RequireEditorIdle();
+                var edit = owner.BeginTransformDraft([targetId]) ?? throw new InvalidOperationException("Choose a visible layer or folder with drawable content.");
+                var initial = edit.Value; var next = CopyTransform(initial);
+                next.Origin = new(EditorLayerNumber(args, "x", initial.Origin.X), EditorLayerNumber(args, "y", initial.Origin.Y));
+                next.Size = new(EditorLayerNumber(args, "width", initial.Size.Width), EditorLayerNumber(args, "height", initial.Size.Height));
+                next.Rotation = EditorLayerNumber(args, "rotation", initial.Rotation);
+                if (!next.IsValid) throw new ArgumentException("Invalid layer bounds: x/y ±1000000, width/height 1–300000, finite rotation.");
+                if (!next.Equals(initial)) plan = new(next, "Mcp_Moving", Source: initial);
+            }
+            else if (!target.IsGroupOrFalse && name is "editor_layer_duplicate" or "editor_layer_delete" or "editor_layer_visibility" or "editor_layer_opacity" or "editor_layer_blend")
+                plan = new(CopyTransform(target.Transform), name == "editor_layer_delete" ? "Mcp_Deleting" : name == "editor_layer_duplicate" ? "Mcp_Creating" : "Mcp_Editing",
+                    Creating: name == "editor_layer_duplicate");
+        }
+        var visual = await PreviewMcpActivityAsync(owner, plan, cancellation);
+        bool applied = false;
+        try
+        {
+            await QueueEditorActionAsync(owner, args, cancellation, () =>
+            {
                 if (name == "editor_layer_import")
                 {
                     using var batch = owner.BeginFileImport();
@@ -108,12 +131,10 @@ public sealed partial class MainWindow
                         default: throw new ArgumentException("Unknown live layer tool.");
                     }
                 }
-                completion.TrySetResult();
-            }
-            catch (Exception ex) { completion.TrySetException(ex); }
-        });
-        try { await completion.Task.WaitAsync(cancellation); }
-        finally { waiting = false; }
+            });
+            applied = true;
+        }
+        finally { CompleteMcpActivity(visual, applied); }
     }
 
     private void SelectEditorLayer(EditorDocument owner, Guid? id)

@@ -94,6 +94,12 @@ and cannot apply later. None of these layer commands uploads images or starts a 
 History uses the same selection synchronization as the editor's Undo/Redo commands, so the layer
 rows and transform controls follow the restored active layer.
 
+The editor displays local MCP operation feedback without extra tool parameters: a virtual cursor
+draws the exact creation bounds before publication, transforms show their destination, and batches
+use compact feedback. **View > AI Operation Animation** controls the overlay; Windows reduced-motion
+settings suppress movement and delay. Feedback adds no document layers or history. Targets are
+revalidated after the preview, so an intervening document edit or switch refuses stale publication.
+
 `editor_state` includes `selectedLayerIds`; each layer also reports `kind`, `hasMask` and
 `blendModeName`. The existing numeric `blendMode` field is retained. Layer arrays are in manifest
 order (bottom to top among siblings). Transform x/y describe the unrotated bounds; rotation is

@@ -20,6 +20,77 @@ public sealed class ImageGenerationTests
     };
 
     [Fact]
+    public async Task UrlResponseDownloadsPngWithoutApiCredentials()
+    {
+        int calls = 0;
+        using var http = new HttpClient(new Handler((request, _) =>
+        {
+            calls++;
+            if (request.Method == HttpMethod.Post)
+                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+                { Content = new StringContent("{\"data\":[{\"url\":\"https://cdn.example.test/image.png?signature=test\",\"revised_prompt\":\"a boat\"}]}") });
+            Assert.Null(request.Headers.Authorization);
+            Assert.False(request.Headers.Contains("Chatgpt-Account-Id"));
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(Png) });
+        }));
+        var result = await new ImageGenerationClient(http, "api-test-key", imageHttp: http)
+            .GenerateAsync(new("prompt"));
+        Assert.Equal(Png, result.Png);
+        Assert.Equal("a boat", result.RevisedPrompt);
+        Assert.Equal(2, calls);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task UrlResponseUsesIndependentClientForGenerationAndEditing(bool editing)
+    {
+        using var api = new HttpClient(new Handler((request, _) =>
+        {
+            Assert.Equal(HttpMethod.Post, request.Method);
+            Assert.NotNull(request.Headers.Authorization);
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+            { Content = new StringContent("{\"data\":[{\"b64_json\":null,\"url\":\"https://cdn.example.test/image.png\"}]}") });
+        }));
+        using var download = new HttpClient(new Handler((request, _) =>
+        {
+            Assert.Equal(HttpMethod.Get, request.Method);
+            Assert.Null(request.Headers.Authorization);
+            Assert.False(request.Headers.Contains("Chatgpt-Account-Id"));
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new ByteArrayContent(Png) });
+        }));
+        var result = await new ImageGenerationClient(api, "api-test-key", imageHttp: download)
+            .GenerateAsync(new("prompt") { Image = editing ? new(Png) : null });
+        Assert.Equal(Png, result.Png);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task Base64TakesPrecedenceAndInvalidBase64DoesNotTriggerDownload(bool valid)
+    {
+        using var api = new HttpClient(new Handler((_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+        { Content = new StringContent(JsonSerializer.Serialize(new { data = new[] { new
+            { b64_json = valid ? Convert.ToBase64String(Png) : "invalid!", url = "https://cdn.example.test/image.png" } } })) })));
+        using var download = new HttpClient(new Handler((_, _) => throw new Xunit.Sdk.XunitException("Download called")));
+        var client = new ImageGenerationClient(api, "api-test-key", imageHttp: download);
+        if (valid) Assert.Equal(Png, (await client.GenerateAsync(new("prompt"))).Png);
+        else await Assert.ThrowsAsync<AiServiceException>(() => client.GenerateAsync(new("prompt")));
+    }
+
+    [Fact]
+    public async Task DownloadedNonPngCannotBecomeSuccessfulResult()
+    {
+        using var api = new HttpClient(new Handler((_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+        { Content = new StringContent("{\"data\":[{\"url\":\"https://cdn.example.test/image.png\"}]}") })));
+        using var download = new HttpClient(new Handler((_, _) => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
+        { Content = new StringContent("not a PNG") })));
+        var error = await Assert.ThrowsAsync<AiServiceException>(() =>
+            new ImageGenerationClient(api, "api-test-key", imageHttp: download).GenerateAsync(new("prompt")));
+        Assert.Contains("PNG", error.Message);
+    }
+
+    [Fact]
     public async Task ApiGenerationPreservesModelAndUsesOnlyApiCredentials()
     {
         using var http = new HttpClient(new Handler(async (request, ct) =>
@@ -41,12 +112,27 @@ public sealed class ImageGenerationTests
     }
 
     [Fact]
+    public async Task CustomApiGenerationRequestsBase64ToAvoidExternalDownload()
+    {
+        using var http = new HttpClient(new Handler(async (request, ct) =>
+        {
+            using var json = JsonDocument.Parse(await request.Content!.ReadAsStringAsync(ct));
+            Assert.Equal("b64_json", json.RootElement.GetProperty("response_format").GetString());
+            return ImageResponse();
+        }));
+        var result = await new ImageGenerationClient(http, "api-test-key", new("https://images.example.test/v1/"))
+            .GenerateAsync(new("prompt"));
+        Assert.Equal(Png, result.Png);
+    }
+
+    [Fact]
     public async Task AccountEditingSendsAnInputAndMaskOnTheSameJsonContract()
     {
         using var http = new HttpClient(new Handler(async (request, ct) =>
         {
             Assert.EndsWith("/images/edits", request.RequestUri!.AbsolutePath);
             using var json = JsonDocument.Parse(await request.Content!.ReadAsStringAsync(ct));
+            Assert.False(json.RootElement.TryGetProperty("response_format", out _));
             var input = json.RootElement.GetProperty("images")[0].GetProperty("image_url").GetString();
             Assert.Equal("data:image/png;base64," + Convert.ToBase64String(Png), input);
             Assert.Equal(input, json.RootElement.GetProperty("mask").GetProperty("image_url").GetString());
@@ -73,6 +159,7 @@ public sealed class ImageGenerationTests
             Assert.Equal("change the sky", await parts["prompt"].ReadAsStringAsync(ct));
             Assert.Equal("1", await parts["n"].ReadAsStringAsync(ct));
             Assert.Equal("png", await parts["output_format"].ReadAsStringAsync(ct));
+            Assert.Equal("b64_json", await parts["response_format"].ReadAsStringAsync(ct));
             foreach (string name in new[] { "image[]", "mask" })
             {
                 Assert.Equal("image/png", parts[name].Headers.ContentType!.MediaType);
@@ -111,7 +198,6 @@ public sealed class ImageGenerationTests
     [Theory]
     [InlineData("{}")]
     [InlineData("{\"data\":[]}")]
-    [InlineData("{\"data\":[{\"url\":\"https://example.com/image.png\"}]}")]
     [InlineData("{\"data\":[{\"b64_json\":\"not-base64!\"}]}")]
     [InlineData("{\"data\":[{\"b64_json\":\"aGVsbG8=\"}]}")]
     [InlineData("not json")]

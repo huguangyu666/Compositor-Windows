@@ -37,6 +37,7 @@ public sealed partial class MainWindow
     private void TrackEditorDocument(EditorDocument? current)
     {
         if (ReferenceEquals(editorTrackedDocument, current)) return;
+        StopMcpActivity(); lastMcpActivity = 0;
         if (editorTrackedDocument is { } old)
         { old.Changed -= EditorDocumentChanged; old.PixelsChanged -= EditorDocumentChanged; old.SelectionChanged -= EditorDocumentChanged; old.LayerLocksChanged -= EditorDocumentChanged; }
         editorTrackedDocument = current;

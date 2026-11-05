@@ -53,6 +53,61 @@ public sealed partial class MainWindow
         }
         cancellation.ThrowIfCancellationRequested();
         Dictionary<string, Guid>? aliases = null;
+        EditorDocument.AutomationEdit? prepared = null;
+        Guid? resultLayer = null;
+        McpActivityPlan? plan = null;
+        await QueueEditorActionAsync(owner, args, cancellation, () =>
+        {
+            if (name == "editor_select")
+            {
+                if (selection is { IsEmpty: false })
+                {
+                    var bounds = selection.Bounds;
+                    plan = new(new() { Origin = new(bounds.X, bounds.Y), Size = new(bounds.Width, bounds.Height) }, "Mcp_Editing", Creating: true);
+                }
+            }
+            else if (name == "editor_mask")
+            {
+                var layer = owner.Snapshot.Manifest.Layers.Single(l => l.Id == Guid.Parse(args["layerId"]!.GetValue<string>()));
+                plan = new(CopyTransform(layer.Transform), "Mcp_Editing");
+            }
+            else
+            {
+                prepared = name == "editor_batch"
+                    ? EditorAutomation.PrepareBatch(owner, args["commands"] as JsonArray ?? throw new ArgumentException("Missing commands."), out aliases)
+                    : EditorAutomation.Prepare(owner, name, args, out resultLayer);
+                if (prepared.HasChanges) plan = DescribeMcpActivity(owner.Snapshot, prepared.Snapshot, aliases is not null ? args["commands"]!.AsArray().Count : 1);
+            }
+        });
+        var visual = await PreviewMcpActivityAsync(owner, plan, cancellation);
+        bool applied = false;
+        try
+        {
+            await QueueEditorActionAsync(owner, args, cancellation, () =>
+            {
+                if (name == "editor_mask")
+                {
+                    if (!maskRefinement!.Commit()) throw new InvalidOperationException("The mask source changed. Read editor_state before retrying.");
+                }
+                else if (name == "editor_select") owner.SetSelectionUndoable(selection);
+                else
+                {
+                    if (!prepared!.Commit()) throw new InvalidOperationException("The edit source changed. Read editor_state before retrying.");
+                    if (name == "editor_batch" || args["layerId"] is null) SelectEditorLayer(owner, name == "editor_batch" ? owner.Snapshot.Manifest.ActiveLayerId : resultLayer);
+                }
+            });
+            applied = true;
+        }
+        finally { CompleteMcpActivity(visual, applied); }
+        var state = EditorState();
+        if (aliases is not null) state["batchAliases"] = System.Text.Json.JsonSerializer.SerializeToNode(aliases);
+        return EditorResult(state);
+    }
+
+    private async Task QueueEditorActionAsync(EditorDocument owner, JsonObject args, CancellationToken cancellation, Action apply)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        RequireEditorTarget(args); RequireEditorIdle();
         var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         bool waiting = true;
         QueueCanvasInput(owner, () =>
@@ -61,27 +116,13 @@ public sealed partial class MainWindow
             try
             {
                 RequireEditorTarget(args); RequireEditorIdle();
-                if (name == "editor_mask")
-                {
-                    if (!maskRefinement!.Commit()) throw new InvalidOperationException("The mask source changed. Read editor_state before retrying.");
-                }
-                else if (name == "editor_select") owner.SetSelectionUndoable(selection);
-                else if (name == "editor_batch") aliases = EditorAutomation.ApplyBatch(owner, args["commands"] as JsonArray ?? throw new ArgumentException("Missing commands."));
-                else
-                {
-                    Guid? id = EditorAutomation.Apply(owner, name, args);
-                    if (args["layerId"] is null) SelectEditorLayer(owner, id);
-                }
-                if (name == "editor_batch") SelectEditorLayer(owner, owner.Snapshot.Manifest.ActiveLayerId);
+                apply();
                 completion.TrySetResult();
             }
             catch (Exception ex) { completion.TrySetException(ex); }
         });
         try { await completion.Task.WaitAsync(cancellation); }
         finally { waiting = false; }
-        var state = EditorState();
-        if (aliases is not null) state["batchAliases"] = System.Text.Json.JsonSerializer.SerializeToNode(aliases);
-        return EditorResult(state);
     }
 
     private static async Task<MaskSurface> ReadEditorMaskAsync(string path, long maxPixels, CancellationToken cancellation = default)

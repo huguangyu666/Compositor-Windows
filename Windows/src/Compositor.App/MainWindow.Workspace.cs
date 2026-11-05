@@ -108,6 +108,7 @@ public sealed partial class MainWindow
         SnapToBoundsToggle.IsChecked = snapToBounds;
         GridToggle.IsChecked = showsGrid;
         PixelGridToggle.IsChecked = showPixelGrid;
+        McpAnimationToggle.IsChecked = ReadFlag("mcp-operation-animation", true);
         RefreshGuides();
         QueueViewportFrame();
     }

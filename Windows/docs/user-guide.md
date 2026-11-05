@@ -795,6 +795,14 @@ The API adapters do not expose provider task IDs or support resuming interrupted
 External agents can also create/edit text and adjustment layers, import exact selection masks,
 and group multiple local edits into a single undoable batch. See the MCP reference for arguments.
 
+MCP creation requests show a virtual AI cursor dragging a frame from the element's top-left,
+with its actual width × height in document pixels. The element appears after the frame is drawn;
+transforms animate toward the requested placement, while masks and adjustments highlight their
+target. Batches and rapid consecutive requests use shorter feedback. The overlay follows zoom
+and pan, does not capture input, and adds no layers or Undo steps. **View > AI Operation Animation**
+turns it off and remembers the choice. Windows animation settings are respected: when animations
+are disabled, feedback is static and editing has no animation delay.
+
 AI layout commands can group/ungroup layers, align their rotated placement bounds to each other
 or the canvas, distribute equal gaps or centers, and crop the canvas without deleting original
 image pixels. Folder content, including hidden children, moves together; linked masks follow and

@@ -5,7 +5,7 @@
 A free, open-source Windows image editor built with C# and WinUI 3. Compose layers, edit photos,
 and let an external AI agent operate the editor through MCP.
 
-**Public Beta · Windows x64.** [Download the Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261105).
+**Public Beta · Windows x64.** [Download the Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261105.1).
 Run `Compositor.App.exe` directly; .NET and WinUI runtimes are bundled. The complete ZIP also
 includes the optional MCP server, agent skill, instructions and licenses.
 
@@ -25,6 +25,7 @@ saved the project and exported the image. The background artwork was generated s
 - Configure a compatible image API, use selections and reference images, preview results and
   accept them as undoable layers.
 - Connect an MCP client to inspect the live canvas and edit layers, typography, selections and masks.
+- Watch a virtual AI cursor draw exact creation bounds before elements appear, with compact batch feedback.
 
 ## Let AI operate the editor
 

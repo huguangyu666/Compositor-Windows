@@ -4,7 +4,7 @@
 
 免费开源的 Windows 图像编辑器，采用 C# 和 WinUI 3。支持图层合成、摄影调色、AI 图像编辑，以及通过 MCP 让外部 AI 直接操作软件。
 
-**公开测试版 · Windows x64。** [下载 Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261105)。
+**公开测试版 · Windows x64。** [下载 Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261105.1)。
 双击 `Compositor.App.exe` 即可启动，已内置 .NET 和 WinUI 运行库；完整 ZIP 另含 MCP 程序、配套 Skill、中文说明和许可证。
 
 当前版本未签名，已在开发电脑上完成基本编辑、保存重开等验证，尚未验证干净系统和更多硬件环境。
@@ -20,6 +20,7 @@
 - 使用曲线、色彩平衡和局部蒙版调整进行摄影调色。
 - 自行填写兼容服务的 API 地址与 Key，结合选区和参考图生成，预览后接受为可撤销图层。
 - 接入 MCP，让外部 AI 读取实时画布、操作图层和文字、修改选区与蒙版。
+- AI 创建元素时先用虚拟箭头拉出准确尺寸框，再显示内容；移动有过渡，批量操作简化反馈。
 
 ## 让 AI 直接操作编辑器
 

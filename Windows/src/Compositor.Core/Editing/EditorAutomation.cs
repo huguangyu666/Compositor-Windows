@@ -14,11 +14,26 @@ public static partial class EditorAutomation
         return result;
     }
 
+    public static EditorDocument.AutomationEdit Prepare(EditorDocument owner, string tool, JsonObject args, out Guid? result)
+    {
+        Guid? id = null;
+        var edit = owner.PrepareAutomation(draft => id = ApplyCommand(draft, tool, args), tool);
+        result = id;
+        return edit;
+    }
+
     public static Dictionary<string, Guid> ApplyBatch(EditorDocument owner, JsonArray commands)
+    {
+        var prepared = PrepareBatch(owner, commands, out var names);
+        prepared.Commit();
+        return names;
+    }
+
+    public static EditorDocument.AutomationEdit PrepareBatch(EditorDocument owner, JsonArray commands, out Dictionary<string, Guid> aliases)
     {
         if (commands.Count is < 1 or > 32) throw new ArgumentException("A batch needs 1–32 local editing commands.");
         var names = new Dictionary<string, Guid>(StringComparer.Ordinal);
-        owner.ApplyAutomation(draft =>
+        var prepared = owner.PrepareAutomation(draft =>
         {
             foreach (var item in commands)
             {
@@ -41,7 +56,8 @@ public static partial class EditorAutomation
                 }
             }
         });
-        return names;
+        aliases = names;
+        return prepared;
     }
 
     private static Guid? ApplyCommand(EditorDocument owner, string tool, JsonObject args)
@@ -232,26 +248,60 @@ public static partial class EditorAutomation
 public sealed partial class EditorDocument
 {
     internal void ApplyAutomation(Action<EditorDocument> edit, string operation = "Batch")
+        => PrepareAutomation(edit, operation).Commit();
+
+    internal AutomationEdit PrepareAutomation(Action<EditorDocument> edit, string operation = "Batch") => new(this, edit, operation);
+
+    /// <summary>Validated local edits can show their exact placement before publishing one history step.</summary>
+    public sealed class AutomationEdit
     {
-        if (ActiveTextDraft is not null) throw new InvalidOperationException("Finish the text draft first.");
-        var before = CaptureState();
-        var fork = new EditorDocument(new ProjectSnapshot
+        private readonly EditorDocument owner, fork;
+        private readonly MementoState before;
+        private readonly string operation;
+        private readonly Dictionary<Guid, int> imageRevisions, maskRevisions;
+        private bool committed;
+        public ProjectSnapshot Snapshot => fork.Snapshot;
+        public bool HasChanges { get; }
+
+        internal AutomationEdit(EditorDocument owner, Action<EditorDocument> edit, string operation)
         {
-            Manifest = ManifestJson.Deserialize(System.Text.Encoding.UTF8.GetString(before.Manifest)),
-            Images = new Dictionary<Guid, Surface>(Snapshot.Images), Masks = new Dictionary<Guid, MaskSurface>(Snapshot.Masks),
-        }) { ActiveSelection = ActiveSelection, suppressUndoHistory = true };
-        foreach (var pair in layerLocks) fork.layerLocks[pair.Key] = pair.Value;
-        edit(fork);
-        ValidateLayerProtection(fork.Snapshot);
-        ProjectValidator.Validate(fork.Snapshot.Manifest);
-        if (fork.Snapshot.Images.Values.Sum(s => s.PixelCount) + fork.Snapshot.Masks.Values.Sum(s => (long)s.Width * s.Height) > Limits.DocumentPixelBudget)
-            throw new ArgumentException("The batch exceeds the document pixel budget.");
-        bool sameAssets = Snapshot.Images.Count == fork.Snapshot.Images.Count && Snapshot.Masks.Count == fork.Snapshot.Masks.Count
-            && Snapshot.Images.All(pair => ReferenceEquals(pair.Value, fork.Snapshot.Images.GetValueOrDefault(pair.Key)))
-            && Snapshot.Masks.All(pair => ReferenceEquals(pair.Value, fork.Snapshot.Masks.GetValueOrDefault(pair.Key)));
-        if (before.Manifest.AsSpan().SequenceEqual(MementoOf(fork.Snapshot)) && ReferenceEquals(ActiveSelection, fork.ActiveSelection) && sameAssets) return;
-        bool selectionChanged = !ReferenceEquals(ActiveSelection, fork.ActiveSelection);
-        BeginChange(before, operation); Snapshot = fork.Snapshot; ActiveSelection = fork.ActiveSelection; coalesceKey = null; EndChange();
-        if (selectionChanged) SelectionChanged?.Invoke();
+            if (owner.ActiveTextDraft is not null) throw new InvalidOperationException("Finish the text draft first.");
+            this.owner = owner; this.operation = operation; before = owner.CaptureState();
+            imageRevisions = before.Images.ToDictionary(p => p.Key, p => p.Value.Revision);
+            maskRevisions = before.Masks.ToDictionary(p => p.Key, p => p.Value.Revision);
+            fork = new EditorDocument(new ProjectSnapshot
+            {
+                Manifest = ManifestJson.Deserialize(System.Text.Encoding.UTF8.GetString(before.Manifest)),
+                Images = new Dictionary<Guid, Surface>(before.Images), Masks = new Dictionary<Guid, MaskSurface>(before.Masks),
+            }) { ActiveSelection = before.Selection, suppressUndoHistory = true };
+            foreach (var pair in owner.layerLocks) fork.layerLocks[pair.Key] = pair.Value;
+            edit(fork);
+            owner.ValidateLayerProtection(fork.Snapshot);
+            ProjectValidator.Validate(fork.Snapshot.Manifest);
+            if (fork.Snapshot.Images.Values.Sum(s => s.PixelCount) + fork.Snapshot.Masks.Values.Sum(s => (long)s.Width * s.Height) > Limits.DocumentPixelBudget)
+                throw new ArgumentException("The batch exceeds the document pixel budget.");
+            bool sameAssets = before.Images.Count == fork.Snapshot.Images.Count && before.Masks.Count == fork.Snapshot.Masks.Count
+                && before.Images.All(pair => ReferenceEquals(pair.Value, fork.Snapshot.Images.GetValueOrDefault(pair.Key)))
+                && before.Masks.All(pair => ReferenceEquals(pair.Value, fork.Snapshot.Masks.GetValueOrDefault(pair.Key)));
+            HasChanges = !before.Manifest.AsSpan().SequenceEqual(MementoOf(fork.Snapshot)) || !ReferenceEquals(before.Selection, fork.ActiveSelection) || !sameAssets;
+        }
+
+        public bool Commit()
+        {
+            if (committed || owner.ActiveTextDraft is not null || owner.CurrentHistoryId != before.HistoryId
+                || !ReferenceEquals(owner.ActiveSelection, before.Selection)
+                || !before.Manifest.AsSpan().SequenceEqual(MementoOf(owner.Snapshot))
+                || before.Images.Count != owner.Snapshot.Images.Count || before.Masks.Count != owner.Snapshot.Masks.Count
+                || before.Images.Any(p => !ReferenceEquals(p.Value, owner.Snapshot.Images.GetValueOrDefault(p.Key)) || p.Value.Revision != imageRevisions[p.Key])
+                || before.Masks.Any(p => !ReferenceEquals(p.Value, owner.Snapshot.Masks.GetValueOrDefault(p.Key)) || p.Value.Revision != maskRevisions[p.Key])) return false;
+            owner.ValidateLayerProtection(fork.Snapshot);
+            committed = true;
+            if (!HasChanges) return true;
+            bool selectionChanged = !ReferenceEquals(owner.ActiveSelection, fork.ActiveSelection);
+            owner.BeginChange(owner.IsDirty == before.Dirty ? before : owner.CaptureState(), operation);
+            owner.Snapshot = fork.Snapshot; owner.ActiveSelection = fork.ActiveSelection; owner.coalesceKey = null; owner.EndChange();
+            if (selectionChanged) owner.SelectionChanged?.Invoke();
+            return true;
+        }
     }
 }

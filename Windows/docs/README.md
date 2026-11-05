@@ -1,6 +1,7 @@
 # Windows documentation
 
 - [User guide](user-guide.md): workspace, editing and file operations.
+- [MCP operation animation](mcp-operation-animation.md): virtual cursor, exact bounds and reduced motion.
 - [MCP](mcp.md): live editor tools, saved-package tools and skill installation.
 - [Companion skill](../skills/compositor-mcp/SKILL.md): reusable editing workflows.
 - [AI integration](ai-integration.md): custom API connections, references and privacy.

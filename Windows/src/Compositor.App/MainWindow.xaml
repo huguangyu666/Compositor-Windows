@@ -264,6 +264,7 @@
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator />
                 <ToggleMenuFlyoutItem x:Name="PixelGridToggle" x:Uid="V_ShowGrid" Text="Show Pixel Grid" Click="OnShowPixelGrid" ToolTipService.ToolTip="Visible from 800%" />
+                <ToggleMenuFlyoutItem x:Name="McpAnimationToggle" x:Uid="V_McpAnimation" Text="AI Operation Animation" IsChecked="True" Click="OnToggleMcpAnimation" />
                 <ToggleMenuFlyoutItem x:Name="RulersToggle" x:Uid="N_Rulers" Text="Show Rulers" Click="OnShowRulers">
                     <ToggleMenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Key="R" Modifiers="Control" /></ToggleMenuFlyoutItem.KeyboardAccelerators>
                 </ToggleMenuFlyoutItem>
@@ -658,6 +659,20 @@
                 <Canvas x:Name="NavigationOverlay" IsHitTestVisible="False">
                     <canvas:CanvasControl x:Name="SampleRingCanvas" Width="116" Height="116" ClearColor="Transparent" Draw="OnSampleRingDraw" Visibility="Collapsed" />
                     <Line x:Name="RulerGuidePreview" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                    <Canvas x:Name="McpActivityHost" IsHitTestVisible="False" Visibility="Collapsed">
+                        <Polygon x:Name="McpActivityFrame" Stroke="#FFBBA0FF" StrokeThickness="1.5" Fill="#128B5CF6" />
+                        <Grid x:Name="McpActivityCursor" Width="22" Height="28">
+                            <Path Data="M1,1 L1,22 L7,16 L11,26 L15,24 L11,15 L20,15 Z"
+                                  Fill="#FFF8F5FF" Stroke="#FF211A35" StrokeThickness="1.5" />
+                        </Grid>
+                        <Border x:Name="McpActivityBadge" Background="#EF211C32" BorderBrush="#806F69AB"
+                                BorderThickness="1" CornerRadius="6" Padding="10,6" MaxWidth="250">
+                            <StackPanel Spacing="2">
+                                <TextBlock x:Name="McpActivityLabel" Foreground="#FFE9DDFF" FontSize="11" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                <TextBlock x:Name="McpActivitySize" Foreground="#FFBBB3CE" FontSize="10" />
+                            </StackPanel>
+                        </Border>
+                    </Canvas>
                 </Canvas>
                 <Border x:Name="MaskAloneBadge" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Bottom"
                         Height="26" Margin="8,0,8,14" Padding="11,0,8,0" CornerRadius="13"

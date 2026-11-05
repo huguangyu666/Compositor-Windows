@@ -2572,4 +2572,11 @@
   <data name="H_Layout" xml:space="preserve"><value>Layer layout</value></data>
   <data name="H_Batch" xml:space="preserve"><value>Batch edit</value></data>
   <data name="H_Pixels" xml:space="preserve"><value>Edit pixels</value></data>
+  <data name="V_McpAnimation.Text" xml:space="preserve"><value>AI Operation Animation</value></data>
+  <data name="Mcp_Creating" xml:space="preserve"><value>Creating…</value></data>
+  <data name="Mcp_Moving" xml:space="preserve"><value>Transforming…</value></data>
+  <data name="Mcp_Editing" xml:space="preserve"><value>Editing…</value></data>
+  <data name="Mcp_Deleting" xml:space="preserve"><value>Deleting…</value></data>
+  <data name="Mcp_Batch" xml:space="preserve"><value>{0} operations…</value></data>
+  <data name="Mcp_Done" xml:space="preserve"><value>Done</value></data>
 </root>

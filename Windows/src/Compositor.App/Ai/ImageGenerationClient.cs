@@ -11,6 +11,7 @@ namespace Compositor.App.Ai;
 internal sealed class ImageGenerationClient
 {
     private readonly HttpClient http;
+    private readonly HttpClient imageHttp;
     private readonly string? apiKey;
     private readonly Func<CancellationToken, Task<ChatGptTokens>>? accountTokens;
     private readonly Uri baseUri;
@@ -19,11 +20,12 @@ internal sealed class ImageGenerationClient
     private const int MaxOutputBytes = 64 * 1024 * 1024;
 
     public ImageGenerationClient(HttpClient http, string apiKey, Uri? apiBase = null,
-        int responseByteLimit = 96 * 1024 * 1024)
+        int responseByteLimit = 96 * 1024 * 1024, HttpClient? imageHttp = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(apiKey);
         if (!AiHttp.IsCredentialValue(apiKey)) throw new ArgumentException("The API key contains invalid characters.", nameof(apiKey));
         this.http = http;
+        this.imageHttp = imageHttp ?? ImageDownload.Client;
         this.apiKey = apiKey;
         baseUri = NormalizeApiBase(apiBase ?? new("https://api.openai.com/v1/"));
         this.responseByteLimit = CheckLimit(responseByteLimit);
@@ -31,9 +33,10 @@ internal sealed class ImageGenerationClient
 
     // Pass ChatGptAccount.GetTokensAsync. There is no API-key fallback in this adapter.
     public ImageGenerationClient(HttpClient http, Func<CancellationToken, Task<ChatGptTokens>> accountTokens,
-        int responseByteLimit = 96 * 1024 * 1024)
+        int responseByteLimit = 96 * 1024 * 1024, HttpClient? imageHttp = null)
     {
         this.http = http;
+        this.imageHttp = imageHttp ?? ImageDownload.Client;
         this.accountTokens = accountTokens;
         baseUri = new("https://chatgpt.com/backend-api/codex/");
         this.responseByteLimit = CheckLimit(responseByteLimit);
@@ -55,6 +58,10 @@ internal sealed class ImageGenerationClient
             ["size"] = input.Size, ["quality"] = input.Quality, ["background"] = input.Background,
             ["output_format"] = "png"
         };
+        // Compatible gateways can otherwise return URLs that require a separate network route.
+        // Official GPT Image and account endpoints keep their existing request contract.
+        if (accountTokens is null && !baseUri.Host.Equals("api.openai.com", StringComparison.OrdinalIgnoreCase))
+            body["response_format"] = "b64_json";
         if (input.Mask is not null && input.Mask.MediaType != "image/png") throw new ArgumentException("An edit mask must be a PNG.");
         using var request = new HttpRequestMessage(HttpMethod.Post,
             new Uri(baseUri, input.Image is null ? "images/generations" : "images/edits"));
@@ -99,22 +106,32 @@ internal sealed class ImageGenerationClient
         }
         else request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         using var json = await AiHttp.SendAsync(http, request, responseByteLimit, cancellation).ConfigureAwait(false);
-        return ReadImage(json.RootElement, input.Model);
+        return await ReadImageAsync(json.RootElement, input.Model, cancellation).ConfigureAwait(false);
     }
 
-    private static ImageGenerationResult ReadImage(JsonElement root, string model)
+    private async Task<ImageGenerationResult> ReadImageAsync(JsonElement root, string model, CancellationToken cancellation)
     {
         if (root.ValueKind != JsonValueKind.Object || !root.TryGetProperty("data", out var items) ||
             items.ValueKind != JsonValueKind.Array || items.GetArrayLength() != 1)
             throw new AiServiceException("The AI service did not return exactly one image.");
         var image = items[0];
-        if (image.ValueKind != JsonValueKind.Object || !image.TryGetProperty("b64_json", out var b64) ||
-            b64.ValueKind != JsonValueKind.String || b64.GetString() is not { Length: > 0 } text ||
-            text.Length > (MaxOutputBytes + 2L) / 3 * 4)
-            throw new AiServiceException("The AI service did not return a supported image payload.");
+        if (image.ValueKind != JsonValueKind.Object)
+            throw new AiServiceException("The AI service did not return a supported image payload (expected b64_json or url).");
         byte[] png;
-        try { png = Convert.FromBase64String(text); }
-        catch (FormatException) { throw new AiServiceException("The AI service returned invalid image data."); }
+        if (image.TryGetProperty("b64_json", out var b64) && b64.ValueKind == JsonValueKind.String &&
+            b64.GetString() is { Length: > 0 } text)
+        {
+            if (text.Length > (MaxOutputBytes + 2L) / 3 * 4)
+                throw new AiServiceException("The AI response exceeds the local size limit.");
+            try { png = Convert.FromBase64String(text); }
+            catch (FormatException) { throw new AiServiceException("The AI service returned invalid image data."); }
+        }
+        else if (image.TryGetProperty("url", out var url) && url.ValueKind == JsonValueKind.String &&
+            url.GetString() is { Length: > 0 } address)
+        {
+            png = await ImageDownload.ReadAsync(imageHttp, address, MaxOutputBytes, cancellation).ConfigureAwait(false);
+        }
+        else throw new AiServiceException("The AI service did not return a supported image payload (expected b64_json or url).");
         ReadOnlySpan<byte> signature = [137, 80, 78, 71, 13, 10, 26, 10];
         if (png.Length < 8 || png.Length > MaxOutputBytes || !png.AsSpan(0, 8).SequenceEqual(signature))
             throw new AiServiceException("The AI service did not return the requested PNG format.");
