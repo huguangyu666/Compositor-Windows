@@ -1,0 +1,16 @@
+bin/
+obj/
+*.user
+.vs/
+AppPackages/
+BundleArtifacts/
+*.appx
+*.msix
+artifacts/
+TestResults/
+.lock
+
+# Raw local probe evidence; keep the curated Markdown reports in source control.
+/docs/*.log
+/docs/*.report.json
+/docs/*-process.json

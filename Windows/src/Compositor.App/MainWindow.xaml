@@ -1,0 +1,853 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Compositor.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:local="using:Compositor.App"
+    Title="Compositor">
+
+    <!-- The Mac pins dark mode for the whole app (NSApp.appearance = darkAqua), so the
+         port does too — at the application level, so flyouts and dialogs follow, with a
+         solid dark chrome color behind the theme's light text. The canvas and its overlays
+         keep their own fixed accent colors. The plain X and D keys swap and reset the
+         palette, as the macOS canvas does. -->
+    <Grid x:Name="RootGrid" AllowDrop="True" DragOver="OnDragOver" Drop="OnDrop"
+          RequestedTheme="Dark" Background="#FF1E1E1E">
+        <Grid.Resources>
+            <Style x:Key="ToolbarNavigationStyle" TargetType="Button">
+                <Setter Property="MinWidth" Value="0" />
+                <Setter Property="Height" Value="28" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="CornerRadius" Value="4" />
+            </Style>
+            <Style x:Key="SelectionModeButtonStyle" TargetType="ToggleButton">
+                <Setter Property="MinWidth" Value="64" />
+                <Setter Property="Height" Value="30" />
+                <Setter Property="Padding" Value="10,3" />
+                <Setter Property="CornerRadius" Value="3" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </Grid.Resources>
+        <Grid.KeyboardAccelerators>
+            <!-- Named because a rebind rewrites the chord on the very object that carries its handler. -->
+            <KeyboardAccelerator x:Name="SwapColorsAccelerator" Key="X" Invoked="OnSwapColorsAccelerator" />
+            <KeyboardAccelerator x:Name="ResetColorsAccelerator" Key="D" Invoked="OnResetColorsAccelerator" />
+        </Grid.KeyboardAccelerators>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <MenuBar x:Name="MenuBarRoot" Grid.Row="0">
+            <MenuBarItem x:Uid="M_File" Title="File">
+                <MenuFlyoutItem x:Name="NewProjectMenuItem" x:Uid="M_New" Text="New" Click="OnNew">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="N" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="OpenProjectMenuItem" x:Uid="M_Open" Text="Open Source…" Click="OnOpen">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="O" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="OpenProjectFolderMenuItem" x:Uid="M_OpenProjectFolder" Text="Open Project Folder…" Click="OnOpenProjectFolder">
+                    <MenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Modifiers="Control, Shift" Key="O" /></MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSubItem x:Uid="M_OpenRecent" x:Name="OpenRecentMenu" Text="Open Recent">
+                    <MenuFlyoutItem x:Name="ClearRecentMenuItem" x:Uid="M_ClearMenu" Text="Clear Menu" Click="OnClearRecentProjects" />
+                </MenuFlyoutSubItem>
+                <MenuFlyoutItem x:Name="SaveMenuItem" x:Uid="M_Save" Text="Save" Click="OnSave">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="S" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="SaveAsMenuItem" x:Uid="M_SaveAs" Text="Save As…" Click="OnSaveAs">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control, Shift" Key="S" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Name="ImportMenuItem" x:Uid="M_Import" Text="Import Image…" Click="OnImportImage">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="I" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="M_ImageSize" Text="Image Size…" Click="OnImageSize" />
+                <MenuFlyoutItem x:Uid="M_CanvasSize" Text="Canvas Size…" Click="OnCanvasSize" />
+                <MenuFlyoutItem x:Uid="M_Trim" Text="Trim…" Click="OnTrim" />
+                <MenuFlyoutItem x:Uid="M_FlipCanvasHorizontal" Text="Flip Canvas Horizontal" Click="OnFlipCanvasHorizontal" />
+                <MenuFlyoutItem x:Uid="M_FlipCanvasVertical" Text="Flip Canvas Vertical" Click="OnFlipCanvasVertical" />
+                <MenuFlyoutItem x:Uid="M_ExportPng" Text="Export PNG…" Click="OnExportPng" />
+                <MenuFlyoutItem x:Uid="M_ExportJpeg" Text="Export JPEG…" Click="OnExportJpeg" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Name="CloseProjectMenuItem" x:Uid="M_CloseProject" Text="Close Project" Click="OnCloseProject">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="W" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Uid="M_Exit" Text="Exit" Click="OnExit" />
+            </MenuBarItem>
+            <MenuBarItem x:Name="EditMenu" x:Uid="M_Edit" Title="Edit">
+                <MenuFlyoutItem x:Name="UndoMenuItem" x:Uid="M_Undo" Text="Undo" Click="OnUndo">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="Z" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="RedoMenuItem" x:Uid="M_Redo" Text="Redo" Click="OnRedo">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="Y" />
+                        <KeyboardAccelerator Modifiers="Control, Shift" Key="Z" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Name="FreeTransformMenuItem" x:Uid="Tr_FreeTransform" Text="Free Transform" Click="OnFreeTransform">
+                    <MenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Modifiers="Control" Key="T" /></MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="CopyPixelsMenuItem" x:Uid="M_CopyPixels" Text="Copy" Click="OnCopyPixels" ToolTipService.ToolTip="Ctrl+C">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="C" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="CutPixelsMenuItem" x:Uid="M_CutPixels" Text="Cut" Click="OnCutPixels" ToolTipService.ToolTip="Ctrl+X">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="X" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="PastePixelsMenuItem" x:Uid="M_PastePixels" Text="Paste" Click="OnPastePixels" ToolTipService.ToolTip="Ctrl+V">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="V" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="LayerViaCopyMenuItem" x:Uid="M_LayerViaCopy" Text="Layer via Copy" Click="OnLayerViaCopy" ToolTipService.ToolTip="Ctrl+J">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="J" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="CopyMergedMenuItem" x:Uid="M_CopyMerged" Text="Copy Merged" Click="OnCopyMerged" ToolTipService.ToolTip="Ctrl+Shift+C">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control,Shift" Key="C" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="SelectAllMenuItem" x:Uid="M_SelectAll" Text="Select All" Click="OnSelectAll" ToolTipService.ToolTip="Ctrl+A">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="A" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="InvertSelectionMenuItem" x:Uid="M_InvertSelection" Text="Inverse Selection" Click="OnInvertSelection" ToolTipService.ToolTip="Ctrl+Shift+I">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control,Shift" Key="I" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="DeselectMenuItem" x:Uid="M_Deselect" Text="Deselect" Click="OnDeselect">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="D" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="LoadLayerPixelsMenuItem" x:Uid="M_LoadLayerPixels" Text="Layer's Pixels" Click="OnLoadLayerPixels" />
+                <MenuFlyoutItem x:Name="LoadMaskBlackMenuItem" x:Uid="M_LoadMaskBlack" Text="Mask's Black Areas" Click="OnLoadMaskBlack" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Uid="M_ExpandSelection" Text="Expand Selection" Click="OnExpandSelection" />
+                <MenuFlyoutItem x:Uid="M_ContractSelection" Text="Contract Selection" Click="OnContractSelection" />
+                <MenuFlyoutItem x:Uid="M_FeatherSelection" Text="Feather Selection" Click="OnFeatherSelection" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Uid="M_ColorRange" Text="Color Range…" Click="OnColorRange" />
+                <MenuFlyoutItem x:Uid="M_InvertPixels" Text="Invert Pixels" Click="OnInvertPixels" />
+                <MenuFlyoutItem x:Uid="M_InvertMask" Text="Invert Mask" Click="OnInvertMask" />
+                <MenuFlyoutItem x:Name="FillForegroundMenuItem" x:Uid="M_FillForeground" Text="Fill With Foreground" Click="OnFillForeground">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Shift" Key="F5" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="M_FillBackground" Text="Fill With Background" Click="OnFillBackground" />
+                <MenuFlyoutItem x:Uid="M_ClearSelection" Text="Clear Selection Pixels" Click="OnClearSelectionPixels" />
+                <MenuFlyoutItem x:Uid="M_ContentFill" Text="Content-Aware Fill" Click="OnContentFill" />
+                <MenuFlyoutItem x:Uid="M_Dither" Text="Dither…" Click="OnDither" />
+                <MenuFlyoutItem x:Uid="M_Distort" Text="Free Distort…" Click="OnDistort" />
+                <MenuFlyoutItem x:Uid="M_LensCorrection" Text="Lens Correction…" Click="OnLensCorrection" />
+                <MenuFlyoutItem x:Uid="M_Vignette" Text="Vignette…" Click="OnVignette" />
+                <MenuFlyoutItem x:Uid="M_TonalContrast" Text="Tonal Contrast…" Click="OnTonalContrast" />
+                <MenuFlyoutItem x:Uid="M_GaussianBlurFilter" Text="Gaussian Blur…" Click="OnGaussianBlurFilter" />
+                <MenuFlyoutItem x:Uid="M_MotionBlurFilter" Text="Motion Blur…" Click="OnMotionBlurFilter" />
+                <MenuFlyoutItem x:Uid="M_BloomFilter" Text="Bloom / Glow…" Click="OnBloomFilter" />
+                <MenuFlyoutItem x:Uid="M_AddNoiseFilter" Text="Add Noise…" Click="OnAddNoiseFilter" />
+                <MenuFlyoutItem x:Name="CameraRawFilterMenuItem" x:Uid="M_CameraRawFilter"
+                                Text="Camera Raw Filter…" Click="OnCameraRawFilter" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Uid="M_SelectSubject" Text="Select Subject (AI)" Click="OnSelectSubject" />
+                <MenuFlyoutItem x:Uid="M_RemoveSubject" Text="Remove Subject (AI)" Click="OnRemoveSubject" />
+            </MenuBarItem>
+            <MenuBarItem x:Uid="M_Ai" Title="AI">
+                <MenuFlyoutItem x:Uid="M_AiRemove" Text="Remove…" Click="OnAiRemove" />
+                <MenuFlyoutItem x:Uid="M_AiReplace" Text="Replace…" Click="OnAiReplace" />
+                <MenuFlyoutItem x:Uid="M_AiExpand" Text="Expand Canvas…" Click="OnAiExpand" />
+            </MenuBarItem>
+            <MenuBarItem x:Name="LayerMenu" x:Uid="M_Layer" Title="Layer">
+                <MenuFlyoutItem x:Name="NewBlankLayerMenuItem" x:Uid="M_NewBlankLayer" Text="New Blank Layer" Click="OnAddBlankLayer">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control, Shift" Key="N" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="M_AddFolder" Text="Add Folder" Click="OnAddFolder" />
+                <MenuFlyoutItem x:Name="GroupMenuItem" x:Uid="M_Group" Text="New Group from Selection" Click="OnGroupLayers">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="G" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="UngroupMenuItem" x:Uid="M_Ungroup" Text="Ungroup" Click="OnUngroupLayer">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control, Shift" Key="G" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="MergeMenuItem" x:Uid="M_Merge" Text="Merge Layers" Click="OnMergeLayers" />
+                <MenuFlyoutItem x:Uid="M_Duplicate" Text="Duplicate Layers" Click="OnDuplicateLayers" />
+                <MenuFlyoutItem x:Uid="M_FlipLayerHorizontal" Text="Flip Layer Horizontal" Click="OnFlipLayerHorizontal" />
+                <MenuFlyoutItem x:Uid="M_FlipLayerVertical" Text="Flip Layer Vertical" Click="OnFlipLayerVertical" />
+                <MenuFlyoutItem x:Uid="M_MoveOut" Text="Move Out of Folder" Click="OnMoveOutOfFolder" />
+                <MenuFlyoutItem x:Name="RenameMenuItem" x:Uid="M_Rename" Text="Rename Layer…" Click="OnRenameLayer" />
+                <MenuFlyoutSubItem x:Uid="M_AddAdjustment" Text="Add Adjustment">
+                    <MenuFlyoutItem x:Uid="M_Invert" Text="Invert" Tag="Invert" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_Exposure" Text="Exposure" Tag="Exposure" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_HueSat" Text="Hue/Saturation" Tag="HueSaturation" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_Levels" Text="Levels" Tag="Levels" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_Curves" Text="Curves" Tag="Curves" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_ColorBalance" Text="Color Balance" Tag="ColorBalance" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_BlackWhite" Text="Black &amp; White" Tag="BlackWhite" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_GradientMap" Text="Gradient Map" Tag="GradientMap" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_Grain" Text="Grain" Tag="Grain" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_GaussianBlur" Text="Gaussian Blur" Tag="GaussianBlur" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_MotionBlur" Text="Motion Blur" Tag="MotionBlur" Click="OnAddAdjustment" />
+                    <MenuFlyoutItem x:Uid="M_AddNoise" Text="Add Noise" Tag="AddNoise" Click="OnAddAdjustment" />
+                </MenuFlyoutSubItem>
+                <MenuFlyoutItem x:Name="EditAdjustmentMenuItem" x:Uid="M_EditAdjustment" Text="Edit Adjustment…" Click="OnEditAdjustment" />
+                <MenuFlyoutItem x:Uid="M_LayerEffects" Text="Layer Effects…" Click="OnLayerEffects" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Name="AddMaskMenuItem" x:Uid="M_AddMask" Text="Add Reveal Mask" Click="OnAddMask" />
+                <MenuFlyoutItem x:Name="AddHideAllMaskMenuItem" x:Uid="M_AddHideAllMask" Text="Add Hide-All Mask" Click="OnAddHideAllMask" />
+                <MenuFlyoutItem x:Name="RevealSelectionMaskMenuItem" x:Uid="M_RevealSelectionMask" Text="Reveal Selection" Click="OnRevealSelectionMask" />
+                <MenuFlyoutItem x:Name="HideSelectionMaskMenuItem" x:Uid="M_HideSelectionMask" Text="Hide Selection" Click="OnHideSelectionMask" />
+                <MenuFlyoutItem x:Name="MaskLinkMenuItem" x:Uid="M_MaskLink" Text="Unlink Mask" Click="OnToggleMaskLink" />
+                <MenuFlyoutItem x:Name="MaskEnabledMenuItem" x:Uid="M_MaskEnabled" Text="Disable Mask" Click="OnToggleMaskEnabled" />
+                <MenuFlyoutItem x:Name="ClippingMaskMenuItem" x:Uid="M_ClippingMask" Text="Create Clipping Mask" Click="OnToggleClippingMask" />
+                <MenuFlyoutItem x:Uid="M_RemoveMask" Text="Remove Mask" Click="OnRemoveMask" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Name="RaiseMenuItem" x:Uid="M_Raise" Text="Raise" Click="OnRaiseLayer" />
+                <MenuFlyoutItem x:Name="LowerMenuItem" x:Uid="M_Lower" Text="Lower" Click="OnLowerLayer" />
+                <MenuFlyoutItem x:Uid="M_Delete" Text="Delete" Click="OnDeleteLayer" />
+            </MenuBarItem>
+            <MenuBarItem x:Uid="M_View" Title="View">
+                <MenuFlyoutItem x:Name="FitCanvasMenuItem" x:Uid="M_Fit" Text="Fit to Window" Click="OnFitToWindow" ToolTipService.ToolTip="Fit the whole canvas (Ctrl+0)">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="Number0" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="Zoom100MenuItem" x:Uid="M_Zoom100" Text="Zoom 100%" Click="OnZoom100" ToolTipService.ToolTip="Actual size (Ctrl+1)">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="Number1" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="ZoomInItem" x:Uid="M_ZoomIn" Text="Zoom In" Click="OnZoomIn" ToolTipService.ToolTip="Ctrl+= / Ctrl++">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="Add" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Name="ZoomOutItem" x:Uid="M_ZoomOut" Text="Zoom Out" Click="OnZoomOut" ToolTipService.ToolTip="Ctrl+-">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Control" Key="Subtract" />
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator />
+                <ToggleMenuFlyoutItem x:Name="PixelGridToggle" x:Uid="V_ShowGrid" Text="Show Pixel Grid" Click="OnShowPixelGrid" ToolTipService.ToolTip="Visible from 800%" />
+                <ToggleMenuFlyoutItem x:Name="RulersToggle" x:Uid="N_Rulers" Text="Show Rulers" Click="OnShowRulers">
+                    <ToggleMenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Key="R" Modifiers="Control" /></ToggleMenuFlyoutItem.KeyboardAccelerators>
+                </ToggleMenuFlyoutItem>
+                <ToggleMenuFlyoutItem x:Name="GridToggle" x:Uid="V_Grid" Text="Grid" Click="OnToggleShowGrid" />
+                <MenuFlyoutItem x:Name="GridSettingsButton" x:Uid="V_GridSettings" Text="Grid Settings…" Click="OnGridSettings" />
+                <ToggleMenuFlyoutItem x:Name="GuidesToggle" x:Uid="V_ShowGuides" Text="Guides" Click="OnToggleGuides" />
+                <ToggleMenuFlyoutItem x:Name="SnapToggle" x:Uid="V_Snap" Text="Snap" Click="OnToggleSnap" />
+                <MenuFlyoutSubItem x:Uid="V_SnapTo" Text="Snap To">
+                    <ToggleMenuFlyoutItem x:Name="SnapToGuidesToggle" x:Uid="V_SnapToGuides" Text="Guides" Click="OnToggleSnapToGuides" />
+                    <ToggleMenuFlyoutItem x:Name="SnapToGridToggle" x:Uid="V_SnapToGrid" Text="Grid" Click="OnToggleSnapToGrid" />
+                    <ToggleMenuFlyoutItem x:Name="SnapToLayersToggle" x:Uid="V_SnapToLayers" Text="Layers" Click="OnToggleSnapToLayers" />
+                    <ToggleMenuFlyoutItem x:Name="SnapToBoundsToggle" x:Uid="V_SnapToBounds" Text="Document Bounds" Click="OnToggleSnapToBounds" />
+                </MenuFlyoutSubItem>
+                <ToggleMenuFlyoutItem x:Name="LockGuidesToggle" x:Uid="V_LockGuides" Text="Lock Guides" Click="OnToggleLockGuides" />
+                <MenuFlyoutSeparator />
+                <MenuFlyoutItem x:Uid="M_GuideV" Text="Add Vertical Guide" Click="OnAddVerticalGuide" />
+                <MenuFlyoutItem x:Uid="M_GuideH" Text="Add Horizontal Guide" Click="OnAddHorizontalGuide" />
+                <MenuFlyoutItem x:Uid="M_GuidesClear" Text="Clear Guides" Click="OnClearGuides" />
+            </MenuBarItem>
+            <MenuBarItem x:Uid="M_Help" Title="Help">
+                <MenuFlyoutItem x:Uid="M_Shortcuts" Text="Keyboard Shortcuts" Click="ShowShortcutEditor" />
+            </MenuBarItem>
+        </MenuBar>
+        <Border Grid.Row="1" Background="#FF252525" BorderBrush="#FF393939" BorderThickness="0,0,0,1">
+            <Grid Height="40" Padding="10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button x:Uid="W_New" Content="+" Width="32" Height="30" Padding="0" Click="OnNew" />
+                <StackPanel x:Name="ProjectTabStrip" Grid.Column="1" Orientation="Horizontal" Spacing="4"
+                            VerticalAlignment="Center" Margin="10,0" />
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <Button x:Uid="W_Fit" Content="Fit" Click="OnFitToWindow" Height="30" Padding="10,0" />
+                    <Button Content="100%" Click="OnZoom100" Height="30" Padding="10,0" ToolTipService.ToolTip="100% (Ctrl+1)" />
+                    <Button x:Name="ZoomOutButton" x:Uid="W_ZoomOut" Click="OnZoomOut" Height="30" Width="30" Padding="0">
+                        <FontIcon Glyph="&#xE71F;" FontSize="14" />
+                    </Button>
+                    <Button x:Name="ZoomInButton" x:Uid="W_ZoomIn" Click="OnZoomIn" Height="30" Width="30" Padding="0">
+                        <FontIcon Glyph="&#xE8A3;" FontSize="14" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" x:Name="ToolHeader" Background="#FF292929" BorderBrush="#FF393939" BorderThickness="0,0,0,1">
+            <Grid Height="58" Padding="10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="ActiveToolLabel" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,12,0" MaxWidth="100" TextTrimming="CharacterEllipsis" />
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="ToolOptionsPreviousButton" Width="26" Style="{StaticResource ToolbarNavigationStyle}" Content="‹" FontSize="22"
+                            VerticalAlignment="Center" Visibility="Collapsed" Click="OnToolOptionsPrevious" />
+                <ScrollViewer x:Name="ToolOptionsScroll" Grid.Column="1" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled"
+                              HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                    <StackPanel x:Name="ToolOptionsPanel" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                        <ComboBox x:Name="ToolCombo" SelectionChanged="OnToolChanged" Visibility="Collapsed" />
+                        <StackPanel x:Name="TransformControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed" />
+                        <StackPanel x:Name="NavigationControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <NumberBox x:Name="NavigationZoomBox" Value="100" Minimum="0.1" Maximum="3200" SmallChange="1" LargeChange="10" Width="96"
+                                       ValueChanged="OnNavigationZoomChanged" KeyDown="OnNavigationZoomKey" />
+                            <TextBlock Text="%" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel x:Name="EyedropperControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <ComboBox x:Name="EyedropperTargetCombo" SelectedIndex="0" Width="150">
+                                <ComboBoxItem x:Uid="N_Foreground" Content="Foreground" /><ComboBoxItem x:Uid="N_Background" Content="Background" />
+                            </ComboBox>
+                            <CheckBox x:Name="SampleRingCheck" x:Uid="N_SampleRing" Content="Sample ring" IsChecked="True" />
+                        </StackPanel>
+                        <StackPanel x:Name="HealingControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <ComboBox x:Name="HealingModeCombo" Width="160" SelectedIndex="0">
+                                <ComboBoxItem x:Uid="L_HealContentAware" Content="Content-Aware" />
+                                <ComboBoxItem x:Uid="L_HealCreateTexture" Content="Create Texture" />
+                                <ComboBoxItem x:Uid="L_HealProximity" Content="Proximity Match" />
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel x:Name="GradientControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <ComboBox x:Name="GradientShapeCombo" Width="110" SelectedIndex="0" SelectionChanged="OnGradientOptionsChanged">
+                                <ComboBoxItem x:Uid="L_GradientLinear" Content="Linear" />
+                                <ComboBoxItem x:Uid="L_GradientRadial" Content="Radial" />
+                            </ComboBox>
+                            <ComboBox x:Name="GradientStyleCombo" Width="180" SelectedIndex="0" SelectionChanged="OnGradientOptionsChanged">
+                                <ComboBoxItem x:Uid="L_GradientTransparent" Content="Foreground to transparent" />
+                                <ComboBoxItem x:Uid="L_GradientBackground" Content="Foreground to background" />
+                            </ComboBox>
+                            <CheckBox x:Name="GradientReverseCheck" x:Uid="L_GradientReverse" Content="Reverse" Checked="OnGradientOptionsChanged" Unchecked="OnGradientOptionsChanged" />
+                            <TextBlock x:Name="GradientOpacityLabel" x:Uid="L_Opacity" Text="Opacity" VerticalAlignment="Center" />
+                            <Slider x:Name="GradientOpacitySlider" Minimum="1" Maximum="100" Value="100" Width="90"
+                                    AutomationProperties.LabeledBy="{x:Bind GradientOpacityLabel}" ValueChanged="OnGradientOptionsChanged" />
+                            <CheckBox x:Name="GradientMaskCheck" x:Uid="L_GradientMask" Content="Paint mask" Checked="OnGradientTargetChanged" Unchecked="OnGradientTargetChanged" />
+                            <Button x:Name="GradientApplyButton" x:Uid="L_GradientApply" Content="Apply" IsEnabled="False" Click="OnGradientApply" />
+                            <Button x:Name="GradientCancelButton" x:Uid="L_GradientCancel" Content="Cancel" IsEnabled="False" Click="OnGradientCancel" />
+                        </StackPanel>
+                        <StackPanel x:Name="LassoControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <ComboBox x:Name="LassoKindCombo" Width="150" SelectedIndex="0" SelectionChanged="OnLassoOptionsChanged">
+                                <ComboBoxItem x:Uid="L_LassoFreehand" Content="Freehand" />
+                                <ComboBoxItem x:Uid="L_LassoPolygonal" Content="Polygonal" />
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel x:Name="SelectionControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <Border Background="#FF202020" BorderBrush="#FF424242" BorderThickness="1" CornerRadius="5" Padding="2" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="2">
+                                    <ToggleButton x:Name="SelectionReplaceButton" Content="New" Style="{StaticResource SelectionModeButtonStyle}" Checked="OnSelectionModeChanged" Unchecked="OnSelectionModeChanged" />
+                                    <ToggleButton x:Name="SelectionAddButton" Content="Add" Style="{StaticResource SelectionModeButtonStyle}" Checked="OnSelectionModeChanged" Unchecked="OnSelectionModeChanged" />
+                                    <ToggleButton x:Name="SelectionSubtractButton" Content="Subtract" Style="{StaticResource SelectionModeButtonStyle}" Checked="OnSelectionModeChanged" Unchecked="OnSelectionModeChanged" />
+                                </StackPanel>
+                            </Border>
+                            <CheckBox x:Name="LassoAntialiasCheck" x:Uid="L_LassoAntialias" Content="Anti-alias" IsChecked="True" />
+                        </StackPanel>
+                        <StackPanel x:Name="BrushControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <TextBlock x:Name="BrushSizeLabel" x:Uid="L_Size" Text="Size" VerticalAlignment="Center" />
+                            <Slider x:Name="BrushSizeSlider" Minimum="1" Maximum="200" Value="20" Width="110"
+                                    AutomationProperties.LabeledBy="{x:Bind BrushSizeLabel}" />
+                            <TextBlock x:Name="BrushHardnessLabel" x:Uid="L_Hardness" Text="Hardness" VerticalAlignment="Center" />
+                            <Slider x:Name="BrushHardnessSlider" Minimum="0" Maximum="100" Value="75" Width="110"
+                                    AutomationProperties.LabeledBy="{x:Bind BrushHardnessLabel}" />
+                            <TextBlock x:Name="BrushOpacityLabel" x:Uid="L_Opacity" Text="Opacity" VerticalAlignment="Center" />
+                            <Slider x:Name="BrushOpacitySlider" Minimum="1" Maximum="100" Value="100" Width="110"
+                                    AutomationProperties.LabeledBy="{x:Bind BrushOpacityLabel}" />
+                            <StackPanel x:Name="BrushSmoothingControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                                <TextBlock x:Name="BrushSmoothingLabel" x:Uid="L_BrushSmoothing" Text="Smoothing" VerticalAlignment="Center" />
+                                <Slider x:Name="BrushSmoothingSlider" Minimum="0" Maximum="100" Value="0" Width="90"
+                                        AutomationProperties.LabeledBy="{x:Bind BrushSmoothingLabel}" ValueChanged="OnBrushSmoothingSliderChanged" />
+                                <NumberBox x:Name="BrushSmoothingBox" Minimum="0" Maximum="100" Value="0" SmallChange="1" LargeChange="10" Width="64"
+                                           AutomationProperties.LabeledBy="{x:Bind BrushSmoothingLabel}" ValueChanged="OnBrushSmoothingBoxChanged" />
+                            </StackPanel>
+                            <CheckBox x:Name="PaintMaskCheck" x:Uid="L_PaintMask" Content="Paint mask" Checked="OnPaintTargetChanged" Unchecked="OnPaintTargetChanged" />
+                        </StackPanel>
+                        <StackPanel x:Name="TextControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <Button x:Name="TextDefaultsButton" x:Uid="T_TextSettings" Content="Font…" Click="OnTextDefaults" />
+                        </StackPanel>
+                        <StackPanel x:Name="CropControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <ComboBox x:Name="CropRatioCombo" Width="110" SelectionChanged="OnCropRatioChanged">
+                                <ComboBoxItem x:Uid="L_Free" Content="Free" />
+                                <ComboBoxItem x:Uid="L_Original" Content="Original" />
+                                <ComboBoxItem Content="1:1" />
+                                <ComboBoxItem Content="4:3" />
+                                <ComboBoxItem Content="3:4" />
+                                <ComboBoxItem Content="16:9" />
+                                <ComboBoxItem Content="9:16" />
+                            </ComboBox>
+                            <TextBlock x:Name="CropSizeLabel" VerticalAlignment="Center" FontSize="11" Opacity="0.9" />
+                            <Button x:Uid="S_ApplyCrop" Content="Apply Crop" Click="OnApplyCrop" />
+                            <Button x:Uid="Dlg_Cancel" Content="Cancel" Click="OnCancelCrop" />
+                        </StackPanel>
+                        <StackPanel x:Name="ShapeControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <ComboBox x:Name="ShapeKindCombo" Width="110" SelectionChanged="OnShapeKindChanged">
+                                <ComboBoxItem x:Uid="L_Rectangle" Content="Rectangle" />
+                                <ComboBoxItem x:Uid="L_Ellipse" Content="Ellipse" />
+                                <ComboBoxItem x:Uid="L_Line" Content="Line" />
+                            </ComboBox>
+                            <TextBlock x:Name="ShapeCornerLabel" x:Uid="L_Corner" Text="Corner" VerticalAlignment="Center" />
+                            <Slider x:Name="ShapeCornerSlider" Minimum="0" Maximum="200" Value="0" Width="90"
+                                    AutomationProperties.LabeledBy="{x:Bind ShapeCornerLabel}"
+                                    ValueChanged="OnShapeCornerSliderChanged" />
+                            <NumberBox x:Name="ShapeCornerBox" Width="72" Minimum="0" Maximum="5000" SmallChange="1"
+                                       Value="0" SpinButtonPlacementMode="Hidden" ValidationMode="InvalidInputOverwritten"
+                                       KeyDown="OnShapeNumberKey" ValueChanged="OnShapeCornerBoxChanged" />
+                            <TextBlock x:Name="ShapeLineWidthLabel" x:Uid="L_LineWidth" Text="Line width" VerticalAlignment="Center" />
+                            <Slider x:Name="ShapeLineWidthSlider" Minimum="1" Maximum="100" Value="8" Width="90"
+                                    AutomationProperties.LabeledBy="{x:Bind ShapeLineWidthLabel}"
+                                    ValueChanged="OnShapeLineWidthSliderChanged" />
+                            <NumberBox x:Name="ShapeLineWidthBox" Width="72" Minimum="1" Maximum="5000" SmallChange="1"
+                                       Value="8" SpinButtonPlacementMode="Hidden" ValidationMode="InvalidInputOverwritten"
+                                       KeyDown="OnShapeNumberKey" ValueChanged="OnShapeLineWidthBoxChanged" />
+                        </StackPanel>
+                        <StackPanel x:Name="CloneControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <CheckBox x:Name="CloneAlignedCheck" x:Uid="L_CloneAligned" Content="Aligned" IsChecked="True" />
+                            <CheckBox x:Name="CloneAllLayersCheck" x:Uid="L_CloneAllLayers" Content="All layers" />
+                            <TextBlock x:Uid="L_CloneHint" Text="Alt-click sets the source" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel x:Name="BlurControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <ComboBox x:Name="BlurModeCombo" Width="110" SelectedIndex="0" SelectionChanged="OnBlurModeChanged">
+                                <ComboBoxItem x:Uid="L_BlurMode" Content="Blur" />
+                                <ComboBoxItem x:Uid="L_SmudgeMode" Content="Smudge" />
+                                <ComboBoxItem x:Uid="L_LiquifyMode" Content="Liquify" />
+                            </ComboBox>
+                            <TextBlock x:Name="BlurRadiusLabel" x:Uid="L_BlurRadius" Text="Radius" VerticalAlignment="Center" />
+                            <NumberBox x:Name="BlurRadiusBox" Minimum="0.5" Maximum="50" Value="10" Width="90"
+                                       AutomationProperties.LabeledBy="{x:Bind BlurRadiusLabel}" />
+                        </StackPanel>
+                        <StackPanel x:Name="WandControls" Orientation="Horizontal" Spacing="8" Visibility="Collapsed">
+                            <TextBlock x:Name="WandToleranceLabel" x:Uid="L_WandTolerance" Text="Tolerance" VerticalAlignment="Center" />
+                            <NumberBox x:Name="WandToleranceBox" Minimum="0" Maximum="255" Value="32" Width="90"
+                                       AutomationProperties.LabeledBy="{x:Bind WandToleranceLabel}" ValueChanged="OnWandToleranceChanged" />
+                            <TextBlock x:Name="WandSampleLabel" x:Uid="L_WandSample" Text="Sample" VerticalAlignment="Center" />
+                            <ComboBox x:Name="WandSampleCombo" Width="130" SelectedIndex="0"
+                                      AutomationProperties.LabeledBy="{x:Bind WandSampleLabel}" SelectionChanged="OnWandOptionChanged">
+                                <ComboBoxItem x:Uid="L_WandPoint" Content="Point" />
+                                <ComboBoxItem x:Uid="L_Wand3x3" Content="3×3 Average" />
+                                <ComboBoxItem x:Uid="L_Wand5x5" Content="5×5 Average" />
+                            </ComboBox>
+                            <CheckBox x:Name="WandContiguousCheck" x:Uid="L_WandContiguous" Content="Contiguous" Checked="OnWandOptionChanged" Unchecked="OnWandOptionChanged" />
+                            <CheckBox x:Name="WandAllLayersCheck" x:Uid="L_WandAllLayers" Content="All layers" Checked="OnWandOptionChanged" Unchecked="OnWandOptionChanged" />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+                    <Button x:Name="ToolOptionsNextButton" Grid.Column="2" Width="26" Style="{StaticResource ToolbarNavigationStyle}" Content="›" FontSize="22"
+                            VerticalAlignment="Center" Visibility="Collapsed" Click="OnToolOptionsNext" />
+                </Grid>
+                <StackPanel x:Name="TransformActions" Grid.Column="2" Orientation="Horizontal" Spacing="8" Margin="12,0,0,0" VerticalAlignment="Center" Visibility="Collapsed" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="3" x:Name="WorkspaceGrid">
+            <Grid.Resources>
+                <Style x:Key="LayerEyeStyle" TargetType="CheckBox">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="CheckBox">
+                                <Grid Width="24" Height="28" Background="Transparent">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CheckStates">
+                                            <VisualState x:Name="Checked"><VisualState.Setters><Setter Target="EyeIcon.Opacity" Value="1" /></VisualState.Setters></VisualState>
+                                            <VisualState x:Name="Unchecked"><VisualState.Setters><Setter Target="EyeIcon.Opacity" Value="0.25" /></VisualState.Setters></VisualState>
+                                            <VisualState x:Name="Indeterminate" />
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <FontIcon x:Name="EyeIcon" Glyph="&#xE890;" FontSize="14" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="LayerEffectEyeStyle" TargetType="CheckBox">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="CheckBox">
+                                <Grid Width="20" Height="24" Background="Transparent">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CheckStates">
+                                            <VisualState x:Name="Checked"><VisualState.Setters><Setter Target="EffectEyeIcon.Opacity" Value="1" /></VisualState.Setters></VisualState>
+                                            <VisualState x:Name="Unchecked"><VisualState.Setters><Setter Target="EffectEyeIcon.Opacity" Value="0.25" /></VisualState.Setters></VisualState>
+                                            <VisualState x:Name="Indeterminate" />
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <FontIcon x:Name="EffectEyeIcon" Glyph="&#xE890;" FontSize="12" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="WorkspaceIconButton" TargetType="Button">
+                    <Setter Property="Width" Value="26" />
+                    <Setter Property="Height" Value="36" />
+                    <Setter Property="MinWidth" Value="0" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="ToolsColumn" Width="88" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition x:Name="LayersColumn" Width="252" />
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="ToolRailHost" Background="#FF242424" BorderBrush="#FF393939" BorderThickness="0,0,1,0">
+                <Grid.RowDefinitions><RowDefinition Height="24" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <Button x:Name="ToolRailLayoutButton" Style="{StaticResource ToolbarNavigationStyle}" Height="22" Width="36"
+                        HorizontalAlignment="Center" Content="«" FontSize="16" Click="OnToolRailLayoutChanged" />
+            <ScrollViewer x:Name="ToolRailScroll" Grid.Row="1" Width="88" HorizontalScrollMode="Disabled" VerticalScrollMode="Enabled"
+                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Background="#FF242424">
+                <StackPanel Spacing="10" Padding="0,6,0,10" HorizontalAlignment="Center">
+                    <StackPanel x:Name="ToolButtons" />
+                </StackPanel>
+            </ScrollViewer>
+                <StackPanel Grid.Row="2" Spacing="8" Padding="0,0,0,10" HorizontalAlignment="Center">
+                    <Border Height="1" Background="#FF414141" Margin="0,0,0,2" />
+                    <Grid x:Name="PaletteGrid" Width="38" Height="38">
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout>
+                                <ColorPicker x:Name="BrushColorPicker" ColorChanged="OnPaletteColorChanged" />
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                        <Button x:Name="BackgroundColorChip" Width="24" Height="24" Padding="0"
+                                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                Tag="background" Click="OnPaletteChipClick"
+                                x:Uid="W_Background">
+                            <Rectangle x:Name="BackgroundChipFill" Width="18" Height="18" Fill="White" Stroke="#CC808080" />
+                        </Button>
+                        <Button x:Name="ForegroundColorChip" Width="24" Height="24" Padding="0"
+                                HorizontalAlignment="Left" VerticalAlignment="Top"
+                                Tag="foreground" Click="OnPaletteChipClick"
+                                x:Uid="W_Foreground">
+                            <Rectangle x:Name="ForegroundChipFill" Width="18" Height="18" Fill="Black" Stroke="#CCFFFFFF" />
+                        </Button>
+                        <Button Content="⇄" FontSize="9" Width="14" Height="14" Padding="0"
+                                HorizontalAlignment="Right" VerticalAlignment="Top"
+                                Click="OnSwapPaletteColors" x:Uid="W_SwapColors" x:Name="SwapColorsChip" />
+                        <Button Content="↺" FontSize="9" Width="14" Height="14" Padding="0"
+                                HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                                Click="OnResetPaletteColors" x:Uid="W_ResetColors" x:Name="ResetColorsChip" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+            <StackPanel x:Name="ColorRangeControls" Orientation="Vertical" Spacing="6" Visibility="Collapsed">
+                <ScrollViewer HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock x:Uid="L_ColorRangeSampling" Text="Click = replace · Shift = add · Alt = exclude" VerticalAlignment="Center" />
+                    <TextBlock x:Uid="L_ColorRangeFuzziness" Text="Fuzziness" VerticalAlignment="Center" />
+                    <Slider x:Name="ColorRangeFuzzinessSlider" Minimum="0" Maximum="200" Value="40" Width="110" ValueChanged="OnColorRangePreviewChanged" />
+                    <CheckBox x:Name="ColorRangeInvertCheck" x:Uid="L_ColorRangeInvert" Content="Invert" Checked="OnColorRangePreviewChanged" Unchecked="OnColorRangePreviewChanged" />
+                    <Button x:Uid="L_ColorRangeAddInclude" Content="Add include" Click="OnColorRangeForeground" Tag="include" />
+                    <Button x:Uid="L_ColorRangeAddExclude" Content="Add exclude" Click="OnColorRangeForeground" Tag="exclude" />
+                    <Button x:Uid="L_ColorRangeClear" Content="Clear colors" Click="OnColorRangeClear" />
+                    <TextBlock x:Name="ColorRangeCountsText" VerticalAlignment="Center" />
+                    <Button x:Uid="L_ColorRangeApply" Content="Apply" Click="OnColorRangeApply" />
+                    <Button x:Uid="L_ColorRangeCancel" Content="Cancel" Click="OnColorRangeCancel" />
+                </StackPanel>
+                </ScrollViewer>
+                <Image x:Name="ColorRangePreviewImage" Width="292" Height="200" Stretch="None" HorizontalAlignment="Left" />
+            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions><RowDefinition x:Name="RulerRow" Height="0" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+                <Grid.ColumnDefinitions><ColumnDefinition x:Name="RulerColumn" Width="0" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border x:Name="RulerCorner" Background="#FF333333" Visibility="Collapsed" />
+                <canvas:CanvasControl x:Name="HorizontalRuler" Grid.Column="1" ClearColor="#FF333333" Visibility="Collapsed" Draw="OnRulerDraw"
+                    PointerPressed="OnRulerPressed" PointerMoved="OnRulerMoved" PointerReleased="OnRulerReleased" PointerCanceled="OnRulerCancelled" PointerCaptureLost="OnRulerCancelled" />
+                <canvas:CanvasControl x:Name="VerticalRuler" Grid.Row="1" ClearColor="#FF333333" Visibility="Collapsed" Draw="OnRulerDraw"
+                    PointerPressed="OnRulerPressed" PointerMoved="OnRulerMoved" PointerReleased="OnRulerReleased" PointerCanceled="OnRulerCancelled" PointerCaptureLost="OnRulerCancelled" />
+            <ScrollViewer x:Name="CanvasScroll" Grid.Row="1" Grid.Column="1" Background="#FF1B1B1B" ZoomMode="Disabled"
+                          HorizontalScrollMode="Disabled" VerticalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                <local:ViewportSurface x:Name="CanvasStage" IsTabStop="True">
+                <Grid Background="Transparent">
+                    <canvas:CanvasControl x:Name="CanvasControl" Draw="OnCanvasDraw" CreateResources="OnCanvasCreateResources" ClearColor="#FF1B1B1B" IsHitTestVisible="False" />
+                <Grid x:Name="CanvasHost" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent"
+                      PointerPressed="OnCanvasPointerPressed"
+                      PointerMoved="OnCanvasPointerMoved"
+                      PointerReleased="OnCanvasPointerReleased"
+                      PointerCanceled="OnHealingPointerCanceled" PointerCaptureLost="OnHealingPointerCanceled"
+                      DoubleTapped="OnCanvasDoubleTapped">
+                    <Canvas x:Name="ToolOverlay" IsHitTestVisible="False">
+                        <Line x:Name="SnapLineX" Stroke="#FFFFD60A" StrokeThickness="1" Visibility="Collapsed" />
+                        <Line x:Name="SnapLineY" Stroke="#FFFFD60A" StrokeThickness="1" Visibility="Collapsed" />
+                        <Line x:Name="RotationStem" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="TransformBox" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Polygon x:Name="DistortBox" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="Handle0" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="Handle1" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="Handle2" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="Handle3" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="Handle4" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="Handle5" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="Handle6" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="Handle7" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Ellipse x:Name="RotationHandleDot" Width="11" Height="11" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Path x:Name="SelectionOutline"
+                                   Stroke="#FF4CC2FF" StrokeDashArray="4 3" StrokeThickness="1"
+                                   Visibility="Collapsed" />
+                        <Polyline x:Name="LassoPreview" Stroke="#FFF2F2F2" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="DragPreview"
+                                   Stroke="#FFF2F2F2" StrokeThickness="1"
+                                   Visibility="Collapsed" />
+                        <Ellipse x:Name="ShapePreviewEllipse"
+                                 Stroke="#FFF2F2F2" StrokeThickness="1"
+                                 Visibility="Collapsed" />
+                        <Line x:Name="ShapePreviewLine"
+                              Stroke="#FFF2F2F2" StrokeThickness="1"
+                              Visibility="Collapsed" />
+                        <Rectangle x:Name="CropPreview" StrokeThickness="1.5" Visibility="Collapsed">
+                            <Rectangle.Stroke>
+                                <SolidColorBrush Color="#FF4CC2FF" />
+                            </Rectangle.Stroke>
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="#334CC2FF" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <Rectangle x:Name="CropHandle0" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="CropHandle1" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="CropHandle2" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="CropHandle3" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="CropHandle4" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="CropHandle5" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="CropHandle6" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                        <Rectangle x:Name="CropHandle7" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                    </Canvas>
+                    <Canvas x:Name="InlineTextLayer" Visibility="Collapsed" />
+                </Grid>
+                <Canvas x:Name="NavigationOverlay" IsHitTestVisible="False">
+                    <canvas:CanvasControl x:Name="SampleRingCanvas" Width="116" Height="116" ClearColor="Transparent" Draw="OnSampleRingDraw" Visibility="Collapsed" />
+                    <Line x:Name="RulerGuidePreview" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
+                </Canvas>
+                <Border x:Name="MaskAloneBadge" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                        Height="26" Margin="8,0,8,14" Padding="11,0,8,0" CornerRadius="13"
+                        Background="#BF000000" BorderBrush="#24FFFFFF" BorderThickness="1">
+                    <StackPanel Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
+                        <Grid Width="12" Height="10"><Rectangle Stroke="White" /><Ellipse Width="4" Height="4" Fill="White" /></Grid>
+                        <TextBlock x:Uid="L_MaskAloneTitle" Text="Layer Mask" Foreground="White" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <TextBlock x:Name="MaskAloneName" Foreground="#99FFFFFF" FontSize="12" MaxWidth="220" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                        <Button x:Name="MaskAloneCloseButton" Click="OnCloseMaskAlone" MinWidth="0" MinHeight="0" Width="20" Height="22"
+                                Padding="0" BorderThickness="0" Background="Transparent" Foreground="White">
+                            <FontIcon Glyph="&#xE711;" FontSize="9" />
+                        </Button>
+                    </StackPanel>
+                </Border>
+                </Grid>
+                </local:ViewportSurface>
+            </ScrollViewer>
+            <Grid x:Name="AiPreviewHost" Grid.Row="1" Grid.Column="1" Background="#FF1B1B1B" Visibility="Collapsed" IsHitTestVisible="False">
+                <Image x:Name="AiPreviewImage" Stretch="Uniform" Margin="24" />
+                <Border HorizontalAlignment="Left" VerticalAlignment="Top" Background="#E5282828" CornerRadius="4" Padding="8,4" Margin="12">
+                    <TextBlock x:Uid="L_AiPreview" Text="AI preview · not yet applied" />
+                </Border>
+            </Grid>
+            <Grid x:Name="AiWorkingHost" Grid.Row="1" Grid.Column="1" Visibility="Collapsed" IsHitTestVisible="False">
+                <Border x:Name="AiWorkingRegion" HorizontalAlignment="Left" VerticalAlignment="Top" BorderThickness="2"
+                        Background="#0C8B5CF6" CornerRadius="4">
+                    <Border.BorderBrush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#AA67E8F9" Offset="0" />
+                            <GradientStop Color="#DDD8B4FE" Offset="0.5" />
+                            <GradientStop Color="#AA818CF8" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.BorderBrush>
+                    <Grid>
+                        <Grid.Clip><RectangleGeometry x:Name="AiWorkingClip" /></Grid.Clip>
+                        <Rectangle x:Name="AiWorkingScan" Width="180" HorizontalAlignment="Left">
+                            <Rectangle.RenderTransform><TranslateTransform x:Name="AiWorkingScanShift" /></Rectangle.RenderTransform>
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#0067E8F9" Offset="0" />
+                                    <GradientStop Color="#1867E8F9" Offset="0.3" />
+                                    <GradientStop Color="#558B5CF6" Offset="0.6" />
+                                    <GradientStop Color="#00C4B5FD" Offset="1" />
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </Border>
+                <Border x:Name="AiWorkingBadge" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#ED211C32"
+                        BorderBrush="#806F69AB" BorderThickness="1" CornerRadius="14" Padding="12,6">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="✦" Foreground="#FFC4B5FD" />
+                        <TextBlock x:Uid="L_AiWorking" Text="AI is creating…" Foreground="#FFF3EEFF" FontSize="12" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <Border x:Name="AiActions" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Visibility="Collapsed" Background="#F52D2D2D" BorderBrush="#FF555555" BorderThickness="1" CornerRadius="6" Padding="4">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <Button x:Name="AiRemoveButton" x:Uid="B_AiRemove" Content="AI Remove" Click="OnAiRemove" Padding="10,5" />
+                    <Button x:Name="AiReplaceButton" x:Uid="B_AiReplace" Content="Replace" Click="OnAiReplace" Padding="10,5" />
+                    <Button x:Uid="B_AiExpand" Content="Expand" Click="OnAiExpand" Padding="10,5" />
+                </StackPanel>
+            </Border>
+            </Grid>
+            </Grid>
+
+            <local:WorkspaceResizeEdge Grid.Column="2" x:Name="PanelResizeEdge" Background="#FF393939"
+                    PointerPressed="OnPanelResizePressed" PointerMoved="OnPanelResizeMoved"
+                    PointerReleased="OnPanelResizeReleased" PointerCanceled="OnPanelResizeReleased"
+                    PointerCaptureLost="OnPanelResizeReleased" x:Uid="W_PanelResize" />
+
+            <Grid Grid.Column="3" x:Name="LayersPane" Background="#FF252525">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid x:Name="LayersHeader" Padding="12,10" BorderBrush="#FF393939" BorderThickness="0,0,0,1">
+                    <TextBlock x:Uid="L_Layers" Text="Layers" FontSize="12" FontWeight="SemiBold" />
+                    <TextBlock x:Name="LayerCountLabel" HorizontalAlignment="Right" FontSize="12" Opacity="0.55" />
+                </Grid>
+                <StackPanel x:Name="LayerAppearance" Grid.Row="1" Spacing="8" Padding="12,10" BorderBrush="#FF393939" BorderThickness="0,0,0,1">
+                    <TextBlock x:Name="SelectedLayerName" Text="No layer selected" Visibility="Collapsed" />
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                        <TextBlock x:Name="BlendLabel" x:Uid="L_Blend" Text="Blend" VerticalAlignment="Center" FontSize="12" />
+                        <ComboBox x:Name="BlendCombo" Grid.Column="1" HorizontalAlignment="Stretch"
+                                  AutomationProperties.LabeledBy="{x:Bind BlendLabel}" SelectionChanged="OnBlendChanged" />
+                    </Grid>
+                    <Grid ColumnSpacing="6">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="74" /></Grid.ColumnDefinitions>
+                        <local:ViewportSurface x:Name="LayerOpacityScrub" VerticalAlignment="Center" IsTabStop="False">
+                            <TextBlock x:Name="LayerOpacityLabel" x:Uid="L_Opacity" Text="Opacity" FontSize="12" />
+                        </local:ViewportSurface>
+                        <Slider x:Name="OpacitySlider" Grid.Column="1" MinWidth="0" Minimum="0" Maximum="100"
+                                AutomationProperties.LabeledBy="{x:Bind LayerOpacityLabel}"
+                                ValueChanged="OnOpacityChanged" PointerCaptureLost="OnOpacityCommit" />
+                        <NumberBox x:Name="OpacityBox" Grid.Column="2" MinWidth="0" Minimum="0" Maximum="100" Value="100"
+                                   AutomationProperties.LabeledBy="{x:Bind LayerOpacityLabel}"
+                                   SpinButtonPlacementMode="Hidden" ValueChanged="OnOpacityBoxChanged" />
+                    </Grid>
+                    <TextBlock x:Name="OpacityLabel" Visibility="Collapsed" />
+                    <CheckBox x:Name="VisibleCheck" x:Uid="L_Visible" Content="Visible" Visibility="Collapsed" Checked="OnVisibleChanged" Unchecked="OnVisibleChanged" />
+                </StackPanel>
+
+                <ListView x:Name="LayerList" Grid.Row="2" SelectionMode="Extended" SelectionChanged="OnLayerSelected"
+                          CanDragItems="True" AllowDrop="True"
+                          PointerMoved="OnLayerGesturePointerMoved" PointerReleased="OnLayerGesturePointerReleased"
+                          PointerCaptureLost="OnLayerGesturePointerCaptureLost" PointerCanceled="OnLayerGesturePointerCaptureLost"
+                          DragItemsStarting="OnLayerRowsDragItemsStarting" DragItemsCompleted="OnLayerRowsDragItemsCompleted"
+                          DragOver="OnLayerRowsDragOver" DragLeave="OnLayerRowsDragLeave" Drop="OnLayerRowsDrop">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="Padding" Value="8,4" />
+                            <Setter Property="MinHeight" Value="40" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+
+                <!-- The Mac draws the drop decision itself (tableView.setDropRow, NativeLayerList.swift
+                     :406): an insertion line where a plain row lands above, and the row's own band
+                     highlighted when the drop goes INTO a folder. The decision has lived here since the
+                     placement work; this canvas is only its picture - transparent to hits, so the list
+                     keeps every gesture. -->
+                <Canvas x:Name="LayerDropFeedback" Grid.Row="2" IsHitTestVisible="False">
+                    <Border x:Name="DropInsertionLine" Height="2" Background="#FF609EFF" Visibility="Collapsed" />
+                    <Border x:Name="DropFolderBand" Background="#4D609EFF" BorderBrush="#FF609EFF"
+                            BorderThickness="1" Visibility="Collapsed" />
+                </Canvas>
+
+                <ScrollViewer x:Name="LayerPropertiesScroll" Grid.Row="3" MaxHeight="240" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel x:Name="AdjustmentPanel" Spacing="8" Margin="12,8" Visibility="Collapsed" />
+                </ScrollViewer>
+
+                <StackPanel Grid.Row="4" x:Name="LayerCommands" Orientation="Horizontal" Padding="8,3" BorderBrush="#FF393939" BorderThickness="0,1,0,0">
+                    <Button x:Name="BlankWorkspaceButton" x:Uid="W_NewBlankLayer" Style="{StaticResource WorkspaceIconButton}" Click="OnAddBlankLayer"><FontIcon Glyph="&#xE710;" FontSize="15" /></Button>
+                    <Button x:Uid="W_Folder" Style="{StaticResource WorkspaceIconButton}" Click="OnAddFolder"><FontIcon Glyph="&#xE8F4;" FontSize="15" /></Button>
+                    <Button x:Name="MaskWorkspaceButton" x:Uid="W_Mask" Style="{StaticResource WorkspaceIconButton}" Click="OnAddWorkspaceMask">
+                        <Grid Width="16" Height="14"><Rectangle Stroke="#FFE2E2E2" /><Ellipse Width="6" Height="6" Fill="#FFE2E2E2" /></Grid>
+                    </Button>
+                    <Button x:Uid="W_Effects" Style="{StaticResource WorkspaceIconButton}" Click="OnLayerEffects" Content="fx" FontSize="13" FontStyle="Italic" />
+                    <Button x:Uid="W_Adjustment" Style="{StaticResource WorkspaceIconButton}" x:Name="AdjustmentMenuButton">
+                        <Grid Width="16" Height="16"><Ellipse Stroke="#FFE2E2E2" /><Path Data="M8,0 A8,8 0 0 0 8,16 Z" Fill="#FFE2E2E2" /></Grid>
+                        <Button.Flyout><MenuFlyout x:Name="FooterAdjustmentMenu" /></Button.Flyout>
+                    </Button>
+                    <Button x:Uid="W_MoreLayers" Style="{StaticResource WorkspaceIconButton}">
+                        <FontIcon Glyph="&#xE712;" FontSize="15" />
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:Uid="M_Raise" Text="Raise" Click="OnRaiseLayer" />
+                                <MenuFlyoutItem x:Uid="M_Lower" Text="Lower" Click="OnLowerLayer" />
+                                <MenuFlyoutItem x:Uid="M_Duplicate" Text="Duplicate Layers" Click="OnDuplicateLayers" />
+                                <MenuFlyoutItem x:Uid="M_Rename" Text="Rename Layer…" Click="OnRenameLayer" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                    <Button x:Uid="W_DeleteLayer" Style="{StaticResource WorkspaceIconButton}" Click="OnDeleteLayer"><FontIcon Glyph="&#xE74D;" FontSize="15" /></Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- #37: the window's non-modal panel host, the counterpart of the Mac's FloatingPanelController.
+                 Panels are built in code and dropped in here, so several can be up at once as they are on the
+                 Mac (effects beside the color picker beside the filter). The container deliberately carries no
+                 Background: an unset brush makes it transparent to the pointer, so an empty host never eats a
+                 canvas click. -->
+            <Grid x:Name="FloatingPanelHosts" Grid.Column="1" />
+            <!-- Docked panels (Camera Raw, the way the Mac parks it) span every column, because the original
+                 copies its frame from the document window's right edge and 440 px covers the layers pane;
+                 FloatingPanelHosts is the canvas column alone and would park the panel to the left of it.
+                 Last child, so it paints above the pane it covers, and it carries no Background so an empty
+                 host stays transparent to the pointer. -->
+            <Grid x:Name="DockedPanelHosts" Grid.Column="0" Grid.ColumnSpan="4" />
+        </Grid>
+
+        <Grid Grid.Row="4" Padding="12,4" ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="ZoomLabel" Text="100%" VerticalAlignment="Center" FontSize="11" Opacity="0.9" MinWidth="44" />
+            <TextBlock x:Name="DocSizeLabel" Grid.Column="1" VerticalAlignment="Center" FontSize="11" Opacity="0.7" />
+            <ProgressBar x:Name="StatusProgress" Grid.Column="2" Width="120" Height="4" IsIndeterminate="True"
+                         VerticalAlignment="Center" Visibility="Collapsed" />
+            <TextBlock x:Name="StatusText" Grid.Column="3" Text="Ready" FontSize="12" Opacity="0.85" TextTrimming="CharacterEllipsis" />
+            <HyperlinkButton x:Name="ErrorDetailsButton" Grid.Column="4" x:Uid="L_Details" Content="Details" Padding="0"
+                             FontSize="12" Click="OnErrorDetails" Visibility="Collapsed" />
+        </Grid>
+    </Grid>
+</Window>

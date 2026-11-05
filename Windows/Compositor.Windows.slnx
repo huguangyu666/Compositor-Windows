@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Compositor.App/Compositor.App.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="src/Compositor.Core/Compositor.Core.csproj" />
+    <Project Path="src/Compositor.Renderer/Compositor.Renderer.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Compositor.App.Infrastructure.Tests/Compositor.App.Infrastructure.Tests.csproj" />
+    <Project Path="tests/Compositor.Core.Tests/Compositor.Core.Tests.csproj" />
+    <Project Path="tests/Compositor.Renderer.Tests/Compositor.Renderer.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Compositor.Mcp/Compositor.Mcp.csproj" />
+    <Project Path="tools/Compositor.PsdProbe/Compositor.PsdProbe.csproj" />
+  </Folder>
+</Solution>

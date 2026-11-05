@@ -1,0 +1,30 @@
+{
+  "activeLayerID": "6F1D3C2A-0B7E-4E8A-9C4D-2A1B3C4D5E6F",
+  "colorSpace": "sRGB",
+  "documentID": "0C5E7A91-3B2D-4F6A-8E1C-9D0B7A6F5E4D",
+  "format": "com.compositor.project",
+  "guides": [
+    { "axis": "horizontal", "id": "FF741F57-F9DE-49FD-9322-A45E17E96C71", "position": 3.25 },
+    { "axis": "vertical", "id": "36A276FD-7183-42A2-B213-58047D1F91E5", "position": -4.5 }
+  ],
+  "height": 8,
+  "layers": [
+    {
+      "id": "6F1D3C2A-0B7E-4E8A-9C4D-2A1B3C4D5E6F",
+      "imageFile": "6F1D3C2A-0B7E-4E8A-9C4D-2A1B3C4D5E6F.png",
+      "isVisible": true,
+      "name": "Background",
+      "transform": {
+        "flipX": false,
+        "flipY": false,
+        "origin": [0, 0],
+        "rotation": 0,
+        "sampling": "High quality",
+        "size": [8, 8]
+      }
+    }
+  ],
+  "resolution": 72,
+  "version": 8,
+  "width": 8
+}

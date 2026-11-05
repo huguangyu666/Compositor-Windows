@@ -1,0 +1,9 @@
+interface:
+  display_name: "Compositor MCP"
+  short_description: "Edit and grade images through Compositor MCP"
+  default_prompt: "Use $compositor-mcp to inspect the current canvas and make the requested edits while keeping the project editable."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "compositor"
+      description: "Compositor for Windows live editor and saved-project tools"

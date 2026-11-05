@@ -1,0 +1,2575 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Raw_Adjustment_AddNoise" xml:space="preserve">
+    <value>Add Noise</value>
+  </data>
+  <data name="Raw_Adjustment_BlackWhite" xml:space="preserve">
+    <value>Black &amp; White</value>
+  </data>
+  <data name="Raw_Adjustment_ColorBalance" xml:space="preserve">
+    <value>Color Balance</value>
+  </data>
+  <data name="Raw_Adjustment_Curves" xml:space="preserve">
+    <value>Curves</value>
+  </data>
+  <data name="Raw_Adjustment_Exposure" xml:space="preserve">
+    <value>Exposure</value>
+  </data>
+  <data name="Raw_Adjustment_GaussianBlur" xml:space="preserve">
+    <value>Gaussian Blur</value>
+  </data>
+  <data name="Raw_Adjustment_GradientMap" xml:space="preserve">
+    <value>Gradient Map</value>
+  </data>
+  <data name="Raw_Adjustment_Grain" xml:space="preserve">
+    <value>Grain</value>
+  </data>
+  <data name="Raw_Adjustment_HueSaturation" xml:space="preserve">
+    <value>Hue/Saturation</value>
+  </data>
+  <data name="Raw_Adjustment_Invert" xml:space="preserve">
+    <value>Invert</value>
+  </data>
+  <data name="Raw_Adjustment_Levels" xml:space="preserve">
+    <value>Levels</value>
+  </data>
+  <data name="Raw_Adjustment_MotionBlur" xml:space="preserve">
+    <value>Motion Blur</value>
+  </data>
+  <data name="Raw_Blend_Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="Raw_Blend_ColorBurn" xml:space="preserve">
+    <value>Color Burn</value>
+  </data>
+  <data name="Raw_Blend_ColorDodge" xml:space="preserve">
+    <value>Color Dodge</value>
+  </data>
+  <data name="Raw_Blend_Darken" xml:space="preserve">
+    <value>Darken</value>
+  </data>
+  <data name="Raw_Blend_Difference" xml:space="preserve">
+    <value>Difference</value>
+  </data>
+  <data name="Raw_Blend_Divide" xml:space="preserve">
+    <value>Divide</value>
+  </data>
+  <data name="Raw_Blend_Exclusion" xml:space="preserve">
+    <value>Exclusion</value>
+  </data>
+  <data name="Raw_Blend_HardLight" xml:space="preserve">
+    <value>Hard Light</value>
+  </data>
+  <data name="Raw_Blend_HardMix" xml:space="preserve">
+    <value>Hard Mix</value>
+  </data>
+  <data name="Raw_Blend_Hue" xml:space="preserve">
+    <value>Hue</value>
+  </data>
+  <data name="Raw_Blend_Lighten" xml:space="preserve">
+    <value>Lighten</value>
+  </data>
+  <data name="Raw_Blend_LinearBurn" xml:space="preserve">
+    <value>Linear Burn</value>
+  </data>
+  <data name="Raw_Blend_LinearDodge" xml:space="preserve">
+    <value>Linear Dodge</value>
+  </data>
+  <data name="Raw_Blend_LinearLight" xml:space="preserve">
+    <value>Linear Light</value>
+  </data>
+  <data name="Raw_Blend_Luminosity" xml:space="preserve">
+    <value>Luminosity</value>
+  </data>
+  <data name="Raw_Blend_Multiply" xml:space="preserve">
+    <value>Multiply</value>
+  </data>
+  <data name="Raw_Blend_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Raw_Blend_Overlay" xml:space="preserve">
+    <value>Overlay</value>
+  </data>
+  <data name="Raw_Blend_PinLight" xml:space="preserve">
+    <value>Pin Light</value>
+  </data>
+  <data name="Raw_Blend_Saturation" xml:space="preserve">
+    <value>Saturation</value>
+  </data>
+  <data name="Raw_Blend_Screen" xml:space="preserve">
+    <value>Screen</value>
+  </data>
+  <data name="Raw_Blend_SoftLight" xml:space="preserve">
+    <value>Soft Light</value>
+  </data>
+  <data name="Raw_Blend_Subtract" xml:space="preserve">
+    <value>Subtract</value>
+  </data>
+  <data name="Raw_Blend_VividLight" xml:space="preserve">
+    <value>Vivid Light</value>
+  </data>
+  <data name="CE_EndpointsFixed" xml:space="preserve">
+    <value>Endpoints cannot be removed.</value>
+  </data>
+  <data name="CE_Hint" xml:space="preserve">
+    <value>Click to add · drag to move · drag away or right-click to remove</value>
+  </data>
+  <data name="CE_ParametricHint" xml:space="preserve">
+    <value>Drag up or down to lift or lower those tones · drag a divider along the bottom to change which tones each region covers</value>
+  </data>
+  <data name="CE_MaxPoints" xml:space="preserve">
+    <value>A curve can have at most {0} points.</value>
+  </data>
+  <data name="CE_InOut" xml:space="preserve">
+    <value>In {0:0}   Out {1:0}</value>
+  </data>
+  <data name="CE_PointAdded" xml:space="preserve">
+    <value>Point added at ({0:0}, {1:0}).</value>
+  </data>
+  <data name="CE_PointRemoved" xml:space="preserve">
+    <value>Point removed.</value>
+  </data>
+  <data name="CE_PointRemovedLeft" xml:space="preserve">
+    <value>Point removed ({0} left).</value>
+  </data>
+  <data name="CE_TooClose" xml:space="preserve">
+    <value>Too close to a neighboring point.</value>
+  </data>
+  <data name="Chan_Blue" xml:space="preserve">
+    <value>Blue</value>
+  </data>
+  <data name="Chan_Green" xml:space="preserve">
+    <value>Green</value>
+  </data>
+  <data name="Chan_RGB" xml:space="preserve">
+    <value>RGB</value>
+  </data>
+  <data name="Chan_Red" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="DlgGroupEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="DlgGroupFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="DlgGroupView" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="DlgShortcutsTitle" xml:space="preserve">
+    <value>Keyboard Shortcuts</value>
+  </data>
+  <data name="T_Dlg_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Dlg_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Dlg_DontSave" xml:space="preserve">
+    <value>Don't Save</value>
+  </data>
+  <data name="Dlg_Export" xml:space="preserve">
+    <value>Export…</value>
+  </data>
+  <data name="Dlg_ExportJpeg" xml:space="preserve">
+    <value>Export JPEG</value>
+  </data>
+  <data name="Dlg_FailedTitle" xml:space="preserve">
+    <value>Could not complete the operation</value>
+  </data>
+  <data name="Dlg_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Dlg_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Dlg_SaveChanges" xml:space="preserve">
+    <value>Save changes?</value>
+  </data>
+  <data name="Dlg_Shortcuts" xml:space="preserve">
+    <value>Keyboard Shortcuts</value>
+  </data>
+  <data name="Dlg_Unsaved" xml:space="preserve">
+    <value>“{0}” has unsaved changes.</value>
+  </data>
+  <data name="L_Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="L_Angle" xml:space="preserve">
+    <value>Angle</value>
+  </data>
+  <data name="L_Balance" xml:space="preserve">
+    <value>Balance</value>
+  </data>
+  <data name="L_Black" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="T_L_Blend" xml:space="preserve">
+    <value>Blend</value>
+  </data>
+  <data name="L_Blending" xml:space="preserve">
+    <value>Blending</value>
+  </data>
+  <data name="L_Bloom" xml:space="preserve">
+    <value>Bloom</value>
+  </data>
+  <data name="L_Clarity" xml:space="preserve">
+    <value>Clarity</value>
+  </data>
+  <data name="L_ColorGrading" xml:space="preserve">
+    <value>Color Grading</value>
+  </data>
+  <data name="L_ColorMixer" xml:space="preserve">
+    <value>Color Mixer</value>
+  </data>
+  <data name="T_L_Corner" xml:space="preserve">
+    <value>Corner Radius</value>
+  </data>
+  <data name="L_Curve" xml:space="preserve">
+    <value>Curve</value>
+  </data>
+  <data name="L_Dehaze" xml:space="preserve">
+    <value>Dehaze</value>
+  </data>
+  <data name="T_L_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="L_Detail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="T_L_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="L_Diffusion" xml:space="preserve">
+    <value>Diffusion</value>
+  </data>
+  <data name="L_Distance" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="L_Effects" xml:space="preserve">
+    <value>Effects</value>
+  </data>
+  <data name="T_L_Ellipse" xml:space="preserve">
+    <value>Ellipse</value>
+  </data>
+  <data name="L_Exposure" xml:space="preserve">
+    <value>Exposure</value>
+  </data>
+  <data name="T_L_Free" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="L_Gamma" xml:space="preserve">
+    <value>Gamma</value>
+  </data>
+  <data name="L_Global" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="L_Glow" xml:space="preserve">
+    <value>Glow</value>
+  </data>
+  <data name="L_GlowRange" xml:space="preserve">
+    <value>Glow Range</value>
+  </data>
+  <data name="L_GlowSpread" xml:space="preserve">
+    <value>Glow Spread</value>
+  </data>
+  <data name="L_GlowWarmth" xml:space="preserve">
+    <value>Glow Warmth</value>
+  </data>
+  <data name="L_Grain" xml:space="preserve">
+    <value>Grain</value>
+  </data>
+  <data name="L_Halation" xml:space="preserve">
+    <value>Halation</value>
+  </data>
+  <data name="T_L_Hardness" xml:space="preserve">
+    <value>Hardness</value>
+  </data>
+  <data name="L_Highlights" xml:space="preserve">
+    <value>Highlights</value>
+  </data>
+  <data name="L_Hue" xml:space="preserve">
+    <value>Hue</value>
+  </data>
+  <data name="T_L_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="T_L_Layers" xml:space="preserve">
+    <value>Layers</value>
+  </data>
+  <data name="L_Lightness" xml:space="preserve">
+    <value>Lightness</value>
+  </data>
+  <data name="T_L_Line" xml:space="preserve">
+    <value>Line</value>
+  </data>
+  <data name="T_L_LineWidth" xml:space="preserve">
+    <value>Line Width</value>
+  </data>
+  <data name="T_L_Lower" xml:space="preserve">
+    <value>Lower</value>
+  </data>
+  <data name="L_Lum" xml:space="preserve">
+    <value>Luminance</value>
+  </data>
+  <data name="L_Luminance" xml:space="preserve">
+    <value>Luminance</value>
+  </data>
+  <data name="L_Masking" xml:space="preserve">
+    <value>Masking</value>
+  </data>
+  <data name="L_Matte" xml:space="preserve">
+    <value>Matte</value>
+  </data>
+  <data name="L_MatteTip" xml:space="preserve">
+    <value>The color that fills transparent areas</value>
+  </data>
+  <data name="L_Midtones" xml:space="preserve">
+    <value>Midtones</value>
+  </data>
+  <data name="L_NRColor" xml:space="preserve">
+    <value>NR Color</value>
+  </data>
+  <data name="L_NRColorDetail" xml:space="preserve">
+    <value>NR Color Detail</value>
+  </data>
+  <data name="L_NRContrast" xml:space="preserve">
+    <value>NR Contrast</value>
+  </data>
+  <data name="L_NRDetail" xml:space="preserve">
+    <value>NR Detail</value>
+  </data>
+  <data name="L_NRLuminance" xml:space="preserve">
+    <value>NR Luminance</value>
+  </data>
+  <data name="L_NRSmoothness" xml:space="preserve">
+    <value>NR Smoothness</value>
+  </data>
+  <data name="L_NoLayer" xml:space="preserve">
+    <value>No layer selected</value>
+  </data>
+  <data name="L_NoPixels" xml:space="preserve">
+    <value>This layer has no pixels to adjust.</value>
+  </data>
+  <data name="L_Offset" xml:space="preserve">
+    <value>Offset</value>
+  </data>
+  <data name="T_L_Opacity" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="T_L_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="L_OutBlack" xml:space="preserve">
+    <value>Output Black</value>
+  </data>
+  <data name="L_OutWhite" xml:space="preserve">
+    <value>Output White</value>
+  </data>
+  <data name="T_L_PaintMask" xml:space="preserve">
+    <value>Paint Mask</value>
+  </data>
+  <data name="L_Quality" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="L_Radius" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="T_L_Raise" xml:space="preserve">
+    <value>Raise</value>
+  </data>
+  <data name="L_Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="T_L_Rectangle" xml:space="preserve">
+    <value>Rectangle</value>
+  </data>
+  <data name="L_RefineSat" xml:space="preserve">
+    <value>Refine Saturation</value>
+  </data>
+  <data name="L_Sat" xml:space="preserve">
+    <value>Saturation</value>
+  </data>
+  <data name="L_Saturation" xml:space="preserve">
+    <value>Saturation</value>
+  </data>
+  <data name="L_Shadows" xml:space="preserve">
+    <value>Shadows</value>
+  </data>
+  <data name="L_Sharpening" xml:space="preserve">
+    <value>Sharpening</value>
+  </data>
+  <data name="T_L_Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="L_Texture" xml:space="preserve">
+    <value>Texture</value>
+  </data>
+  <data name="L_Vignette" xml:space="preserve">
+    <value>Vignette</value>
+  </data>
+  <data name="T_L_Visible" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="L_White" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="M_EditAdjustment.Text" xml:space="preserve"><value>Edit Adjustment…</value></data><data name="M_AddAdjustment.Text" xml:space="preserve">
+    <value>Add Adjustment</value>
+  </data>
+  <data name="M_AddFolder.Text" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="M_AddMask.Text" xml:space="preserve">
+    <value>Add Reveal Mask</value>
+  </data>
+  <data name="M_AddHideAllMask.Text" xml:space="preserve">
+    <value>Add Hide-All Mask</value>
+  </data>
+  <data name="M_RevealSelectionMask.Text" xml:space="preserve">
+    <value>Reveal Selection</value>
+  </data>
+  <data name="M_HideSelectionMask.Text" xml:space="preserve">
+    <value>Hide Selection</value>
+  </data>
+  <data name="M_CopyPixels.Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="M_CutPixels.Text" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="M_PastePixels.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="M_LayerViaCopy.Text" xml:space="preserve">
+    <value>Layer via Copy</value>
+  </data>
+  <data name="M_MaskLink.Text" xml:space="preserve">
+    <value>Unlink Mask</value>
+  </data>
+  <data name="M_LinkMask" xml:space="preserve">
+    <value>Link Mask</value>
+  </data>
+  <data name="M_UnlinkMask" xml:space="preserve">
+    <value>Unlink Mask</value>
+  </data>
+  <data name="M_MaskEnabled.Text" xml:space="preserve">
+    <value>Disable Mask</value>
+  </data>
+  <data name="M_DisableMask" xml:space="preserve">
+    <value>Disable Mask</value>
+  </data>
+  <data name="M_EnableMask" xml:space="preserve">
+    <value>Enable Mask</value>
+  </data>
+  <data name="M_ClippingMask.Text" xml:space="preserve">
+    <value>Create Clipping Mask</value>
+  </data>
+  <data name="M_CreateClipping" xml:space="preserve">
+    <value>Create Clipping Mask</value>
+  </data>
+  <data name="M_ReleaseClipping" xml:space="preserve">
+    <value>Release Clipping Mask</value>
+  </data>
+  <data name="M_AddNoise.Text" xml:space="preserve">
+    <value>Add Noise</value>
+  </data>
+  <data name="M_BlackWhite.Text" xml:space="preserve">
+    <value>Black &amp; White</value>
+  </data>
+  <data name="M_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="M_ColorBalance.Text" xml:space="preserve">
+    <value>Color Balance</value>
+  </data>
+  <data name="M_Curves.Text" xml:space="preserve">
+    <value>Curves</value>
+  </data>
+  <data name="M_Delete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="M_Deselect.Text" xml:space="preserve">
+    <value>Deselect</value>
+  </data>
+  <data name="M_Edit.Title" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="M_Exit.Text" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="M_ExportJpeg.Text" xml:space="preserve">
+    <value>Export JPEG…</value>
+  </data>
+  <data name="M_ExportPng.Text" xml:space="preserve">
+    <value>Export PNG…</value>
+  </data>
+  <data name="M_Exposure.Text" xml:space="preserve">
+    <value>Exposure</value>
+  </data>
+  <data name="M_File.Title" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="M_Fit.Text" xml:space="preserve">
+    <value>Fit to Window</value>
+  </data>
+  <data name="M_GaussianBlur.Text" xml:space="preserve">
+    <value>Gaussian Blur</value>
+  </data>
+  <data name="M_GradientMap.Text" xml:space="preserve">
+    <value>Gradient Map</value>
+  </data>
+  <data name="M_Grain.Text" xml:space="preserve">
+    <value>Grain</value>
+  </data>
+  <data name="M_Group.Text" xml:space="preserve">
+    <value>New Group from Selection</value>
+  </data>
+  <data name="M_GuideH.Text" xml:space="preserve">
+    <value>Add Horizontal Guide</value>
+  </data>
+  <data name="M_GuideV.Text" xml:space="preserve">
+    <value>Add Vertical Guide</value>
+  </data>
+  <data name="M_GuidesClear.Text" xml:space="preserve">
+    <value>Clear Guides</value>
+  </data>
+  <data name="M_Help.Title" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="M_HueSat.Text" xml:space="preserve">
+    <value>Hue/Saturation</value>
+  </data>
+  <data name="M_Import.Text" xml:space="preserve">
+    <value>Import Image…</value>
+  </data>
+  <data name="M_Invert.Text" xml:space="preserve">
+    <value>Invert</value>
+  </data>
+  <data name="M_Layer.Title" xml:space="preserve">
+    <value>Layer</value>
+  </data>
+  <data name="M_Levels.Text" xml:space="preserve">
+    <value>Levels</value>
+  </data>
+  <data name="M_Lower.Text" xml:space="preserve">
+    <value>Lower</value>
+  </data>
+  <data name="M_MotionBlur.Text" xml:space="preserve">
+    <value>Motion Blur</value>
+  </data>
+  <data name="M_New.Text" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="M_Open.Text" xml:space="preserve">
+    <value>Open Source…</value>
+  </data>
+  <data name="M_OpenRecent.Text" xml:space="preserve">
+    <value>Open Recent</value>
+  </data>
+  <data name="M_Raise.Text" xml:space="preserve">
+    <value>Raise</value>
+  </data>
+  <data name="M_Redo.Text" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="M_RemoveMask.Text" xml:space="preserve">
+    <value>Remove Mask</value>
+  </data>
+  <data name="M_Save.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="M_SaveAs.Text" xml:space="preserve">
+    <value>Save As…</value>
+  </data>
+  <data name="M_Shortcuts.Text" xml:space="preserve">
+    <value>Keyboard Shortcuts</value>
+  </data>
+  <data name="M_Undo.Text" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="M_Ungroup.Text" xml:space="preserve">
+    <value>Ungroup</value>
+  </data>
+  <data name="M_View.Title" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="M_Zoom100.Text" xml:space="preserve">
+    <value>Zoom 100%</value>
+  </data>
+  <data name="M_ZoomIn.Text" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="M_ZoomOut.Text" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
+  <data name="Raw_Range_Blues" xml:space="preserve">
+    <value>Blues</value>
+  </data>
+  <data name="Raw_Range_Cyans" xml:space="preserve">
+    <value>Cyans</value>
+  </data>
+  <data name="Raw_Range_Greens" xml:space="preserve">
+    <value>Greens</value>
+  </data>
+  <data name="Raw_Range_Magentas" xml:space="preserve">
+    <value>Magentas</value>
+  </data>
+  <data name="Raw_Range_Master" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Raw_Range_Reds" xml:space="preserve">
+    <value>Reds</value>
+  </data>
+  <data name="Raw_Range_Yellows" xml:space="preserve">
+    <value>Yellows</value>
+  </data>
+  <data name="S_AdjustmentAdded" xml:space="preserve">
+    <value>Added {0} adjustment layer.</value>
+  </data>
+  <data name="S_AdjustmentSuffix" xml:space="preserve">
+    <value>{0} Adjustment</value>
+  </data>
+  <data name="S_CamRawApplied" xml:space="preserve">
+    <value>Camera Raw adjustments applied (one undo step).</value>
+  </data>
+  <data name="S_CamRawReset" xml:space="preserve">
+    <value>Camera Raw draft reset.</value>
+  </data>
+  <data name="S_CannotExport" xml:space="preserve">
+    <value>Could not export {0}.</value>
+  </data>
+  <data name="S_CannotImport" xml:space="preserve">
+    <value>Could not import {0}.</value>
+  </data>
+  <data name="S_CannotOpen" xml:space="preserve">
+    <value>Could not open {0}.</value>
+  </data>
+  <data name="S_CannotSave" xml:space="preserve">
+    <value>Could not save {0}.</value>
+  </data>
+  <data name="S_CannotSaveTo" xml:space="preserve">
+    <value>Could not save to {0}.</value>
+  </data>
+  <data name="S_CropCancelled" xml:space="preserve">
+    <value>Crop cancelled.</value>
+  </data>
+  <data name="S_CropFirst" xml:space="preserve">
+    <value>Drag a crop box first.</value>
+  </data>
+  <data name="S_CropLive" xml:space="preserve">
+    <value>Cropping {0:0}×{1:0} — drag inside the box to move · click Apply Crop to commit</value>
+  </data>
+  <data name="S_CropRange" xml:space="preserve">
+    <value>Crop bounds are out of range.</value>
+  </data>
+  <data name="S_Cropped" xml:space="preserve">
+    <value>Cropped to {0:0}×{1:0}.</value>
+  </data>
+  <data name="S_Deleted" xml:space="preserve">
+    <value>Deleted {0}.</value>
+  </data>
+  <data name="Dlg_DeleteLiveSource" xml:space="preserve"><value>These layers supply clipping masks</value></data>
+  <data name="Dlg_DeleteLiveBody" xml:space="preserve"><value>Bake writes the current clipping coverage into dependent pixel layers and rasterizes their text or shapes. Their own masks and effects remain editable. Remove Links reveals their pixels. Either choice can be undone.</value></data>
+  <data name="Dlg_DeleteLiveAdjustments" xml:space="preserve"><value>Dependent adjustment layers have their clipping links removed with either choice.</value></data>
+  <data name="Dlg_BakeAndDelete" xml:space="preserve"><value>Bake and Delete</value></data>
+  <data name="Dlg_UnlinkAndDelete" xml:space="preserve"><value>Remove Links and Delete</value></data>
+  <data name="S_BakingDeletion" xml:space="preserve"><value>Baking clipping masks…</value></data>
+  <data name="S_LayersDeleted" xml:space="preserve"><value>Deleted {0} layers.</value></data>
+  <data name="S_DeleteSourceChanged" xml:space="preserve"><value>The document changed; deletion was not applied.</value></data>
+  <data name="S_LayerDeletionFailed" xml:space="preserve"><value>Could not delete the selected layers.</value></data>
+  <data name="S_DeletePlaneFailed" xml:space="preserve"><value>Could not edit the selected pixels or mask.</value></data>
+  <data name="S_ClearingSelection" xml:space="preserve"><value>Clearing selected pixels…</value></data>
+  <data name="A_EffectRow" xml:space="preserve"><value>{0} effect</value></data>
+  <data name="A_EffectRowHelp" xml:space="preserve"><value>Click to select; double-click to edit; Alt-drag to copy.</value></data>
+  <data name="A_HideEffect" xml:space="preserve"><value>Hide {0}</value></data>
+  <data name="A_ShowEffect" xml:space="preserve"><value>Show {0}</value></data>
+  <data name="S_EffectRemoved" xml:space="preserve"><value>Removed {0}.</value></data>
+  <data name="S_EffectShown" xml:space="preserve"><value>Showed {0}.</value></data>
+  <data name="S_EffectHidden" xml:space="preserve"><value>Hid {0}.</value></data>
+  <data name="S_EffectSelectionFailed" xml:space="preserve"><value>Could not select this effect.</value></data>
+  <data name="S_EffectChangeFailed" xml:space="preserve"><value>Could not change this effect.</value></data>
+  <data name="S_LayerContextFailed" xml:space="preserve"><value>Could not open or use the layer menu.</value></data>
+  <data name="A_AddLayerMask" xml:space="preserve"><value>Add layer mask</value></data>
+  <data name="S_CreatingSelectionMask" xml:space="preserve"><value>Creating a mask from the selection…</value></data>
+  <data name="S_SelectionMaskUnavailable" xml:space="preserve"><value>Could not create a mask for this selection.</value></data>
+  <data name="S_MaskSourceChanged" xml:space="preserve"><value>The document changed; the new mask was not applied.</value></data>
+  <data name="S_SelectionMaskFailed" xml:space="preserve"><value>Could not create the selection mask.</value></data>
+  <data name="A_AddMaskAll" xml:space="preserve"><value>Add layer mask (Alt-click for a black mask)</value></data>
+  <data name="A_AddMaskSelection" xml:space="preserve"><value>Add layer mask revealing the selection (Alt-click to hide it)</value></data>
+  <data name="A_StopViewingMask" xml:space="preserve"><value>Show the image again (or Alt-click the mask thumbnail)</value></data>
+  <data name="L_MaskAloneTitle.Text" xml:space="preserve"><value>Layer Mask</value></data>
+  <data name="M_ContextDeleteEffect" xml:space="preserve"><value>Delete {0}</value></data>
+  <data name="M_ContextDeleteMask" xml:space="preserve"><value>Delete Mask</value></data>
+  <data name="M_ContextDeleteLayer" xml:space="preserve"><value>Delete Layer</value></data>
+  <data name="M_ContextDeleteLayers" xml:space="preserve"><value>Delete Selected Layers</value></data>
+  <data name="M_ContextAddMask" xml:space="preserve"><value>Add Mask</value></data>
+  <data name="M_ContextRevealMask" xml:space="preserve"><value>Reveal All (White)</value></data>
+  <data name="M_ContextHideMask" xml:space="preserve"><value>Hide All (Black)</value></data>
+  <data name="M_ContextHideLayer" xml:space="preserve"><value>Hide Layer</value></data>
+  <data name="M_ContextShowLayer" xml:space="preserve"><value>Show Layer</value></data>
+  <data name="S_PlaneEditUnchanged" xml:space="preserve"><value>No selected pixels changed.</value></data>
+  <data name="S_Deselected" xml:space="preserve">
+    <value>Deselected.</value>
+  </data>
+  <data name="S_DiskChanged" xml:space="preserve">
+    <value>The project changed on disk while this document has unsaved edits. Saving is blocked until you resolve it, so nothing was overwritten.</value>
+  </data>
+  <data name="S_SaveConflict" xml:space="preserve">
+    <value>Another program changed this project since your last save, so this save was refused and nothing was written. Undo back to the saved version, or close without saving and reopen it, to see their changes.</value>
+  </data>
+  <data name="S_Exported" xml:space="preserve">
+    <value>Exported {0} ({1}×{2}, quality {3:0}%).</value>
+  </data>
+  <data name="S_ExternalFail" xml:space="preserve">
+    <value>Could not load external changes: {0}</value>
+  </data>
+  <data name="M_ExternalConflictTitle" xml:space="preserve">
+    <value>“{0}” was changed on disk.</value>
+  </data>
+  <data name="M_ExternalConflictBody" xml:space="preserve">
+    <value>Another app changed this project. You can revert to the version on disk, losing your unsaved changes, or keep what you have.</value>
+  </data>
+  <data name="Dlg_Revert" xml:space="preserve">
+    <value>Revert</value>
+  </data>
+  <data name="Dlg_KeepMine" xml:space="preserve">
+    <value>Keep Mine</value>
+  </data>
+  <data name="S_ExternalKept" xml:space="preserve">
+    <value>Kept your unsaved edits. The next save replaces the version on disk.</value>
+  </data>
+  <data name="S_ExternalWait" xml:space="preserve">
+    <value>The project changed on disk. You will be asked what to do when this edit finishes.</value>
+  </data>
+  <data name="S_CloseConfirmFail" xml:space="preserve">
+    <value>Could not ask about unsaved changes: {0} The window stayed open, so nothing was thrown away; closing again still works.</value>
+  </data>
+  <data name="S_RecoveryFail" xml:space="preserve">
+    <value>Finishing an edit failed: {0}</value>
+  </data>
+  <data name="M_NewBlankLayer.Text" xml:space="preserve"><value>New Blank Layer</value></data>
+  <data name="W_NewBlankLayer.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>New blank layer (Ctrl+Shift+N)</value></data>
+  <data name="S_BlankLayerAdded" xml:space="preserve"><value>Added {0}.</value></data>
+  <data name="S_FolderAdded" xml:space="preserve">
+    <value>Folder added.</value>
+  </data>
+  <data name="S_GroupMany" xml:space="preserve">
+    <value>{0} now contains {1} layers.</value>
+  </data>
+  <data name="S_GroupOne" xml:space="preserve">
+    <value>{0} now contains {1}.</value>
+  </data>
+  <data name="S_GuideH" xml:space="preserve">
+    <value>Added a horizontal guide at the canvas center — drag to move it.</value>
+  </data>
+  <data name="S_GuideMoved" xml:space="preserve">
+    <value>Guide moved.</value>
+  </data>
+  <data name="S_GuideV" xml:space="preserve">
+    <value>Added a vertical guide at the canvas center — drag to move it.</value>
+  </data>
+  <data name="S_GuidesCleared" xml:space="preserve">
+    <value>Guides cleared.</value>
+  </data>
+  <data name="S_GuidesLocked" xml:space="preserve">
+    <value>Guides are locked — unlock them in the View menu.</value>
+  </data>
+  <data name="S_Imported" xml:space="preserve">
+    <value>Imported {0} ({1}×{2}).</value>
+  </data>
+  <data name="S_ImportedLayers" xml:space="preserve">
+    <value>Imported {0} ({1} layers).</value>
+  </data>
+  <data name="S_ImportedPsdCropped" xml:space="preserve">
+    <value>{0} Cropped {1} layers to the canvas to fit in memory.</value>
+  </data>
+  <data name="S_Lowered" xml:space="preserve">
+    <value>Lowered {0}.</value>
+  </data>
+  <data name="S_MaskAdded" xml:space="preserve">
+    <value>Reveal mask added to {0}.</value>
+  </data>
+  <data name="S_HideAllMaskAdded" xml:space="preserve">
+    <value>Hide-all mask added to {0} (layer is now fully hidden).</value>
+  </data>
+  <data name="S_RevealSelectionMaskAdded" xml:space="preserve">
+    <value>Reveal mask created from the selection for {0}.</value>
+  </data>
+  <data name="S_HideSelectionMaskAdded" xml:space="preserve">
+    <value>Hide mask created from the selection for {0}.</value>
+  </data>
+  <data name="S_HasMask" xml:space="preserve">
+    <value>{0} already has a mask — remove it first.</value>
+  </data>
+  <data name="S_SelectionMaskNeedsSelection" xml:space="preserve">
+    <value>Make a selection first.</value>
+  </data>
+  <data name="S_CopiedPixels" xml:space="preserve">
+    <value>Copied selection pixels ({0}).</value>
+  </data>
+  <data name="S_CutPixels" xml:space="preserve">
+    <value>Cut selection pixels ({0}).</value>
+  </data>
+  <data name="S_PastedPixels" xml:space="preserve">
+    <value>Pasted as new layer {0}.</value>
+  </data>
+  <data name="S_NoPixelsToCopy" xml:space="preserve">
+    <value>{0} has no pixels to copy.</value>
+  </data>
+  <data name="S_ClipboardEmpty" xml:space="preserve">
+    <value>The clipboard is empty.</value>
+  </data>
+  <data name="S_LayerViaCopy" xml:space="preserve">
+    <value>Layer {0} created via copy.</value>
+  </data>
+  <data name="S_PastedExternal" xml:space="preserve">
+    <value>Pasted an external image from the clipboard ({0} × {1}, centered).</value>
+  </data>
+  <data name="S_PasteTooLarge" xml:space="preserve">
+    <value>The clipboard image exceeds the pixel limit and cannot be pasted.</value>
+  </data>
+  <data name="S_SystemClipboardFailed" xml:space="preserve">
+    <value>Copied (system clipboard unavailable — in-app only).</value>
+  </data>
+  <data name="M_LoadLayerPixels.Text" xml:space="preserve"><value>Layer's Pixels</value></data><data name="M_LoadMaskBlack.Text" xml:space="preserve"><value>Mask's Black Areas</value></data><data name="M_ExpandSelection.Text" xml:space="preserve">
+    <value>Expand Selection</value>
+  </data>
+  <data name="M_ContractSelection.Text" xml:space="preserve">
+    <value>Contract Selection</value>
+  </data>
+  <data name="M_FeatherSelection.Text" xml:space="preserve">
+    <value>Feather Selection</value>
+  </data>
+  <data name="M_SelectionAmountTitle" xml:space="preserve">
+    <value>Selection Amount</value>
+  </data>
+  <data name="M_SelectionAmountDescription" xml:space="preserve">
+    <value>Amount (1–{0} pixels):</value>
+  </data>
+  <data name="S_SelectionExpanded" xml:space="preserve">
+    <value>Selection expanded by {0} pixels.</value>
+  </data>
+  <data name="S_SelectionContracted" xml:space="preserve">
+    <value>Selection contracted by {0} pixels.</value>
+  </data>
+  <data name="S_SelectionContractedAway" xml:space="preserve">
+    <value>Selection contracted away completely.</value>
+  </data>
+  <data name="S_SelectionFeathered" xml:space="preserve">
+    <value>Selection feathered by {0} pixels.</value>
+  </data>
+  <data name="S_MaskLinked" xml:space="preserve">
+    <value>Mask on {0} linked (moves with the layer).</value>
+  </data>
+  <data name="S_MaskUnlinked" xml:space="preserve">
+    <value>Mask on {0} unlinked (can move independently).</value>
+  </data>
+  <data name="S_MaskEnabled" xml:space="preserve">
+    <value>Mask on {0} enabled.</value>
+  </data>
+  <data name="S_MaskDisabled" xml:space="preserve">
+    <value>Mask on {0} disabled.</value>
+  </data>
+  <data name="S_ClippingCreated" xml:space="preserve">
+    <value>Clipping mask created for {0}.</value>
+  </data>
+  <data name="S_ClippingReleased" xml:space="preserve">
+    <value>Clipping mask released from {0}.</value>
+  </data>
+  <data name="S_ClippingRefused" xml:space="preserve">
+    <value>Could not create a clipping mask (needs an adjacent regular layer below).</value>
+  </data>
+  <data name="S_MaskRemoved" xml:space="preserve">
+    <value>Mask removed from {0}.</value>
+  </data>
+  <data name="S_MultiSelect" xml:space="preserve">
+    <value>{0} layers selected · Ctrl+click to remove one</value>
+  </data>
+  <data name="S_NewDoc" xml:space="preserve">
+    <value>New 1280×800 document.</value>
+  </data>
+  <data name="S_NoGuides" xml:space="preserve">
+    <value>No guides to clear.</value>
+  </data>
+  <data name="S_NoMask" xml:space="preserve">
+    <value>{0} has no mask.</value>
+  </data>
+  <data name="S_NoRedo" xml:space="preserve">
+    <value>Nothing to redo.</value>
+  </data>
+  <data name="S_NoUndo" xml:space="preserve">
+    <value>Nothing to undo.</value>
+  </data>
+  <data name="S_NotProject" xml:space="preserve">
+    <value>This folder is not a Compositor project (manifest.json is missing).</value>
+  </data>
+  <data name="S_Opened" xml:space="preserve">
+    <value>Opened {0}.</value>
+  </data>
+  <data name="S_PaintToolNeedsPixels" xml:space="preserve"><value>This tool edits layer pixels. Select the image thumbnail to use it.</value></data>
+  <data name="S_PaintMultipleLayers" xml:space="preserve"><value>Several layers are selected. Select just one to paint on it.</value></data>
+  <data name="S_PaintHiddenLayer" xml:space="preserve"><value>“{0}” is hidden or inside a hidden folder. Show it to paint on it.</value></data>
+  <data name="S_PaintNeedsLayer" xml:space="preserve">
+    <value>This layer has no pixels to paint on.</value>
+  </data>
+  <data name="S_PaintFolderHasNoPixels" xml:space="preserve">
+    <value>{0} is a folder, which has no pixels of its own. Paint on a layer inside it, or on the folder's mask.</value>
+  </data>
+  <data name="S_PaintAdjustmentHasNoPixels" xml:space="preserve">
+    <value>{0} is an adjustment layer, with no pixels to paint. Paint on its mask instead.</value>
+  </data>
+  <data name="S_PaintMaskTurnedOff" xml:space="preserve">
+    <value>The layer mask is turned off. Shift-click its thumbnail to turn it on, then paint.</value>
+  </data>
+  <data name="S_PaintEmptySelection" xml:space="preserve">
+    <value>Nothing is selected, so there is nowhere to paint. Choose Edit > Deselect (Ctrl+D) to paint anywhere.</value>
+  </data>
+  <data name="S_Raised" xml:space="preserve">
+    <value>Raised {0}.</value>
+  </data>
+  <data name="S_Redo" xml:space="preserve">
+    <value>Redone.</value>
+  </data>
+  <data name="S_Reloaded" xml:space="preserve">
+    <value>Project reloaded from disk.</value>
+  </data>
+  <data name="S_Rotation" xml:space="preserve">
+    <value>Rotation {0:0.#}° · Size {1:0.#}×{2:0.#}</value>
+  </data>
+  <data name="S_Saved" xml:space="preserve">
+    <value>Saved.</value>
+  </data>
+  <data name="S_SavedTo" xml:space="preserve">
+    <value>Saved to {0}.</value>
+  </data>
+  <data name="S_SelectGroup" xml:space="preserve">
+    <value>Select the layers to group.</value>
+  </data>
+  <data name="S_SelectPaint" xml:space="preserve">
+    <value>Select a layer to paint on.</value>
+  </data>
+  <data name="S_SelectUngroup" xml:space="preserve">
+    <value>Select a folder to ungroup.</value>
+  </data>
+  <data name="S_ShapeAdded" xml:space="preserve">
+    <value>{0} added on a new layer above the active layer.</value>
+  </data>
+  <data name="S_ShapeTooBig" xml:space="preserve">
+    <value>Shape is too large. A shape can cover at most the same pixel budget as an import.</value>
+  </data>
+  <data name="S_TransformApplied" xml:space="preserve">
+    <value>Transform applied.</value>
+  </data>
+  <data name="S_TransformPos" xml:space="preserve">
+    <value>Size {0:0.#}×{1:0.#} · Position ({2:0.#}, {3:0.#})</value>
+  </data>
+  <data name="S_Undo" xml:space="preserve">
+    <value>Undone.</value>
+  </data>
+  <data name="S_Ungrouped" xml:space="preserve">
+    <value>Folder removed and layers promoted.</value>
+  </data>
+  <data name="Tool_Brush" xml:space="preserve">
+    <value>Brush</value>
+  </data>
+  <data name="Tool_Crop" xml:space="preserve">
+    <value>Crop</value>
+  </data>
+  <data name="Tool_EllipseSelect" xml:space="preserve">
+    <value>Ellipse Select</value>
+  </data>
+  <data name="Tool_Eraser" xml:space="preserve">
+    <value>Eraser</value>
+  </data>
+  <data name="Tool_Move" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="Tool_RectSelect" xml:space="preserve">
+    <value>Rectangle Select</value>
+  </data>
+  <data name="Tool_Shape" xml:space="preserve">
+    <value>Shape</value>
+  </data>
+  <data name="Tool_Wand" xml:space="preserve">
+    <value>Magic Wand</value>
+  </data>
+  <data name="L_WandTolerance.Text" xml:space="preserve">
+    <value>Tolerance</value>
+  </data>
+  <data name="L_WandSample.Text" xml:space="preserve">
+    <value>Sample</value>
+  </data>
+  <data name="L_WandPoint.Content" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="L_Wand3x3.Content" xml:space="preserve">
+    <value>3×3 Average</value>
+  </data>
+  <data name="L_Wand5x5.Content" xml:space="preserve">
+    <value>5×5 Average</value>
+  </data>
+  <data name="L_WandContiguous.Content" xml:space="preserve">
+    <value>Contiguous</value>
+  </data>
+  <data name="L_WandAllLayers.Content" xml:space="preserve">
+    <value>All layers</value>
+  </data>
+  <data name="M_ContentFill.Text" xml:space="preserve">
+    <value>Content-Aware Fill</value>
+  </data>
+  <data name="S_ContentFilled" xml:space="preserve">
+    <value>Content-Aware Fill completed for {0}.</value>
+  </data>
+  <data name="S_ContentFillNoDonors" xml:space="preserve">
+    <value>Not enough surrounding pixels to fill from — make a smaller selection.</value>
+  </data>
+  <data name="M_InvertPixels.Text" xml:space="preserve">
+    <value>Invert Pixels</value>
+  </data>
+  <data name="S_PixelsInverted" xml:space="preserve">
+    <value>Inverted the pixels on {0}.</value>
+  </data>
+  <data name="S_Filled" xml:space="preserve">
+    <value>Filled {0} inside the selection.</value>
+  </data>
+  <data name="S_MaskFilled" xml:space="preserve">
+    <value>Filled the mask on {0}.</value>
+  </data>
+  <data name="S_PixelsCleared" xml:space="preserve">
+    <value>Cleared the selected pixels on {0}.</value>
+  </data>
+  <data name="S_LayersFlippedHorizontal" xml:space="preserve">
+    <value>Flipped {0} layer(s) horizontally.</value>
+  </data>
+  <data name="S_LayersFlippedVertical" xml:space="preserve">
+    <value>Flipped {0} layer(s) vertically.</value>
+  </data>
+  <data name="S_CanvasFlippedHorizontal" xml:space="preserve">
+    <value>Flipped the canvas horizontally.</value>
+  </data>
+  <data name="S_CanvasFlippedVertical" xml:space="preserve">
+    <value>Flipped the canvas vertically.</value>
+  </data>
+  <data name="S_FlipRefused" xml:space="preserve">
+    <value>The flip would push a placement past the supported limits.</value>
+  </data>
+  <data name="S_NoPixelsToInvert" xml:space="preserve">
+    <value>{0} has no pixels to invert.</value>
+  </data>
+  <data name="M_Distort.Text" xml:space="preserve">
+    <value>Free Distort…</value>
+  </data>
+  <data name="L_DistortTopLeft" xml:space="preserve">
+    <value>Top Left</value>
+  </data>
+  <data name="L_DistortTopRight" xml:space="preserve">
+    <value>Top Right</value>
+  </data>
+  <data name="L_DistortBottomRight" xml:space="preserve">
+    <value>Bottom Right</value>
+  </data>
+  <data name="L_DistortBottomLeft" xml:space="preserve">
+    <value>Bottom Left</value>
+  </data>
+  <data name="L_DistortX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="L_DistortY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="S_Distorted" xml:space="preserve">
+    <value>Distorted {0}.</value>
+  </data>
+  <data name="S_DistortUnusable" xml:space="preserve">
+    <value>The distorted shape is unusable (corners overlap or are degenerate).</value>
+  </data>
+  <data name="M_Dither.Text" xml:space="preserve">
+    <value>Dither…</value>
+  </data>
+  <data name="L_DitherStyle" xml:space="preserve">
+    <value>Style</value>
+  </data>
+  <data name="L_DitherPixelSize" xml:space="preserve">
+    <value>Pixel Size</value>
+  </data>
+  <data name="L_DitherLineSpacing" xml:space="preserve">
+    <value>Line Spacing</value>
+  </data>
+  <data name="L_DitherLevels" xml:space="preserve">
+    <value>Levels</value>
+  </data>
+  <data name="S_Dithered" xml:space="preserve">
+    <value>Dither applied to {0}.</value>
+  </data>
+  <data name="DitherStyle_Atkinson" xml:space="preserve">
+    <value>Atkinson (classic Mac)</value>
+  </data>
+  <data name="DitherStyle_FloydSteinberg" xml:space="preserve">
+    <value>Floyd–Steinberg</value>
+  </data>
+  <data name="DitherStyle_Bayer2" xml:space="preserve">
+    <value>Bayer 2 × 2</value>
+  </data>
+  <data name="DitherStyle_Bayer4" xml:space="preserve">
+    <value>Bayer 4 × 4</value>
+  </data>
+  <data name="DitherStyle_Bayer8" xml:space="preserve">
+    <value>Bayer 8 × 8</value>
+  </data>
+  <data name="DitherStyle_HalftoneDots" xml:space="preserve">
+    <value>Halftone Dots</value>
+  </data>
+  <data name="DitherStyle_HalftoneLines" xml:space="preserve">
+    <value>Halftone Lines</value>
+  </data>
+  <data name="DitherStyle_HalftoneDiamonds" xml:space="preserve">
+    <value>Halftone Diamonds</value>
+  </data>
+  <data name="DitherStyle_MacPatterns" xml:space="preserve">
+    <value>Mac Patterns</value>
+  </data>
+  <data name="DitherStyle_Ascii" xml:space="preserve">
+    <value>ASCII</value>
+  </data>
+  <data name="DitherStyle_Scanlines" xml:space="preserve">
+    <value>Scanlines (CRT)</value>
+  </data>
+  <data name="M_InvertMask.Text" xml:space="preserve">
+    <value>Invert Mask</value>
+  </data>
+  <data name="M_FillForeground.Text" xml:space="preserve">
+    <value>Fill With Foreground</value>
+  </data>
+  <data name="M_FillBackground.Text" xml:space="preserve">
+    <value>Fill With Background</value>
+  </data>
+  <data name="M_ClearSelection.Text" xml:space="preserve">
+    <value>Clear Selection Pixels</value>
+  </data>
+  <data name="M_FlipLayerHorizontal.Text" xml:space="preserve">
+    <value>Flip Layer Horizontal</value>
+  </data>
+  <data name="M_FlipLayerVertical.Text" xml:space="preserve">
+    <value>Flip Layer Vertical</value>
+  </data>
+  <data name="M_FlipCanvasHorizontal.Text" xml:space="preserve">
+    <value>Flip Canvas Horizontal</value>
+  </data>
+  <data name="M_FlipCanvasVertical.Text" xml:space="preserve">
+    <value>Flip Canvas Vertical</value>
+  </data>
+  <data name="M_CanvasSize.Text" xml:space="preserve">
+    <value>Canvas Size…</value>
+  </data>
+  <data name="Dlg_Anchor" xml:space="preserve">
+    <value>Anchor</value>
+  </data>
+  <data name="Dlg_AnchorPosition" xml:space="preserve">
+    <value>Anchor row {0}, column {1}</value>
+  </data>
+  <data name="Dlg_ExtensionFill.Text" xml:space="preserve">
+    <value>Extension fill</value>
+  </data>
+  <data name="Dlg_FillTransparent.Text" xml:space="preserve">
+    <value>Transparent</value>
+  </data>
+  <data name="Dlg_FillForeground.Text" xml:space="preserve">
+    <value>Foreground</value>
+  </data>
+  <data name="Dlg_FillBackground.Text" xml:space="preserve">
+    <value>Background</value>
+  </data>
+  <data name="Dlg_FillWhite.Text" xml:space="preserve">
+    <value>White</value>
+  </data>
+  <data name="Dlg_FillBlack.Text" xml:space="preserve">
+    <value>Black</value>
+  </data>
+  <data name="S_CanvasSized" xml:space="preserve">
+    <value>Canvas is now {0} × {1} pixels.</value>
+  </data>
+  <data name="S_CanvasSizeRefused" xml:space="preserve">
+    <value>The canvas size was refused: it exceeds the supported limits or would move a layer out of range.</value>
+  </data>
+  <data name="M_SelectSubject.Text" xml:space="preserve">
+    <value>Select Subject (AI)</value>
+  </data>
+  <data name="M_RemoveSubject.Text" xml:space="preserve">
+    <value>Remove Subject (AI)</value>
+  </data>
+  <data name="S_MaskInverted" xml:space="preserve">
+    <value>Mask on {0} inverted.</value>
+  </data>
+  <data name="S_AiNotWired" xml:space="preserve">
+    <value>The AI segmentation model isn't wired up yet — the interface (IAiSegmenter) is reserved and will work once connected.</value>
+  </data>
+  <data name="S_AiNoSubject" xml:space="preserve">
+    <value>The AI found no subject in the image.</value>
+  </data>
+  <data name="S_SubjectSelected" xml:space="preserve">
+    <value>Selection created from the AI segmentation.</value>
+  </data>
+  <data name="S_SubjectRemoved" xml:space="preserve">
+    <value>Subject pixels removed.</value>
+  </data>
+  <data name="M_ColorRange.Text" xml:space="preserve">
+    <value>Color Range…</value>
+  </data>
+  <data name="L_ColorRangeHint.Text" xml:space="preserve">
+    <value>Compares against the foreground color (un-premultiplied); pixels within tolerance are selected. Multiple include/exclude colors can be stacked.</value>
+  </data>
+  <data name="L_ColorRangeFuzziness.Text" xml:space="preserve">
+    <value>Fuzziness</value>
+  </data>
+  <data name="L_ColorRangeInvert.Content" xml:space="preserve">
+    <value>Invert</value>
+  </data>
+  <data name="L_ColorRangeAddInclude.Content" xml:space="preserve">
+    <value>Add foreground to include</value>
+  </data>
+  <data name="L_ColorRangeAddExclude.Content" xml:space="preserve">
+    <value>Add foreground to exclude</value>
+  </data>
+  <data name="L_ColorRangeClear.Content" xml:space="preserve">
+    <value>Clear colors</value>
+  </data>
+  <data name="L_ColorRangeIncludeCount" xml:space="preserve">
+    <value>Included colors: {0}</value>
+  </data>
+  <data name="L_ColorRangeExcludeCount" xml:space="preserve">
+    <value>Excluded colors: {0}</value>
+  </data>
+  <data name="S_ColorRangeNoColors" xml:space="preserve">
+    <value>No include colors added.</value>
+  </data>
+  <data name="S_ColorRangeSelected" xml:space="preserve">
+    <value>Color Range selected {0} pixels.</value>
+  </data>
+  <data name="S_ColorRangeEmpty" xml:space="preserve">
+    <value>Color Range matched no pixels; the selection was cleared.</value>
+  </data>
+  <data name="L_ColorRangeSampling.Text" xml:space="preserve">
+    <value>Click the canvas to sample: click = replace · Shift = include · Alt = exclude</value>
+  </data>
+  <data name="L_ColorRangeApply.Content" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="L_ColorRangeCancel.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="S_ColorRangeSampling" xml:space="preserve">
+    <value>Color Range: click the canvas to sample; Apply or Cancel to finish.</value>
+  </data>
+  <data name="S_ColorRangeCancelled" xml:space="preserve">
+    <value>Color Range cancelled; the selection was restored.</value>
+  </data>
+  <data name="S_WandSelected" xml:space="preserve">
+    <value>Magic Wand selected {0} pixels.</value>
+  </data>
+  <data name="S_WandEmpty" xml:space="preserve">
+    <value>No matching pixels; the selection was cleared.</value>
+  </data>
+  <data name="T_S_ApplyCrop" xml:space="preserve">
+    <value>Apply Crop</value>
+  </data>
+  <data name="Dlg_Cancel.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="L_Blend.Text" xml:space="preserve">
+    <value>Blend</value>
+  </data>
+  <data name="L_Corner.Text" xml:space="preserve">
+    <value>Corner Radius</value>
+  </data>
+  <data name="L_Delete.Content" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="L_Details.Content" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="L_Ellipse.Content" xml:space="preserve">
+    <value>Ellipse</value>
+  </data>
+  <data name="L_Free.Content" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="L_Hardness.Text" xml:space="preserve">
+    <value>Hardness</value>
+  </data>
+  <data name="L_Import.Content" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="L_Layers.Text" xml:space="preserve">
+    <value>Layers</value>
+  </data>
+  <data name="L_Line.Content" xml:space="preserve">
+    <value>Line</value>
+  </data>
+  <data name="L_LineWidth.Text" xml:space="preserve">
+    <value>Line Width</value>
+  </data>
+  <data name="L_Lower.Content" xml:space="preserve">
+    <value>Lower</value>
+  </data>
+  <data name="L_Opacity.Text" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="L_Original.Content" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="L_PaintMask.Content" xml:space="preserve">
+    <value>Paint Mask</value>
+  </data>
+  <data name="L_Raise.Content" xml:space="preserve">
+    <value>Raise</value>
+  </data>
+  <data name="L_Rectangle.Content" xml:space="preserve">
+    <value>Rectangle</value>
+  </data>
+  <data name="L_Size.Text" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="L_Visible.Content" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="S_ApplyCrop.Content" xml:space="preserve">
+    <value>Apply Crop</value>
+  </data>
+  <data name="M_Merge.Text" xml:space="preserve">
+    <value>Merge Layers</value>
+  </data>
+  <data name="S_Merged" xml:space="preserve">
+    <value>Merged into {{0}}.</value>
+  </data>
+  <data name="M_MergeDown" xml:space="preserve">
+    <value>Merge Down</value>
+  </data>
+  <data name="M_MergeGroup" xml:space="preserve">
+    <value>Merge Group</value>
+  </data>
+  <data name="S_MergeDown" xml:space="preserve">
+    <value>Merged down into {0}.</value>
+  </data>
+  <data name="S_MergeGroup" xml:space="preserve">
+    <value>Group merged into {0}.</value>
+  </data>
+  <data name="S_Renamed" xml:space="preserve">
+    <value>Renamed “{0}” to “{1}”.</value>
+  </data>
+  <data name="V_ShowGrid.Text" xml:space="preserve">
+    <value>Show Pixel Grid</value>
+  </data>
+  <data name="M_TrimDialog" xml:space="preserve">
+    <value>Trim…</value>
+  </data>
+  <data name="L_AutoLevels" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="L_AutoContrast" xml:space="preserve">
+    <value>Contrast</value>
+  </data>
+  <data name="L_AutoColor" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="L_AutoNeutral" xml:space="preserve">
+    <value>Color + neutral midtones</value>
+  </data>
+  <data name="Tool_Blur" xml:space="preserve">
+    <value>Blur Tool</value>
+  </data>
+  <data name="L_BlurMode.Content" xml:space="preserve">
+    <value>Blur</value>
+  </data>
+  <data name="L_SmudgeMode.Content" xml:space="preserve">
+    <value>Smudge</value>
+  </data>
+  <data name="L_LiquifyMode.Content" xml:space="preserve">
+    <value>Liquify</value>
+  </data>
+  <data name="L_BlurRadius.Text" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="Tool_Clone" xml:space="preserve">
+    <value>Clone Stamp</value>
+  </data>
+  <data name="L_CloneAligned.Content" xml:space="preserve">
+    <value>Aligned</value>
+  </data>
+  <data name="L_CloneAllLayers.Content" xml:space="preserve">
+    <value>All layers</value>
+  </data>
+  <data name="L_CloneHint.Text" xml:space="preserve">
+    <value>Alt-click sets the source</value>
+  </data>
+  <data name="S_CloneSourceSet" xml:space="preserve">
+    <value>Clone source set to {0}, {1}.</value>
+  </data>
+  <data name="S_CloneNoSource" xml:space="preserve">
+    <value>Hold Alt and click to set the clone source first.</value>
+  </data>
+  <data name="M_Trim.Text" xml:space="preserve">
+    <value>Trim…</value>
+  </data>
+  <data name="L_TrimBasedOn" xml:space="preserve">
+    <value>Based On</value>
+  </data>
+  <data name="L_TrimTransparent" xml:space="preserve">
+    <value>Transparent Pixels</value>
+  </data>
+  <data name="L_TrimTopLeft" xml:space="preserve">
+    <value>Top Left Color</value>
+  </data>
+  <data name="L_TrimBottomRight" xml:space="preserve">
+    <value>Bottom Right Color</value>
+  </data>
+  <data name="L_TrimTop" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="L_TrimBottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="L_TrimLeft" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="L_TrimRight" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="L_TrimTolerance" xml:space="preserve">
+    <value>Tolerance</value>
+  </data>
+  <data name="S_Trimmed" xml:space="preserve">
+    <value>Trimmed to {0}.</value>
+  </data>
+  <data name="S_TrimNothing" xml:space="preserve">
+    <value>Nothing to trim; the canvas stays {0}.</value>
+  </data>
+  <data name="M_ImageSize" xml:space="preserve">
+    <value>Image Size…</value>
+  </data>
+  <data name="Dlg_Width" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="Dlg_Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="Dlg_LockRatio" xml:space="preserve">
+    <value>Lock aspect ratio</value>
+  </data>
+  <data name="Dlg_Confirm" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="S_Resized" xml:space="preserve">
+    <value>Resized to {0} × {1}.</value>
+  </data>
+  <data name="S_SlowFrame" xml:space="preserve">
+    <value>Slow frame {0}×{1}: {2:0.0} ms</value>
+  </data>
+  <data name="U_Pixels" xml:space="preserve">
+    <value>Pixels</value>
+  </data>
+  <data name="U_Percent" xml:space="preserve">
+    <value>Percent</value>
+  </data>
+  <data name="U_Inches" xml:space="preserve">
+    <value>Inches</value>
+  </data>
+  <data name="U_Centimeters" xml:space="preserve">
+    <value>Centimeters</value>
+  </data>
+  <data name="M_SelectAll.Text" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="M_InvertSelection.Text" xml:space="preserve">
+    <value>Inverse Selection</value>
+  </data>
+  <data name="S_SelectAll" xml:space="preserve">
+    <value>Selected all.</value>
+  </data>
+  <data name="S_Inverted" xml:space="preserve">
+    <value>Selection inverted.</value>
+  </data>
+  <data name="M_Duplicate" xml:space="preserve">
+    <value>Duplicate Layers</value>
+  </data>
+  <data name="M_MoveOut" xml:space="preserve">
+    <value>Move Out of Folder</value>
+  </data>
+  <data name="M_Rename" xml:space="preserve">
+    <value>Rename Layer…</value>
+  </data>
+  <data name="S_Duplicated" xml:space="preserve">
+    <value>Duplicated {0} layer(s).</value>
+  </data>
+  <data name="S_MovedOut" xml:space="preserve">
+    <value>Moved out of folder.</value>
+  </data>
+  <data name="M_CopyMerged.Text" xml:space="preserve">
+    <value>Copy Merged</value>
+  </data>
+  <data name="T_AppName" xml:space="preserve">
+    <value>Compositor</value>
+  </data>
+  <data name="S_TitleFormat" xml:space="preserve">
+    <value>{0}{1} — Compositor</value>
+  </data>
+  <data name="L_EditedSuffix" xml:space="preserve">
+    <value> — Edited</value>
+  </data>
+  <data name="M_Untitled" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+  <data name="M_CloseProject" xml:space="preserve"><value>Close Project</value></data><data name="M_ClearMenu" xml:space="preserve"><value>Clear Menu</value></data><data name="M_NoRecentProjects" xml:space="preserve">
+    <value>No recent projects</value>
+  </data>
+  <data name="S_ToolMoveHint" xml:space="preserve">
+    <value>Drag to move the selected layer · Ctrl+drag moves without snapping</value>
+  </data>
+  <data name="S_ToolRectSelectHint" xml:space="preserve">
+    <value>Drag a rectangle · Ctrl+D deselects</value>
+  </data>
+  <data name="S_ToolEllipseSelectHint" xml:space="preserve">
+    <value>Drag an ellipse · Ctrl+D deselects</value>
+  </data>
+  <data name="S_ToolBrushHint" xml:space="preserve">
+    <value>Drag to paint · Shift-click continues the last stroke · hold Shift to keep a straight axis</value>
+  </data>
+  <data name="S_ToolEraserHint" xml:space="preserve">
+    <value>Drag to erase · Shift-click continues the last stroke · hold Shift to keep a straight axis</value>
+  </data>
+  <data name="S_ToolCropHint" xml:space="preserve">
+    <value>Drag a rectangle, then Apply Crop</value>
+  </data>
+  <data name="S_ToolShapeHint" xml:space="preserve">
+    <value>Drag a Rectangle/Ellipse/Line on a new layer · Shift squares it (45° lines)</value>
+  </data>
+  <data name="S_ToolWandHint" xml:space="preserve">
+    <value>Click matching pixels to select them · untick Contiguous to take every match</value>
+  </data>
+  <data name="S_ToolCloneHint" xml:space="preserve">
+    <value>Alt-click sets the clone source · then drag to stamp (Shift = from all layers)</value>
+  </data>
+  <data name="S_ToolBlurHint" xml:space="preserve">
+    <value>Drag to blur under the brush · radius set below</value>
+  </data>
+  <data name="L_Contrast" xml:space="preserve">
+    <value>Contrast</value>
+  </data>
+  <data name="L_Whites" xml:space="preserve">
+    <value>Whites</value>
+  </data>
+  <data name="L_Blacks" xml:space="preserve">
+    <value>Blacks</value>
+  </data>
+  <data name="L_Temperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="L_Tint" xml:space="preserve">
+    <value>Tint</value>
+  </data>
+  <data name="L_Vibrance" xml:space="preserve">
+    <value>Vibrance</value>
+  </data>
+  <data name="M_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="M_Reset" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="L_Gaussian" xml:space="preserve">
+    <value>Gaussian</value>
+  </data>
+  <data name="L_Monochromatic" xml:space="preserve">
+    <value>Monochromatic</value>
+  </data>
+  <data name="L_Colorize" xml:space="preserve">
+    <value>Colorize</value>
+  </data>
+  <data name="M_AdjustmentNeedsProject" xml:space="preserve">
+    <value>This kind's settings need the project file or an MCP edit for now.</value>
+  </data>
+  <data name="CE_PointMoved" xml:space="preserve">
+    <value>Point ({0:0}, {1:0}).</value>
+  </data>
+  <data name="SC_New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="SC_Open" xml:space="preserve">
+    <value>Open Source…</value>
+  </data>
+  <data name="SC_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SC_ImportImage" xml:space="preserve">
+    <value>Import Image…</value>
+  </data>
+  <data name="SC_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="SC_Redo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="SC_Deselect" xml:space="preserve">
+    <value>Deselect</value>
+  </data>
+  <data name="SC_FitToWindow" xml:space="preserve">
+    <value>Fit to Window</value>
+  </data>
+  <data name="SC_Zoom100" xml:space="preserve">
+    <value>Zoom 100%</value>
+  </data>
+  <data name="SC_ZoomIn" xml:space="preserve">
+    <value>Zoom In</value>
+  </data>
+  <data name="SC_ZoomOut" xml:space="preserve">
+    <value>Zoom Out</value>
+  </data>
+  <data name="M_FileTypeJpeg" xml:space="preserve">
+    <value>JPEG image</value>
+  </data>
+  <data name="M_FileTypePng" xml:space="preserve">
+    <value>PNG image</value>
+  </data>
+  <data name="M_LayerEffects.Text" xml:space="preserve">
+    <value>Layer Effects…</value>
+  </data>
+  <data name="M_LayerEffectsDialog" xml:space="preserve">
+    <value>Layer Effects…</value>
+  </data>
+  <data name="S_LayerEffectsSet" xml:space="preserve">
+    <value>Layer effects set on {0}.</value>
+  </data>
+  <data name="L_EffectStroke" xml:space="preserve">
+    <value>Stroke</value>
+  </data>
+  <data name="L_EffectShadow" xml:space="preserve">
+    <value>Shadow</value>
+  </data>
+  <data name="L_EffectInnerShadow" xml:space="preserve">
+    <value>Inner Shadow</value>
+  </data>
+  <data name="L_EffectColorOverlay" xml:space="preserve">
+    <value>Color Overlay</value>
+  </data>
+  <data name="L_EffectOuterGlow" xml:space="preserve">
+    <value>Outer Glow</value>
+  </data>
+  <data name="L_EffectInnerGlow" xml:space="preserve">
+    <value>Inner Glow</value>
+  </data>
+  <data name="L_EffectKind" xml:space="preserve">
+    <value>Effect</value>
+  </data>
+  <data name="L_EffectPosition" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="L_EffectOutside" xml:space="preserve">
+    <value>Outside</value>
+  </data>
+  <data name="L_EffectInside" xml:space="preserve">
+    <value>Inside</value>
+  </data>
+  <data name="L_Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="L_EffectSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="L_EffectOpacity" xml:space="preserve">
+    <value>Opacity</value>
+  </data>
+  <data name="L_Blur" xml:space="preserve">
+    <value>Blur</value>
+  </data>
+  <data name="M_DitherDialog" xml:space="preserve">
+    <value>Dither…</value>
+  </data>
+  <data name="M_DistortDialog" xml:space="preserve">
+    <value>Free Distort…</value>
+  </data>
+  <data name="L_DitherPixelShape" xml:space="preserve"><value>Pixel Shape</value></data>
+  <data name="L_DitherTextSize" xml:space="preserve"><value>Text Size (px)</value></data>
+  <data name="L_DitherCharacters" xml:space="preserve"><value>Characters</value></data>
+  <data name="L_DitherCellSize" xml:space="preserve"><value>Cell Size (px)</value></data>
+  <data name="L_DitherAngle" xml:space="preserve"><value>Angle (degrees)</value></data>
+  <data name="L_DitherDiffusion" xml:space="preserve"><value>Diffusion (%)</value></data>
+  <data name="L_DitherDensity" xml:space="preserve"><value>Density</value></data>
+  <data name="L_DitherContrast" xml:space="preserve"><value>Contrast</value></data>
+  <data name="L_DitherColors" xml:space="preserve"><value>Colors</value></data>
+  <data name="L_DitherScanlineDots" xml:space="preserve"><value>Dots (%)</value></data>
+  <data name="L_DitherGlow" xml:space="preserve"><value>Glow (%)</value></data>
+  <data name="L_DitherWobble" xml:space="preserve"><value>Wobble (px)</value></data>
+  <data name="L_DitherDarkColor" xml:space="preserve"><value>Dark color</value></data>
+  <data name="L_DitherLightColor" xml:space="preserve"><value>Light color</value></data>
+  <data name="L_DitherPreview" xml:space="preserve"><value>Preview</value></data>
+  <data name="L_DitherLightOnDark" xml:space="preserve"><value>Light on Dark</value></data>
+  <data name="DitherPalette_BlackWhite" xml:space="preserve"><value>Black &amp; White</value></data>
+  <data name="DitherPalette_TwoColors" xml:space="preserve"><value>Two Colors</value></data>
+  <data name="DitherPalette_Original" xml:space="preserve"><value>Original</value></data>
+  <data name="DitherShape_Square" xml:space="preserve"><value>Square</value></data>
+  <data name="DitherShape_Dot" xml:space="preserve"><value>Dot</value></data>
+
+  <data name="Tool_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="S_ToolTextHint" xml:space="preserve">
+    <value>Click to place a text layer · the letters take the foreground color</value>
+  </data>
+  <data name="M_TextDialog" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="L_TextContent" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="L_TextFont" xml:space="preserve">
+    <value>Font</value>
+  </data>
+  <data name="L_TextSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="L_TextTracking" xml:space="preserve">
+    <value>Tracking</value>
+  </data>
+  <data name="L_TextLeading" xml:space="preserve">
+    <value>Leading (0 = auto)</value>
+  </data>
+  <data name="L_TextAlign" xml:space="preserve">
+    <value>Alignment</value>
+  </data>
+  <data name="L_AlignLeft" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="L_AlignCenter" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="L_AlignRight" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="S_TextAdded" xml:space="preserve">
+    <value>Added text layer {0}.</value>
+  </data>
+  <data name="S_TextUpdated" xml:space="preserve">
+    <value>Updated text layer {0}.</value>
+  </data>
+  <data name="S_TextRefused" xml:space="preserve">
+    <value>That text is invalid or exceeds the size limits.</value>
+  </data>
+
+  <data name="Tool_Lasso" xml:space="preserve"><value>Lasso</value></data>
+  <data name="L_LassoFreehand.Content" xml:space="preserve"><value>Freehand</value></data>
+  <data name="L_LassoPolygonal.Content" xml:space="preserve"><value>Polygonal</value></data>
+  <data name="L_SelectionNew.Content" xml:space="preserve"><value>New</value></data>
+  <data name="L_SelectionAdd.Content" xml:space="preserve"><value>Add</value></data>
+  <data name="L_SelectionSubtract.Content" xml:space="preserve"><value>Subtract</value></data>
+  <data name="L_LassoAntialias.Content" xml:space="preserve"><value>Anti-alias</value></data>
+  <data name="S_ToolLassoHint" xml:space="preserve"><value>Drag a freehand outline or click polygon vertices. Shift adds, Alt subtracts; Enter finishes, Escape cancels, Backspace removes a point. Tab switches mode.</value></data>
+  <data name="S_LassoApplied" xml:space="preserve"><value>Applied lasso selection.</value></data>
+  <data name="Tool_Gradient" xml:space="preserve"><value>Gradient</value></data>
+  <data name="L_GradientLinear.Content" xml:space="preserve"><value>Linear</value></data>
+  <data name="L_GradientRadial.Content" xml:space="preserve"><value>Radial</value></data>
+  <data name="L_GradientTransparent.Content" xml:space="preserve"><value>Foreground to transparent</value></data>
+  <data name="L_GradientBackground.Content" xml:space="preserve"><value>Foreground to background</value></data>
+  <data name="L_GradientReverse.Content" xml:space="preserve"><value>Reverse</value></data>
+  <data name="L_GradientMask.Content" xml:space="preserve"><value>Paint mask</value></data>
+  <data name="L_GradientApply.Content" xml:space="preserve"><value>Apply</value></data>
+  <data name="L_GradientCancel.Content" xml:space="preserve"><value>Cancel</value></data>
+  <data name="S_ToolGradientHint" xml:space="preserve"><value>Drag endpoints; Shift snaps to 45°. Enter applies; Escape cancels. Number keys set opacity.</value></data>
+  <data name="S_GradientRefused" xml:space="preserve"><value>Select one visible paintable layer or an enabled mask, with a nonempty selection.</value></data>
+  <data name="S_GradientApplied" xml:space="preserve"><value>Applied gradient.</value></data>
+  <data name="S_GradientUnchanged" xml:space="preserve"><value>Gradient made no change, or the draft became outdated.</value></data>
+  <data name="S_GradientFailed" xml:space="preserve"><value>Could not apply gradient.</value></data>
+  <data name="Tool_Healing" xml:space="preserve"><value>Spot Healing</value></data>
+  <data name="L_HealContentAware.Content" xml:space="preserve"><value>Content-Aware</value></data>
+  <data name="L_HealCreateTexture.Content" xml:space="preserve"><value>Create Texture</value></data>
+  <data name="L_HealProximity.Content" xml:space="preserve"><value>Proximity Match</value></data>
+  <data name="S_ToolHealingHint" xml:space="preserve"><value>Drag over a spot to repair it on release. J selects this tool; Tab switches mode, number keys set opacity, Escape cancels.</value></data>
+  <data name="S_HealingBusy" xml:space="preserve"><value>Finish or cancel the healing stroke before continuing. Escape cancels.</value></data>
+  <data name="S_HealingRefused" xml:space="preserve"><value>Select one visible image layer with a nonempty selection. Spot healing cannot paint a mask, group, or adjustment layer.</value></data>
+  <data name="S_HealingWorking" xml:space="preserve"><value>Repairing the spot… Escape cancels.</value></data>
+  <data name="S_HealingFailed" xml:space="preserve"><value>Could not repair the spot.</value></data>
+  <data name="S_HealingApplied" xml:space="preserve"><value>Applied spot healing.</value></data>
+  <data name="S_HealingUnchanged" xml:space="preserve"><value>Spot healing made no change, or the stroke became outdated.</value></data>
+  <data name="S_HealingCanceled" xml:space="preserve"><value>Canceled spot healing.</value></data>
+  <data name="L_HistogramLoading" xml:space="preserve"><value>Computing histogram…</value></data>
+  <data name="L_HistogramInput" xml:space="preserve"><value>Underlying pixels, weighted by alpha.</value></data>
+  <data name="L_HistogramFailed" xml:space="preserve"><value>Could not compute histogram.</value></data>
+  <data name="L_Reversed" xml:space="preserve"><value>Reversed</value></data>
+  <data name="L_TintHue" xml:space="preserve"><value>Tint hue</value></data>
+  <data name="L_TintSaturation" xml:space="preserve"><value>Tint saturation</value></data>
+  <data name="L_PairCyanRed" xml:space="preserve"><value>Cyan / Red</value></data>
+  <data name="L_PairMagentaGreen" xml:space="preserve"><value>Magenta / Green</value></data>
+  <data name="L_PairYellowBlue" xml:space="preserve"><value>Yellow / Blue</value></data>
+  <data name="L_BalanceRow" xml:space="preserve"><value>{0} {1}</value></data>
+  <data name="L_PreserveLuminosity" xml:space="preserve"><value>Preserve luminosity</value></data>
+  <data name="L_GrainSize" xml:space="preserve"><value>Size</value></data>
+  <data name="L_Roughness" xml:space="preserve"><value>Roughness</value></data>
+  <data name="L_Seed" xml:space="preserve"><value>Seed</value></data>
+  <data name="W_Adjustment.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>New adjustment layer</value></data>
+  <data name="W_Background.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Background color</value></data>
+  <data name="W_DeleteLayer.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Delete the selected effect, layers or targeted mask</value></data>
+  <data name="W_Effects.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Layer effects</value></data>
+  <data name="W_Fit.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Fit canvas (Ctrl+0)</value></data>
+  <data name="W_Folder.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>New folder</value></data>
+  <data name="W_Foreground.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Foreground color</value></data>
+  <data name="W_Import.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Import image</value></data>
+  <data name="W_Mask.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Add layer mask (Alt-click for a black mask)</value></data>
+  <data name="W_MoreLayers.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>More layer commands</value></data>
+  <data name="W_New.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>New canvas (Ctrl+N)</value></data>
+  <data name="W_PanelResize.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Drag to resize the Layers panel</value></data>
+  <data name="W_ResetColors.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Default colors</value></data>
+  <data name="W_SwapColors.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Swap colors</value></data>
+  <data name="W_ZoomIn.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Zoom in</value></data>
+  <data name="W_ZoomOut.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Zoom out</value></data>
+  <data name="M_Fit.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Fit the whole canvas (Ctrl+0)</value></data>
+  <data name="M_Zoom100.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Actual size (Ctrl+1)</value></data>
+  <data name="V_ShowGrid.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>Visible from 800%</value></data>
+  <data name="W_Fit.Content" xml:space="preserve"><value>Fit</value></data>
+  <data name="S_SelectionFailed" xml:space="preserve"><value>Could not build selection.</value></data>
+  <data name="S_SelectionWorking" xml:space="preserve"><value>Building selection…</value></data>
+  <data name="S_SelectionMoved" xml:space="preserve"><value>Selection outline moved.</value></data>
+  <data name="W_MaskLabel" xml:space="preserve"><value>Layer mask</value></data>
+  <data name="N_Background.Content" xml:space="preserve"><value>Background</value></data>
+  <data name="N_Foreground.Content" xml:space="preserve"><value>Foreground</value></data>
+  <data name="N_Rulers.Text" xml:space="preserve"><value>Show Rulers</value></data>
+  <data name="V_ShowGuides.Text" xml:space="preserve"><value>Guides</value></data>
+  <data name="V_Snap.Text" xml:space="preserve"><value>Snap</value></data>
+  <data name="V_LockGuides.Text" xml:space="preserve"><value>Lock Guides</value></data>
+  <data name="V_SnapTo.Text" xml:space="preserve"><value>Snap To</value></data>
+  <data name="V_Grid.Text" xml:space="preserve"><value>Grid</value></data>
+  <data name="V_SnapToGrid.Text" xml:space="preserve"><value>Grid</value></data>
+  <data name="V_GridSettings.Text" xml:space="preserve"><value>Grid Settings…</value></data>
+  <data name="M_GridSettings" xml:space="preserve"><value>Grid</value></data>
+  <data name="L_GridColor" xml:space="preserve"><value>Color</value></data>
+  <data name="L_GridCustomColor" xml:space="preserve"><value>Custom color</value></data>
+  <data name="L_GridStyle" xml:space="preserve"><value>Style</value></data>
+  <data name="L_GridOpacity" xml:space="preserve"><value>Opacity</value></data>
+  <data name="L_GridlineEvery" xml:space="preserve"><value>Gridline every</value></data>
+  <data name="L_GridPixels" xml:space="preserve"><value>pixels</value></data>
+  <data name="L_GridSubdivisions" xml:space="preserve"><value>Subdivisions</value></data>
+  <data name="S_GridSubdivisionEvery" xml:space="preserve"><value>A subdivision every {0} pixels.</value></data>
+  <data name="S_GridRangeHint" xml:space="preserve"><value>Use gridlines every 2–4096 pixels and 1–64 subdivisions, no more than the pixels between gridlines.</value></data>
+  <data name="Dlg_RestoreDefaults" xml:space="preserve"><value>Restore Defaults</value></data>
+  <data name="Dlg_SheetCancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="GridPreset_LightGray" xml:space="preserve"><value>Light Gray</value></data>
+  <data name="GridPreset_LightBlue" xml:space="preserve"><value>Light Blue</value></data>
+  <data name="GridPreset_LightRed" xml:space="preserve"><value>Light Red</value></data>
+  <data name="GridPreset_Green" xml:space="preserve"><value>Green</value></data>
+  <data name="GridPreset_MediumBlue" xml:space="preserve"><value>Medium Blue</value></data>
+  <data name="GridPreset_Yellow" xml:space="preserve"><value>Yellow</value></data>
+  <data name="GridPreset_Magenta" xml:space="preserve"><value>Magenta</value></data>
+  <data name="GridPreset_Cyan" xml:space="preserve"><value>Cyan</value></data>
+  <data name="GridPreset_Black" xml:space="preserve"><value>Black</value></data>
+  <data name="GridPreset_Custom" xml:space="preserve"><value>Custom</value></data>
+  <data name="GridStyle_Lines" xml:space="preserve"><value>Lines</value></data>
+  <data name="GridStyle_DashedLines" xml:space="preserve"><value>Dashed Lines</value></data>
+  <data name="GridStyle_Dots" xml:space="preserve"><value>Dots</value></data>
+  <data name="V_SnapToGuides.Text" xml:space="preserve"><value>Guides</value></data>
+  <data name="V_SnapToLayers.Text" xml:space="preserve"><value>Layers</value></data>
+  <data name="V_SnapToBounds.Text" xml:space="preserve"><value>Document Bounds</value></data>
+  <data name="N_SampleRing.Content" xml:space="preserve"><value>Sample ring</value></data>
+  <data name="S_ToolEyedropperHint" xml:space="preserve"><value>Sample composited sRGB color · Transparent pixels keep the current color</value></data>
+  <data name="S_ToolHandHint" xml:space="preserve"><value>Drag to pan · Space temporarily pans · Pinch to zoom</value></data>
+  <data name="S_ToolZoomHint" xml:space="preserve"><value>Click to zoom in · Alt-click to zoom out · Drag left/right to scrub zoom</value></data>
+  <data name="Tool_Eyedropper" xml:space="preserve"><value>Eyedropper</value></data>
+  <data name="Tool_Hand" xml:space="preserve"><value>Hand</value></data>
+  <data name="Tool_Zoom" xml:space="preserve"><value>Zoom</value></data>
+  <data name="A_LayerVisibility" xml:space="preserve"><value>Layer visibility</value></data>
+  <data name="SC_Rulers" xml:space="preserve"><value>Show rulers</value></data>
+  <data name="SC_TemporaryPan" xml:space="preserve"><value>Temporary pan</value></data>
+  <data name="Tr_FreeTransform.Text" xml:space="preserve"><value>Free Transform</value></data>
+  <data name="Tr_AutoSelect" xml:space="preserve"><value>Auto Select</value></data>
+  <data name="Tr_AutoSelectTip" xml:space="preserve"><value>Click visible content on the canvas to select its layer. Transparent areas let clicks through. Hold Ctrl to temporarily toggle Auto Select.</value></data>
+  <data name="Tr_ShowControls" xml:space="preserve"><value>Show Controls</value></data>
+  <data name="Tr_LockRatio" xml:space="preserve"><value>Lock ratio</value></data>
+  <data name="Tr_Pixels" xml:space="preserve"><value>Pixels</value></data>
+  <data name="Tr_Target" xml:space="preserve"><value>Transform target</value></data>
+  <data name="Tr_Scale" xml:space="preserve"><value>Scale</value></data>
+  <data name="Tr_X" xml:space="preserve"><value>X position</value></data>
+  <data name="Tr_Y" xml:space="preserve"><value>Y position</value></data>
+  <data name="Tr_Width" xml:space="preserve"><value>Width</value></data>
+  <data name="Tr_Height" xml:space="preserve"><value>Height</value></data>
+  <data name="Tr_Rotation" xml:space="preserve"><value>Rotation</value></data>
+  <data name="Tr_Sampling" xml:space="preserve"><value>Sampling</value></data>
+  <data name="Tr_SamplingNearest" xml:space="preserve"><value>Nearest</value></data>
+  <data name="Tr_SamplingSmooth" xml:space="preserve"><value>Smooth</value></data>
+  <data name="Tr_SamplingHighQuality" xml:space="preserve"><value>High quality</value></data>
+  <data name="Tr_FlipH" xml:space="preserve"><value>Flip H</value></data>
+  <data name="Tr_FlipV" xml:space="preserve"><value>Flip V</value></data>
+  <data name="Tr_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="Tr_Transform" xml:space="preserve"><value>Transform</value></data>
+  <data name="Tr_TransformMask" xml:space="preserve"><value>Transform Mask</value></data>
+  <data name="Tr_Unavailable" xml:space="preserve"><value>Select a visible pixel layer or a folder with visible pixel layers.</value></data>
+  <data name="A_PixelThumbnail" xml:space="preserve"><value>Click to target pixels; Ctrl-click loads opaque pixels; Ctrl-Shift adds; Ctrl-Alt subtracts.</value></data>
+  <data name="A_MaskThumbnail" xml:space="preserve"><value>Click to target mask; Shift-click enables/disables; Alt-click shows mask alone; Alt-drag copies mask; Ctrl-click loads black areas (Shift adds, Alt subtracts).</value></data>
+  <data name="A_MaskLink" xml:space="preserve"><value>Link or unlink the layer and mask</value></data>
+  <data name="A_ShapeCorner" xml:space="preserve"><value>Corner radius, pixels</value></data>
+  <data name="A_ShapeLineWidth" xml:space="preserve"><value>Line width, pixels</value></data>
+  <data name="S_LoadMaskSelection" xml:space="preserve"><value>Loaded mask selection.</value></data>
+  <data name="S_LoadLayerSelection" xml:space="preserve"><value>Loaded layer selection.</value></data>
+  <data name="S_EmptySelectionPaint" xml:space="preserve"><value>Nothing is selected. Choose Select &gt; Deselect (Ctrl+D) to paint anywhere.</value></data>
+<data name="S_SelectedPixelsMoved" xml:space="preserve"><value>Selected pixels moved.</value></data>
+<data name="S_SelectedPixelsDuplicated" xml:space="preserve"><value>Selected pixels duplicated.</value></data>
+<data name="S_SelectedPixelsFailed" xml:space="preserve"><value>Could not move selected pixels.</value></data>
+  <data name="S_CanvasUpdateFailed" xml:space="preserve"><value>Canvas update failed.</value></data>
+<data name="S_DitherFailed" xml:space="preserve"><value>Could not apply dither.</value></data>
+<data name="S_DitherSourceChanged" xml:space="preserve"><value>The layer changed while dithering. Try again.</value></data>
+<data name="L_ShortcutEditorHint" xml:space="preserve"><value>Click a shortcut, then press the key combination you want. Changes apply when you save. A row that shows two chords split by "/" answers to either one; recording onto it keeps only the chord you press.</value></data>
+<data name="L_ShortcutPressKeys" xml:space="preserve"><value>Press keys…</value></data>
+<data name="S_ShortcutNeedsModifier" xml:space="preserve"><value>{0} needs a modifier: choose Ctrl, Alt or Shift so it does not swallow typing.</value></data>
+<data name="S_ShortcutReserved" xml:space="preserve"><value>{0} is reserved by Windows.</value></data>
+<data name="S_ShortcutConflict" xml:space="preserve"><value>{0} is assigned to both {1} and {2}.</value></data>
+<data name="S_ShortcutAliasLost" xml:space="preserve"><value>{0} answers to two chords; recording leaves it with the one you press.</value></data>
+<data name="S_ShortcutsSaved" xml:space="preserve"><value>Keyboard shortcuts updated.</value></data>
+<data name="S_ShortcutsCancelled" xml:space="preserve"><value>Shortcut changes discarded.</value></data>
+<data name="DlgGroupCanvas" xml:space="preserve"><value>Canvas keys</value></data>
+<data name="S_ShortcutCanvasPlain" xml:space="preserve"><value>{0} cannot be bound to {1}: a canvas key carries no Ctrl or Alt, because those go to the menus.</value></data>
+<data name="S_ShortcutFixedKey" xml:space="preserve"><value>{0} cannot be bound to {1}: this command is matched by its key alone, so a modifier would be ignored.</value></data>
+<data name="SC_BrushSizeDecrease" xml:space="preserve"><value>Decrease brush size</value></data>
+<data name="SC_BrushSizeIncrease" xml:space="preserve"><value>Increase brush size</value></data>
+<data name="SC_BrushHardnessDecrease" xml:space="preserve"><value>Decrease brush hardness</value></data>
+<data name="SC_BrushHardnessIncrease" xml:space="preserve"><value>Increase brush hardness</value></data>
+<data name="S_ChipShortcut" xml:space="preserve"><value>{0} ({1})</value></data>
+<data name="L_SwapColorsTip" xml:space="preserve"><value>Swap colors</value></data>
+<data name="L_ResetColorsTip" xml:space="preserve"><value>Default colors</value></data>
+<data name="SC_Left" xml:space="preserve"><value>left</value></data>
+<data name="SC_Right" xml:space="preserve"><value>right</value></data>
+<data name="SC_Up" xml:space="preserve"><value>up</value></data>
+<data name="SC_Down" xml:space="preserve"><value>down</value></data>
+<data name="SC_ArrowNudgeOutline" xml:space="preserve"><value>Nudge {0} {1} px</value></data>
+<data name="SC_ArrowMovePixels" xml:space="preserve"><value>Move selected pixels {0} {1} px</value></data>
+<data name="DlgGroupTextEditing" xml:space="preserve"><value>Text editing keys</value></data>
+<data name="SC_TrackingDecrease" xml:space="preserve"><value>Decrease tracking by {0} pt</value></data>
+<data name="SC_TrackingIncrease" xml:space="preserve"><value>Increase tracking by {0} pt</value></data>
+<data name="SC_LeadingDecrease" xml:space="preserve"><value>Decrease leading by {0} pt</value></data>
+<data name="SC_LeadingIncrease" xml:space="preserve"><value>Increase leading by {0} pt</value></data>
+<data name="SC_ApplyOperation" xml:space="preserve"><value>Apply current canvas operation</value></data>
+<data name="SC_CancelOperation" xml:space="preserve"><value>Cancel current canvas operation</value></data>
+<data name="SC_DeleteTarget" xml:space="preserve"><value>Delete selection, mask, layer or lasso point</value></data>
+<data name="A_ClosePanel" xml:space="preserve"><value>Close panel</value></data>
+<data name="L_FilterLimitedToSelection" xml:space="preserve"><value>Limited to the selection</value></data>
+<data name="S_PreviewFailed" xml:space="preserve"><value>Preview failed: {0}</value></data>
+<data name="SC_OpacityDigit" xml:space="preserve"><value>Opacity digit {0} (type two for the exact percentage)</value></data>
+<data name="SC_SwapColors" xml:space="preserve"><value>Swap foreground and background</value></data>
+<data name="SC_ResetColors" xml:space="preserve"><value>Reset colors</value></data>
+<data name="S_ImportedPsdBlendFallback" xml:space="preserve"><value>{0} Unsupported Photoshop blend modes ({1}) were imported as Normal; folders remain pass-through.</value></data>
+<data name="M_LensCorrection.Text" xml:space="preserve"><value>Lens Correction…</value></data>
+<data name="M_BloomFilter.Text" xml:space="preserve"><value>Bloom / Glow…</value></data><data name="M_BloomDialog" xml:space="preserve"><value>Bloom / Glow</value></data><data name="S_Bloomed" xml:space="preserve"><value>Bloom applied to {0}.</value></data><data name="S_BloomFailed" xml:space="preserve"><value>Could not bloom the layer.</value></data><data name="S_BloomTooLarge" xml:space="preserve"><value>The glow needs more room than the layer can grow to.</value></data><data name="M_MotionBlurFilter.Text" xml:space="preserve"><value>Motion Blur…</value></data><data name="M_MotionBlurDialog" xml:space="preserve"><value>Motion Blur</value></data><data name="S_MotionBlurred" xml:space="preserve"><value>Motion blur applied to {0}.</value></data><data name="S_MotionBlurFailed" xml:space="preserve"><value>Could not motion-blur the layer.</value></data><data name="S_MotionBlurTooLarge" xml:space="preserve"><value>The streak needs more room than the layer can grow to.</value></data><data name="M_GaussianBlurFilter.Text" xml:space="preserve"><value>Gaussian Blur…</value></data><data name="M_GaussianBlurDialog" xml:space="preserve"><value>Gaussian Blur</value></data><data name="S_GaussianBlurred" xml:space="preserve"><value>Gaussian blur applied to {0}.</value></data><data name="S_GaussianBlurFailed" xml:space="preserve"><value>Could not blur the layer.</value></data><data name="S_GaussianBlurTooLarge" xml:space="preserve"><value>The blur needs more room than the layer can grow to.</value></data><data name="M_AddNoiseFilter.Text" xml:space="preserve"><value>Add Noise…</value></data><data name="M_AddNoiseDialog" xml:space="preserve"><value>Add Noise</value></data><data name="S_AddNoised" xml:space="preserve"><value>Add Noise applied to {0}.</value></data><data name="S_AddNoiseFailed" xml:space="preserve"><value>Could not add noise.</value></data><data name="M_TonalContrast.Text" xml:space="preserve"><value>Tonal Contrast…</value></data>
+
+<data name="M_CameraRawFilter.Text" xml:space="preserve"><value>Camera Raw Filter…</value></data>
+
+<data name="M_CameraRawFilterDialog" xml:space="preserve"><value>Camera Raw Filter</value></data>
+
+<data name="L_GlowStyle" xml:space="preserve"><value>Style</value></data>
+<data name="L_GradingWheel" xml:space="preserve"><value>Grading</value></data>
+<data name="S_LayerCopied" xml:space="preserve"><value>Copied {0} layer(s) into {1}.</value></data><data name="S_LayerCopyBusy" xml:space="preserve"><value>Let the in-flight edit finish before copying layers across projects.</value></data><data name="S_LayerCopyFailed" xml:space="preserve"><value>Those layers do not fit this project.</value></data><data name="H_NewProjectDrop" xml:space="preserve"><value>New project (click) · Drop layers here to open a new project</value></data><data name="S_FilterEditOpen" xml:space="preserve"><value>Finish or cancel the open filter before starting another.</value></data><data name="M_TonalContrastDialog" xml:space="preserve"><value>Tonal Contrast</value></data>
+<data name="L_TonalAmount" xml:space="preserve"><value>Amount</value></data>
+<data name="L_TonalShadows" xml:space="preserve"><value>Shadows</value></data>
+<data name="L_TonalMidtones" xml:space="preserve"><value>Midtones</value></data>
+<data name="L_TonalHighlights" xml:space="preserve"><value>Highlights</value></data>
+<data name="L_TonalRadius" xml:space="preserve"><value>Radius</value></data>
+<data name="S_TonalContrasted" xml:space="preserve"><value>Tonal contrast applied to {0}.</value></data>
+<data name="S_TonalContrastFailed" xml:space="preserve"><value>Could not apply tonal contrast.</value></data>
+<data name="M_Vignette.Text" xml:space="preserve"><value>Vignette…</value></data>
+<data name="M_VignetteDialog" xml:space="preserve"><value>Vignette</value></data>
+<data name="L_VignetteColor" xml:space="preserve"><value>Color</value></data>
+<data name="L_VignetteAmount" xml:space="preserve"><value>Amount</value></data>
+<data name="L_VignetteMidpoint" xml:space="preserve"><value>Midpoint</value></data>
+<data name="L_VignetteRoundness" xml:space="preserve"><value>Roundness</value></data>
+<data name="L_VignetteFeather" xml:space="preserve"><value>Feather</value></data>
+<data name="L_VignetteHighlights" xml:space="preserve"><value>Highlights</value></data>
+<data name="H_VignetteColor" xml:space="preserve"><value>Choose the vignette color</value></data>
+<data name="H_VignetteAmount" xml:space="preserve"><value>Blend the chosen color into the edges while keeping the center unchanged</value></data>
+<data name="H_VignetteHighlights" xml:space="preserve"><value>Protect bright areas near the edge</value></data>
+<data name="S_Vignetted" xml:space="preserve"><value>Vignette applied to {0}.</value></data>
+<data name="S_VignetteFailed" xml:space="preserve"><value>Could not apply the vignette.</value></data>
+<data name="M_LensCorrectionDialog" xml:space="preserve"><value>Lens Correction</value></data>
+<data name="L_RemoveDistortion" xml:space="preserve"><value>Remove Distortion</value></data>
+<data name="L_LensCorrectionHint" xml:space="preserve"><value>Positive straightens lines that bow outward (barrel); negative, lines that bow inward (pincushion).</value></data>
+<data name="S_LensCorrected" xml:space="preserve"><value>Lens correction applied to {0}.</value></data>
+<data name="S_LensCorrectionFailed" xml:space="preserve"><value>Could not apply lens correction.</value></data>
+  <data name="S_TextDefaultsSet" xml:space="preserve">
+    <value>Text settings remembered for the next click.</value>
+  </data>
+  <data name="T_TextSettings.Content" xml:space="preserve">
+    <value>Font…</value>
+  </data>
+  <data name="T_TextSettings.ToolTipService.ToolTip" xml:space="preserve">
+    <value>The face, size and leading new text is typed with.</value>
+  </data>
+  <data name="A_InlineText" xml:space="preserve">
+    <value>Editing the text of {0}</value>
+  </data>
+  <data name="A_InlineTextNew" xml:space="preserve">
+    <value>Typing new text</value>
+  </data>
+  <data name="A_NavZoom" xml:space="preserve">
+    <value>Zoom percent</value>
+  </data>
+  <data name="A_EyeTarget" xml:space="preserve">
+    <value>Sample target</value>
+  </data>
+  <data name="A_HealMode" xml:space="preserve">
+    <value>Healing mode</value>
+  </data>
+  <data name="A_GradientShape" xml:space="preserve">
+    <value>Gradient shape</value>
+  </data>
+  <data name="A_GradientStyle" xml:space="preserve">
+    <value>Gradient style</value>
+  </data>
+  <data name="A_LassoKind" xml:space="preserve">
+    <value>Lasso kind</value>
+  </data>
+  <data name="A_SelectionMode" xml:space="preserve">
+    <value>Selection mode</value>
+  </data>
+  <data name="A_CropRatio" xml:space="preserve">
+    <value>Crop ratio</value>
+  </data>
+  <data name="A_ShapeKind" xml:space="preserve">
+    <value>Shape</value>
+  </data>
+  <data name="A_BlurMode" xml:space="preserve">
+    <value>Blur mode</value>
+  </data>
+  <data name="A_ZoomIn" xml:space="preserve">
+    <value>Zoom in</value>
+  </data>
+  <data name="A_ZoomOut" xml:space="preserve">
+    <value>Zoom out</value>
+  </data>
+  <data name="A_SwapColors" xml:space="preserve">
+    <value>Swap foreground and background colors</value>
+  </data>
+  <data name="A_ResetColors" xml:space="preserve">
+    <value>Reset colors to the defaults</value>
+  </data>
+  <data name="S_ExportedPng" xml:space="preserve">
+    <value>Exported {0} ({1}×{2}).</value>
+  </data>
+  <data name="S_ExportedPngDpi" xml:space="preserve">
+    <value>Exported {0} ({1}×{2}, {3:0} DPI).</value>
+  </data>
+  <data name="L_Calibration" xml:space="preserve">
+    <value>Calibration</value>
+  </data>
+  <data name="L_Process" xml:space="preserve">
+    <value>Process</value>
+  </data>
+  <data name="L_ProcessV1Summary" xml:space="preserve">
+    <value>Earliest response. Hue, saturation, and shadow tint move about half as far as Version 6.</value>
+  </data>
+  <data name="L_ProcessV2Summary" xml:space="preserve">
+    <value>A little stronger than Version 1. The sliders below still fall well short of the current look.</value>
+  </data>
+  <data name="L_ProcessV3Summary" xml:space="preserve">
+    <value>Firmer color than Version 2. Primary shifts stay gentler than the current process.</value>
+  </data>
+  <data name="L_ProcessV4Summary" xml:space="preserve">
+    <value>The 2012 response. Calibration reaches most of the strength used by Version 6.</value>
+  </data>
+  <data name="L_ProcessV5Summary" xml:space="preserve">
+    <value>Close to the current process, with slightly softer primary and shadow shifts.</value>
+  </data>
+  <data name="L_ProcessV6Summary" xml:space="preserve">
+    <value>Current default. The calibration sliders below apply at full strength.</value>
+  </data>
+  <data name="L_ShadowTint" xml:space="preserve">
+    <value>Shadow tint</value>
+  </data>
+  <data name="L_RedHue" xml:space="preserve">
+    <value>Red hue</value>
+  </data>
+  <data name="L_RedSaturation" xml:space="preserve">
+    <value>Red saturation</value>
+  </data>
+  <data name="L_GreenHue" xml:space="preserve">
+    <value>Green hue</value>
+  </data>
+  <data name="L_GreenSaturation" xml:space="preserve">
+    <value>Green saturation</value>
+  </data>
+  <data name="L_BlueHue" xml:space="preserve">
+    <value>Blue hue</value>
+  </data>
+  <data name="L_BlueSaturation" xml:space="preserve">
+    <value>Blue saturation</value>
+  </data>
+  <data name="L_WhiteBalance" xml:space="preserve">
+    <value>White Balance</value>
+  </data>
+  <data name="L_WhiteBalanceSelector" xml:space="preserve">
+    <value>Selector</value>
+  </data>
+  <data name="A_WhiteBalanceSelector" xml:space="preserve">
+    <value>White balance selector</value>
+  </data>
+  <data name="L_WhiteBalanceClickHint" xml:space="preserve">
+    <value>Click the original layer. Click the eyedropper again to stop.</value>
+  </data>
+  <data name="S_WhiteBalanceAutoApplied" xml:space="preserve">
+    <value>White balance taken from the layer's average color.</value>
+  </data>
+  <data name="S_WhiteBalanceNoAnswer" xml:space="preserve">
+    <value>Nothing to balance: no pixel of that layer is visible.</value>
+  </data>
+  <data name="L_Optics" xml:space="preserve">
+    <value>Optics</value>
+  </data>
+  <data name="L_RemoveChromaticAberration" xml:space="preserve">
+    <value>Remove Chromatic Aberration</value>
+  </data>
+  <data name="L_LensProfile" xml:space="preserve">
+    <value>Enable Lens Profile Corrections</value>
+  </data>
+  <data name="L_NoLensMetadata" xml:space="preserve">
+    <value>No lens metadata on this layer. Profile sliders set generic correction strength.</value>
+  </data>
+  <data name="L_ProfileDistortion" xml:space="preserve">
+    <value>Profile Distortion</value>
+  </data>
+  <data name="L_ProfileVignetting" xml:space="preserve">
+    <value>Profile Vignetting</value>
+  </data>
+  <data name="L_ManualOptics" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="L_Distortion" xml:space="preserve">
+    <value>Distortion</value>
+  </data>
+  <data name="L_Defringe" xml:space="preserve">
+    <value>Defringe</value>
+  </data>
+  <data name="L_DefringeSelector" xml:space="preserve">
+    <value>Selector</value>
+  </data>
+  <data name="A_DefringeSelector" xml:space="preserve">
+    <value>Defringe selector</value>
+  </data>
+  <data name="L_DefringeClickHint" xml:space="preserve">
+    <value>Click the fringe on the layer. Click the eyedropper again to stop.</value>
+  </data>
+  <data name="L_PurpleAmount" xml:space="preserve">
+    <value>Purple Amount</value>
+  </data>
+  <data name="L_PurpleHueLow" xml:space="preserve">
+    <value>Purple Hue Low</value>
+  </data>
+  <data name="L_PurpleHueHigh" xml:space="preserve">
+    <value>Purple Hue High</value>
+  </data>
+  <data name="L_GreenAmount" xml:space="preserve">
+    <value>Green Amount</value>
+  </data>
+  <data name="L_GreenHueLow" xml:space="preserve">
+    <value>Green Hue Low</value>
+  </data>
+  <data name="L_GreenHueHigh" xml:space="preserve">
+    <value>Green Hue High</value>
+  </data>
+  <data name="L_LensVignetting" xml:space="preserve">
+    <value>Lens Vignetting</value>
+  </data>
+  <data name="L_LensMidpoint" xml:space="preserve">
+    <value>Lens Midpoint</value>
+  </data>
+  <data name="L_Geometry" xml:space="preserve">
+    <value>Geometry</value>
+  </data>
+  <data name="L_Projection" xml:space="preserve">
+    <value>Projection</value>
+  </data>
+  <data name="L_GeometryProjectionCaption" xml:space="preserve">
+    <value>Perspective allows stronger keystone. Rectilinear keeps the warp gentler.</value>
+  </data>
+  <data name="L_GeometryVertical" xml:space="preserve">
+    <value>Vertical</value>
+  </data>
+  <data name="L_GeometryHorizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="L_GeometryRotate" xml:space="preserve">
+    <value>Rotate</value>
+  </data>
+  <data name="L_GeometryAspect" xml:space="preserve">
+    <value>Aspect</value>
+  </data>
+  <data name="L_GeometryScale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="L_GeometryOffsetX" xml:space="preserve">
+    <value>Offset X</value>
+  </data>
+  <data name="L_GeometryOffsetY" xml:space="preserve">
+    <value>Offset Y</value>
+  </data>
+  <data name="L_ConstrainCrop" xml:space="preserve">
+    <value>Constrain Crop</value>
+  </data>
+  <data name="L_GeometryRefused" xml:space="preserve">
+    <value>This bend leaves the picture with no area to warp, so nothing moves.</value>
+  </data>
+  <data name="L_Upright" xml:space="preserve">
+    <value>Upright</value>
+  </data>
+  <data name="L_GuidesModeCaption" xml:space="preserve">
+    <value>Off leaves the picture as it is. Guided straightens from lines you draw on the picture.</value>
+  </data>
+  <data name="L_DrawGuides" xml:space="preserve">
+    <value>Draw Guides</value>
+  </data>
+  <data name="A_DrawGuides" xml:space="preserve">
+    <value>Draw guides</value>
+  </data>
+  <data name="L_ClearGuides" xml:space="preserve">
+    <value>Clear Guides</value>
+  </data>
+  <data name="A_ClearGuides" xml:space="preserve">
+    <value>Clear guide lines</value>
+  </data>
+  <data name="L_GuidesDragHint" xml:space="preserve">
+    <value>Drag on the layer to place a guide. Draw at least two lines.</value>
+  </data>
+  <data name="L_MixerPage" xml:space="preserve">
+    <value>Mixer page</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_MixerPage row.</comment>
+  </data>
+  <data name="L_MixerComponent" xml:space="preserve">
+    <value>Component</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_MixerComponent row.</comment>
+  </data>
+  <data name="L_MixerFamily" xml:space="preserve">
+    <value>Color family</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_MixerFamily row.</comment>
+  </data>
+  <data name="L_PointColorPicker" xml:space="preserve">
+    <value>Pick Color</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointColorPicker row.</comment>
+  </data>
+  <data name="A_PointColorPicker" xml:space="preserve">
+    <value>Pick a color from the picture</value>
+    <comment>Camera Raw Color Mixer: the Mac's A_PointColorPicker row.</comment>
+  </data>
+  <data name="L_PointColorClickHint" xml:space="preserve">
+    <value>Click the picture to save a color. Up to eight colors.</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointColorClickHint row.</comment>
+  </data>
+  <data name="A_PointColorChip" xml:space="preserve">
+    <value>Picked color</value>
+    <comment>Camera Raw Color Mixer: the Mac's A_PointColorChip row.</comment>
+  </data>
+  <data name="L_PointHueShift" xml:space="preserve">
+    <value>Hue Shift</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointHueShift row.</comment>
+  </data>
+  <data name="L_PointSaturationShift" xml:space="preserve">
+    <value>Saturation Shift</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointSaturationShift row.</comment>
+  </data>
+  <data name="L_PointLuminanceShift" xml:space="preserve">
+    <value>Luminance Shift</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointLuminanceShift row.</comment>
+  </data>
+  <data name="L_PointHueRange" xml:space="preserve">
+    <value>Hue Range</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointHueRange row.</comment>
+  </data>
+  <data name="L_PointSaturationRange" xml:space="preserve">
+    <value>Saturation Range</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointSaturationRange row.</comment>
+  </data>
+  <data name="L_PointLuminanceRange" xml:space="preserve">
+    <value>Luminance Range</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointLuminanceRange row.</comment>
+  </data>
+  <data name="L_VisualizeRange" xml:space="preserve">
+    <value>Visualize Range</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_VisualizeRange row.</comment>
+  </data>
+  <data name="L_TargetedAdjustment" xml:space="preserve">
+    <value>Targeted Adjustment</value>
+  </data>
+  <data name="A_TargetedCurve" xml:space="preserve">
+    <value>Drag on the picture to move the curve for the tone under the pointer</value>
+  </data>
+  <data name="A_TargetedMixer" xml:space="preserve">
+    <value>Drag a color in the picture. Nearby color families move together.</value>
+  </data>
+  <data name="L_CurveChannel" xml:space="preserve">
+    <value>Curve channel</value>
+    <comment>The channel a point curve is edited on, and the one a targeted curve drag nudges.</comment>
+  </data>
+  <data name="L_CurvePointReadout" xml:space="preserve">
+    <value>Selected curve point</value>
+  </data>
+  <data name="L_CurvePreset" xml:space="preserve">
+    <value>Curve preset</value>
+  </data>
+  <data name="L_CurvePage" xml:space="preserve">
+    <value>Curve page</value>
+    <comment>Parametric lifts tonal regions; Point places anchors on the curve.</comment>
+  </data>
+  <data name="L_GroupLight" xml:space="preserve">
+    <value>Light</value>
+    <comment>Camera Raw's first section header, the row that carries the group's eye button.</comment>
+  </data>
+  <data name="L_GroupColor" xml:space="preserve">
+    <value>Color</value>
+    <comment>Camera Raw's white balance and vibrance section header.</comment>
+  </data>
+  <data name="A_HideGroup" xml:space="preserve">
+    <value>Hide {0}</value>
+    <comment>The eye on a Camera Raw section header while that group is showing; {0} is the group's own name.</comment>
+  </data>
+  <data name="A_ShowGroup" xml:space="preserve">
+    <value>Show {0}</value>
+    <comment>The same eye once the group is hidden.</comment>
+  </data>
+  <data name="H_HideGroupPreview" xml:space="preserve">
+    <value>Hide {0} in the preview</value>
+  </data>
+  <data name="H_ShowGroupPreview" xml:space="preserve">
+    <value>Show {0} in the preview</value>
+  </data>
+  <data name="L_ScopeHistogram" xml:space="preserve">
+    <value>Histogram</value>
+  </data>
+  <data name="L_ScopeVectorscope" xml:space="preserve">
+    <value>Vectorscope</value>
+  </data>
+  <data name="A_ScopeHistogram" xml:space="preserve">
+    <value>RGB histogram</value>
+  </data>
+  <data name="H_ScopeHint" xml:space="preserve">
+    <value>Tones from black on the left to white on the right: blacks, shadows, midtones, highlights, whites. Right-click to show the vectorscope.</value>
+  </data>
+  <data name="A_ShadowClipping" xml:space="preserve">
+    <value>Shadow Clipping Indicator</value>
+  </data>
+  <data name="H_ShadowClipping" xml:space="preserve">
+    <value>Show clipped shadows in blue on the preview.</value>
+  </data>
+  <data name="A_HighlightClipping" xml:space="preserve">
+    <value>Highlight Clipping Indicator</value>
+  </data>
+  <data name="H_HighlightClipping" xml:space="preserve">
+    <value>Show clipped highlights in red on the preview.</value>
+  </data>
+  <data name="S_FilterApplying" xml:space="preserve"><value>Applying…</value></data>
+  <data name="S_SavedWithNewChanges" xml:space="preserve"><value>Saved. Newer changes remain unsaved.</value></data>
+  <data name="L_BrushSmoothing.Text" xml:space="preserve"><value>Smoothing</value></data>
+  <data name="H_BrushSmoothing" xml:space="preserve"><value>The brush trails the pointer on a string this long. Release finishes at the pointer.</value></data>
+  <data name="PsdConversion_Title" xml:space="preserve">
+    <value>Open “{0}”?</value>
+  </data>
+  <data name="PsdConversion_Intro" xml:space="preserve">
+    <value>Compositor will convert these Photoshop features. Nothing is applied until you continue.</value>
+  </data>
+  <data name="PsdConversion_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="AI_Operation" xml:space="preserve"><value>Action</value></data>
+  <data name="AI_Remove" xml:space="preserve"><value>Remove</value></data>
+  <data name="AI_Replace" xml:space="preserve"><value>Replace</value></data>
+  <data name="AI_Expand" xml:space="preserve"><value>Expand canvas</value></data>
+  <data name="AI_Prompt" xml:space="preserve"><value>Describe the edit</value></data>
+  <data name="AI_PromptHint" xml:space="preserve"><value>What should appear in this area?</value></data>
+  <data name="AI_RemovePrompt" xml:space="preserve"><value>Remove the selected object and naturally fill the area to match its surroundings. Preserve everything outside the selected area.</value></data>
+  <data name="AI_ExpandPrompt" xml:space="preserve"><value>Extend the image naturally into the transparent area, matching the composition, lighting and texture. Preserve the original image.</value></data>
+  <data name="AI_Left" xml:space="preserve"><value>Left (px)</value></data>
+  <data name="AI_Right" xml:space="preserve"><value>Right (px)</value></data>
+  <data name="AI_Top" xml:space="preserve"><value>Top (px)</value></data>
+  <data name="AI_Bottom" xml:space="preserve"><value>Bottom (px)</value></data>
+  <data name="AI_Connection" xml:space="preserve"><value>Connection</value></data>
+  <data name="AI_Account" xml:space="preserve"><value>ChatGPT account (experimental)</value></data>
+  <data name="AI_Model" xml:space="preserve"><value>Model</value></data>
+  <data name="AI_KeyHint" xml:space="preserve"><value>Enter a key, or use the saved key</value></data>
+  <data name="AI_Endpoint" xml:space="preserve"><value>API base URL</value></data>
+  <data name="AI_SaveKey" xml:space="preserve"><value>Save key</value></data>
+  <data name="AI_ForgetKey" xml:space="preserve"><value>Forget key</value></data>
+  <data name="AI_SignIn" xml:space="preserve"><value>Sign in in browser</value></data>
+  <data name="AI_SignOut" xml:space="preserve"><value>Sign out</value></data>
+  <data name="AI_AccountNote" xml:space="preserve"><value>Account image access depends on your account and service availability. API Key uses separate billing.</value></data>
+  <data name="AI_Settings" xml:space="preserve"><value>Connection settings and key</value></data>
+  <data name="AI_ApiPrivacyTitle" xml:space="preserve"><value>API data privacy</value></data>
+  <data name="AI_ApiPrivacyNote" xml:space="preserve"><value>Generating sends the full canvas (not just the selection), mask and prompt to the API service you enter. Third-party relays may retain, sell or misuse this data, risking privacy leaks. Check the provider's data policy and avoid uploading personal or confidential content.</value></data>
+  <data name="AI_Generate" xml:space="preserve"><value>Generate</value></data>
+  <data name="AI_Stop" xml:space="preserve"><value>Stop</value></data>
+  <data name="AI_Version" xml:space="preserve"><value>Version</value></data>
+  <data name="AI_Compare" xml:space="preserve"><value>Compare</value></data>
+  <data name="AI_Original" xml:space="preserve"><value>Original</value></data>
+  <data name="AI_Result" xml:space="preserve"><value>Result</value></data>
+  <data name="AI_UploadNote" xml:space="preserve"><value>Generate sends the visible canvas, selection mask and instructions to the selected service.</value></data>
+  <data name="AI_KeyRequired" xml:space="preserve"><value>Enter an API key, or sign in to a ChatGPT account.</value></data>
+  <data name="AI_KeySaved" xml:space="preserve"><value>Key saved securely for this Windows user.</value></data>
+  <data name="AI_KeyForgotten" xml:space="preserve"><value>Saved API key deleted.</value></data>
+  <data name="AI_KeySaveFailed" xml:space="preserve"><value>Could not save or delete the key. Check the key and local storage.</value></data>
+  <data name="AI_AccountSaveFailed" xml:space="preserve"><value>Could not update the saved account.</value></data>
+  <data name="AI_SignedOut" xml:space="preserve"><value>Signed out.</value></data>
+  <data name="AI_SigningIn" xml:space="preserve"><value>Complete sign-in in your browser…</value></data>
+  <data name="AI_SignedIn" xml:space="preserve"><value>Account connected.</value></data>
+  <data name="AI_Cancelled" xml:space="preserve"><value>Stopped. The document is unchanged.</value></data>
+  <data name="AI_SignInFailed" xml:space="preserve"><value>Sign-in failed. Retry, or sign out to clear saved account data.</value></data>
+  <data name="AI_PromptRequired" xml:space="preserve"><value>Describe the edit first.</value></data>
+  <data name="AI_EdgeInvalid" xml:space="preserve"><value>Enter whole expansion amounts from 0 to 8192 pixels, with at least one positive edge.</value></data>
+  <data name="AI_EndpointInvalid" xml:space="preserve"><value>Enter a valid HTTPS API base URL.</value></data>
+  <data name="AI_Generating" xml:space="preserve"><value>Generating… You can stop this request.</value></data>
+  <data name="AI_Ready" xml:space="preserve"><value>Preview ready. Compare versions, then accept as a new layer.</value></data>
+  <data name="AI_Failed" xml:space="preserve"><value>Generation failed. Check the connection and try again.</value></data>
+  <data name="AI_Title" xml:space="preserve"><value>AI edit</value></data>
+  <data name="AI_Accept" xml:space="preserve"><value>Accept as new layer</value></data>
+  <data name="AI_Accepted" xml:space="preserve"><value>AI result added as a new layer. Undo restores the previous document.</value></data>
+  <data name="M_Ai.Title" xml:space="preserve"><value>AI</value></data>
+  <data name="M_AiRemove.Text" xml:space="preserve"><value>Remove…</value></data>
+  <data name="M_AiReplace.Text" xml:space="preserve"><value>Replace…</value></data>
+  <data name="M_AiExpand.Text" xml:space="preserve"><value>Expand Canvas…</value></data>
+  <data name="L_AiPreview.Text" xml:space="preserve"><value>AI preview · not yet applied</value></data>
+  <data name="B_AiRemove.Content" xml:space="preserve"><value>AI Remove</value></data>
+  <data name="B_AiReplace.Content" xml:space="preserve"><value>Replace</value></data>
+  <data name="B_AiExpand.Content" xml:space="preserve"><value>Expand</value></data>
+  <data name="L_AiWorking.Text" xml:space="preserve"><value>AI is creating…</value></data>
+  <data name="AI_References" xml:space="preserve"><value>Reference images and preservation</value></data>
+  <data name="AI_AddReferences" xml:space="preserve"><value>Add reference images</value></data>
+  <data name="AI_RemoveReference" xml:space="preserve"><value>Remove</value></data>
+  <data name="AI_Preserve" xml:space="preserve"><value>Features to preserve</value></data>
+  <data name="AI_PreserveHint" xml:space="preserve"><value>For example: keep the same face, hairstyle and clothing colors.</value></data>
+  <data name="AI_ReferencesNote" xml:space="preserve"><value>Add up to four references and assign their roles. Preservation instructions guide the model; local coverage still protects pixels outside the selection.</value></data>
+  <data name="AI_ReferencesLimit" xml:space="preserve"><value>Choose at most four reference images.</value></data>
+  <data name="AI_ReferencesFailed" xml:space="preserve"><value>Could not load the selected reference images.</value></data>
+  <data name="AI_Reference_general" xml:space="preserve"><value>General reference</value></data>
+  <data name="AI_Reference_identity" xml:space="preserve"><value>Person / identity</value></data>
+  <data name="AI_Reference_clothing" xml:space="preserve"><value>Clothing</value></data>
+  <data name="AI_Reference_style" xml:space="preserve"><value>Style</value></data>
+  <data name="AI_Reference_composition" xml:space="preserve"><value>Composition</value></data>
+  <data name="W_SingleColumnTools" xml:space="preserve"><value>Use a single column of tools</value></data>
+  <data name="W_DoubleColumnTools" xml:space="preserve"><value>Use two columns of tools</value></data>
+  <data name="W_PreviousOptions" xml:space="preserve"><value>Show previous tool options</value></data>
+  <data name="W_NextOptions" xml:space="preserve"><value>Show more tool options</value></data>
+  <data name="M_OpenProjectFolder.Text" xml:space="preserve"><value>Open Project Folder…</value></data>
+  <data name="SelectionMode_New" xml:space="preserve"><value>New</value></data>
+  <data name="SelectionMode_Add" xml:space="preserve"><value>Add</value></data>
+  <data name="SelectionMode_Subtract" xml:space="preserve"><value>Subtract</value></data>
+  <data name="QT_Feather" xml:space="preserve"><value>Feather</value></data>
+  <data name="QT_Invert" xml:space="preserve"><value>Inverse</value></data>
+  <data name="QT_Deselect" xml:space="preserve"><value>Deselect</value></data>
+  <data name="QT_BrushSize" xml:space="preserve"><value>Brush radius (pixels)</value></data>
+  <data name="QT_BrushHardness" xml:space="preserve"><value>Brush hardness (%)</value></data>
+  <data name="QT_BrushOpacity" xml:space="preserve"><value>Brush opacity (%)</value></data>
+  <data name="QT_BrushTip" xml:space="preserve"><value>Brush tip preview</value></data>
+  <data name="QT_AlignLeft" xml:space="preserve"><value>Align left edges</value></data>
+  <data name="QT_AlignCenter" xml:space="preserve"><value>Align horizontal centers</value></data>
+  <data name="QT_AlignRight" xml:space="preserve"><value>Align right edges</value></data>
+  <data name="QT_AlignTop" xml:space="preserve"><value>Align top edges</value></data>
+  <data name="QT_AlignMiddle" xml:space="preserve"><value>Align vertical centers</value></data>
+  <data name="QT_AlignBottom" xml:space="preserve"><value>Align bottom edges</value></data>
+  <data name="QT_DistributeHorizontal" xml:space="preserve"><value>Distribute horizontal gaps</value></data>
+  <data name="QT_DistributeVertical" xml:space="preserve"><value>Distribute vertical gaps</value></data>
+  <data name="QT_Group" xml:space="preserve"><value>Group</value></data>
+  <data name="QT_TextFont" xml:space="preserve"><value>Font</value></data>
+  <data name="QT_TextSize" xml:space="preserve"><value>Font size (pixels)</value></data>
+  <data name="QT_TextColor" xml:space="preserve"><value>Text color</value></data>
+  <data name="QT_TextLeft" xml:space="preserve"><value>Align text left</value></data>
+  <data name="QT_TextCenter" xml:space="preserve"><value>Center text</value></data>
+  <data name="QT_TextRight" xml:space="preserve"><value>Align text right</value></data>
+  <data name="QT_TextMore" xml:space="preserve"><value>More…</value></data>
+  <data name="LP_Lock" xml:space="preserve"><value>Lock</value></data>
+  <data name="LP_Transparency" xml:space="preserve"><value>Lock transparency</value></data>
+  <data name="LP_Pixels" xml:space="preserve"><value>Lock image pixels</value></data>
+  <data name="LP_Position" xml:space="preserve"><value>Lock position and transform</value></data>
+  <data name="LP_All" xml:space="preserve"><value>Lock all edits</value></data>
+  <data name="LP_Inherited" xml:space="preserve"><value>Locked by a parent folder. Select that folder to unlock.</value></data>
+  <data name="LP_Local" xml:space="preserve"><value>Protection is remembered for this project on this computer.</value></data>
+  <data name="LP_NoHits" xml:space="preserve"><value>No visible layer here</value></data>
+  <data name="LP_MoreHits" xml:space="preserve"><value>{0} more matches; use the Layers panel</value></data>
+  <data name="LP_Blocked" xml:space="preserve"><value>Unlock the layer before editing it.</value></data>
+  <data name="H_Layers" xml:space="preserve"><value>Layers</value></data>
+  <data name="H_Title" xml:space="preserve"><value>History</value></data>
+  <data name="H_Initial" xml:space="preserve"><value>Initial state</value></data>
+  <data name="H_Oldest" xml:space="preserve"><value>Oldest retained state</value></data>
+  <data name="H_Hint" xml:space="preserve"><value>Click a step to restore it. History is kept for this session.</value></data>
+  <data name="H_RedoHint" xml:space="preserve"><value>Dimmed steps can be redone. A new edit removes this future branch.</value></data>
+  <data name="H_Busy" xml:space="preserve"><value>Finish the current edit before changing history.</value></data>
+  <data name="H_Restored" xml:space="preserve"><value>History state restored</value></data>
+  <data name="H_Expired" xml:space="preserve"><value>This history state is no longer available.</value></data>
+  <data name="H_Brush" xml:space="preserve"><value>Brush stroke</value></data>
+  <data name="H_Erase" xml:space="preserve"><value>Eraser stroke</value></data>
+  <data name="H_Move" xml:space="preserve"><value>Move layer</value></data>
+  <data name="H_Scale" xml:space="preserve"><value>Scale layer</value></data>
+  <data name="H_Transform" xml:space="preserve"><value>Transform</value></data>
+  <data name="H_Fill" xml:space="preserve"><value>Fill</value></data>
+  <data name="H_Invert" xml:space="preserve"><value>Invert pixels</value></data>
+  <data name="H_Clear" xml:space="preserve"><value>Clear selected pixels</value></data>
+  <data name="H_Selection" xml:space="preserve"><value>Change selection</value></data>
+  <data name="H_Deselect" xml:space="preserve"><value>Deselect</value></data>
+  <data name="H_Text" xml:space="preserve"><value>Edit text</value></data>
+  <data name="H_AI" xml:space="preserve"><value>Accept AI result</value></data>
+  <data name="H_Gradient" xml:space="preserve"><value>Gradient</value></data>
+  <data name="H_Healing" xml:space="preserve"><value>Healing</value></data>
+  <data name="H_Clone" xml:space="preserve"><value>Clone stamp</value></data>
+  <data name="H_Blur" xml:space="preserve"><value>Blur stroke</value></data>
+  <data name="H_Warp" xml:space="preserve"><value>Warp</value></data>
+  <data name="H_PixelsMove" xml:space="preserve"><value>Move selected pixels</value></data>
+  <data name="H_Import" xml:space="preserve"><value>Import image</value></data>
+  <data name="H_NewLayer" xml:space="preserve"><value>New layer</value></data>
+  <data name="H_NewFolder" xml:space="preserve"><value>New folder</value></data>
+  <data name="H_Shape" xml:space="preserve"><value>Add shape</value></data>
+  <data name="H_Duplicate" xml:space="preserve"><value>Duplicate layers</value></data>
+  <data name="H_Delete" xml:space="preserve"><value>Delete layers</value></data>
+  <data name="H_Group" xml:space="preserve"><value>Group layers</value></data>
+  <data name="H_Ungroup" xml:space="preserve"><value>Ungroup</value></data>
+  <data name="H_Merge" xml:space="preserve"><value>Merge layers</value></data>
+  <data name="H_Reorder" xml:space="preserve"><value>Reorder layers</value></data>
+  <data name="H_Opacity" xml:space="preserve"><value>Layer opacity</value></data>
+  <data name="H_Blend" xml:space="preserve"><value>Blend mode</value></data>
+  <data name="H_Visibility" xml:space="preserve"><value>Layer visibility</value></data>
+  <data name="H_Rename" xml:space="preserve"><value>Rename layer</value></data>
+  <data name="H_Adjustment" xml:space="preserve"><value>Color adjustment</value></data>
+  <data name="H_Effects" xml:space="preserve"><value>Layer effects</value></data>
+  <data name="H_Mask" xml:space="preserve"><value>Edit mask</value></data>
+  <data name="H_Canvas" xml:space="preserve"><value>Canvas bounds</value></data>
+  <data name="H_Resize" xml:space="preserve"><value>Image size</value></data>
+  <data name="H_Flip" xml:space="preserve"><value>Flip</value></data>
+  <data name="H_Guides" xml:space="preserve"><value>Edit guides</value></data>
+  <data name="H_Layout" xml:space="preserve"><value>Layer layout</value></data>
+  <data name="H_Batch" xml:space="preserve"><value>Batch edit</value></data>
+  <data name="H_Pixels" xml:space="preserve"><value>Edit pixels</value></data>
+</root>

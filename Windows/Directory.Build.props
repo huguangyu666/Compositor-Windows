@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <Optimize>true</Optimize>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+    <Version>1.0.0</Version>
+    <Product>Compositor</Product>
+    <Company>Compositor</Company>
+  </PropertyGroup>
+</Project>

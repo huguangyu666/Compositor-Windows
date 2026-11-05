@@ -1,0 +1,2575 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DlgGroupEdit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="DlgGroupFile" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="DlgGroupView" xml:space="preserve">
+    <value>视图</value>
+  </data>
+  <data name="DlgShortcutsTitle" xml:space="preserve">
+    <value>键盘快捷键</value>
+  </data>
+  <data name="M_EditAdjustment.Text" xml:space="preserve"><value>编辑调整…</value></data><data name="M_AddAdjustment.Text" xml:space="preserve">
+    <value>添加调整</value>
+  </data>
+  <data name="M_AddFolder.Text" xml:space="preserve">
+    <value>新建文件夹组</value>
+  </data>
+  <data name="M_AddMask.Text" xml:space="preserve">
+    <value>添加显示蒙版</value>
+  </data>
+  <data name="M_AddHideAllMask.Text" xml:space="preserve">
+    <value>添加隐藏蒙版</value>
+  </data>
+  <data name="M_RevealSelectionMask.Text" xml:space="preserve">
+    <value>由选区生成显示蒙版</value>
+  </data>
+  <data name="M_HideSelectionMask.Text" xml:space="preserve">
+    <value>由选区生成隐藏蒙版</value>
+  </data>
+  <data name="M_CopyPixels.Text" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="M_CutPixels.Text" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="M_PastePixels.Text" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="M_LayerViaCopy.Text" xml:space="preserve">
+    <value>通过拷贝新建图层</value>
+  </data>
+  <data name="M_MaskLink.Text" xml:space="preserve">
+    <value>取消链接蒙版</value>
+  </data>
+  <data name="M_LinkMask" xml:space="preserve">
+    <value>链接蒙版</value>
+  </data>
+  <data name="M_UnlinkMask" xml:space="preserve">
+    <value>取消链接蒙版</value>
+  </data>
+  <data name="M_MaskEnabled.Text" xml:space="preserve">
+    <value>停用蒙版</value>
+  </data>
+  <data name="M_DisableMask" xml:space="preserve">
+    <value>停用蒙版</value>
+  </data>
+  <data name="M_EnableMask" xml:space="preserve">
+    <value>启用蒙版</value>
+  </data>
+  <data name="M_ClippingMask.Text" xml:space="preserve">
+    <value>创建剪贴蒙版</value>
+  </data>
+  <data name="M_CreateClipping" xml:space="preserve">
+    <value>创建剪贴蒙版</value>
+  </data>
+  <data name="M_ReleaseClipping" xml:space="preserve">
+    <value>释放剪贴蒙版</value>
+  </data>
+  <data name="M_AddNoise.Text" xml:space="preserve">
+    <value>添加杂色</value>
+  </data>
+  <data name="M_BlackWhite.Text" xml:space="preserve">
+    <value>黑白</value>
+  </data>
+  <data name="M_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="M_ColorBalance.Text" xml:space="preserve">
+    <value>色彩平衡</value>
+  </data>
+  <data name="M_Curves.Text" xml:space="preserve">
+    <value>曲线</value>
+  </data>
+  <data name="M_Delete.Text" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="M_Deselect.Text" xml:space="preserve">
+    <value>取消选择</value>
+  </data>
+  <data name="M_Edit.Title" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="M_Exit.Text" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="M_ExportJpeg.Text" xml:space="preserve">
+    <value>导出 JPEG…</value>
+  </data>
+  <data name="M_ExportPng.Text" xml:space="preserve">
+    <value>导出 PNG…</value>
+  </data>
+  <data name="M_Exposure.Text" xml:space="preserve">
+    <value>曝光</value>
+  </data>
+  <data name="M_File.Title" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="M_Fit.Text" xml:space="preserve">
+    <value>适应窗口</value>
+  </data>
+  <data name="M_GaussianBlur.Text" xml:space="preserve">
+    <value>高斯模糊</value>
+  </data>
+  <data name="M_GradientMap.Text" xml:space="preserve">
+    <value>渐变映射</value>
+  </data>
+  <data name="M_Grain.Text" xml:space="preserve">
+    <value>颗粒</value>
+  </data>
+  <data name="M_Group.Text" xml:space="preserve">
+    <value>从所选编组</value>
+  </data>
+  <data name="M_GuideH.Text" xml:space="preserve">
+    <value>添加水平参考线</value>
+  </data>
+  <data name="M_GuideV.Text" xml:space="preserve">
+    <value>添加垂直参考线</value>
+  </data>
+  <data name="M_GuidesClear.Text" xml:space="preserve">
+    <value>清除参考线</value>
+  </data>
+  <data name="M_Help.Title" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="M_HueSat.Text" xml:space="preserve">
+    <value>色相/饱和度</value>
+  </data>
+  <data name="M_Import.Text" xml:space="preserve">
+    <value>导入图像…</value>
+  </data>
+  <data name="M_Invert.Text" xml:space="preserve">
+    <value>反相</value>
+  </data>
+  <data name="M_Layer.Title" xml:space="preserve">
+    <value>图层</value>
+  </data>
+  <data name="M_Levels.Text" xml:space="preserve">
+    <value>色阶</value>
+  </data>
+  <data name="M_Lower.Text" xml:space="preserve">
+    <value>下移一层</value>
+  </data>
+  <data name="M_MotionBlur.Text" xml:space="preserve">
+    <value>动感模糊</value>
+  </data>
+  <data name="M_New.Text" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="M_Open.Text" xml:space="preserve">
+    <value>打开源文件…</value>
+  </data>
+  <data name="M_OpenRecent.Text" xml:space="preserve">
+    <value>打开最近</value>
+  </data>
+  <data name="M_Raise.Text" xml:space="preserve">
+    <value>上移一层</value>
+  </data>
+  <data name="M_Redo.Text" xml:space="preserve">
+    <value>重做</value>
+  </data>
+  <data name="M_RemoveMask.Text" xml:space="preserve">
+    <value>移除蒙版</value>
+  </data>
+  <data name="M_Save.Text" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="M_SaveAs.Text" xml:space="preserve">
+    <value>另存为…</value>
+  </data>
+  <data name="M_Shortcuts.Text" xml:space="preserve">
+    <value>键盘快捷键</value>
+  </data>
+  <data name="M_Undo.Text" xml:space="preserve">
+    <value>撤销</value>
+  </data>
+  <data name="M_Ungroup.Text" xml:space="preserve">
+    <value>解组</value>
+  </data>
+  <data name="M_View.Title" xml:space="preserve">
+    <value>视图</value>
+  </data>
+  <data name="M_Zoom100.Text" xml:space="preserve">
+    <value>缩放 100%</value>
+  </data>
+  <data name="M_ZoomIn.Text" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="M_ZoomOut.Text" xml:space="preserve">
+    <value>缩小</value>
+  </data>
+  <data name="L_Amount" xml:space="preserve">
+    <value>数量</value>
+  </data>
+  <data name="L_Angle" xml:space="preserve">
+    <value>角度</value>
+  </data>
+  <data name="L_Balance" xml:space="preserve">
+    <value>平衡</value>
+  </data>
+  <data name="L_Black" xml:space="preserve">
+    <value>黑</value>
+  </data>
+  <data name="L_Blending" xml:space="preserve">
+    <value>融合</value>
+  </data>
+  <data name="L_Clarity" xml:space="preserve">
+    <value>清晰度</value>
+  </data>
+  <data name="L_Dehaze" xml:space="preserve">
+    <value>去雾</value>
+  </data>
+  <data name="L_Detail" xml:space="preserve">
+    <value>细节</value>
+  </data>
+  <data name="L_Distance" xml:space="preserve">
+    <value>距离</value>
+  </data>
+  <data name="L_Exposure" xml:space="preserve">
+    <value>曝光</value>
+  </data>
+  <data name="L_Gamma" xml:space="preserve">
+    <value>伽马</value>
+  </data>
+  <data name="L_Glow" xml:space="preserve">
+    <value>辉光</value>
+  </data>
+  <data name="L_GlowRange" xml:space="preserve">
+    <value>辉光范围</value>
+  </data>
+  <data name="L_GlowSpread" xml:space="preserve">
+    <value>辉光扩散</value>
+  </data>
+  <data name="L_GlowWarmth" xml:space="preserve">
+    <value>辉光暖度</value>
+  </data>
+  <data name="L_Grain" xml:space="preserve">
+    <value>颗粒</value>
+  </data>
+  <data name="L_Hue" xml:space="preserve">
+    <value>色相</value>
+  </data>
+  <data name="L_Lightness" xml:space="preserve">
+    <value>明度</value>
+  </data>
+  <data name="L_Lum" xml:space="preserve">
+    <value>亮度</value>
+  </data>
+  <data name="L_Luminance" xml:space="preserve">
+    <value>亮度</value>
+  </data>
+  <data name="L_Masking" xml:space="preserve">
+    <value>蒙版</value>
+  </data>
+  <data name="L_NRColor" xml:space="preserve">
+    <value>降噪色彩</value>
+  </data>
+  <data name="L_NRColorDetail" xml:space="preserve">
+    <value>降噪色彩细节</value>
+  </data>
+  <data name="L_NRContrast" xml:space="preserve">
+    <value>降噪对比</value>
+  </data>
+  <data name="L_NRDetail" xml:space="preserve">
+    <value>降噪细节</value>
+  </data>
+  <data name="L_NRLuminance" xml:space="preserve">
+    <value>降噪亮度</value>
+  </data>
+  <data name="L_NRSmoothness" xml:space="preserve">
+    <value>降噪平滑</value>
+  </data>
+  <data name="L_Offset" xml:space="preserve">
+    <value>偏移</value>
+  </data>
+  <data name="L_OutBlack" xml:space="preserve">
+    <value>输出黑</value>
+  </data>
+  <data name="L_OutWhite" xml:space="preserve">
+    <value>输出白</value>
+  </data>
+  <data name="L_Radius" xml:space="preserve">
+    <value>半径</value>
+  </data>
+  <data name="L_RefineSat" xml:space="preserve">
+    <value>精细饱和</value>
+  </data>
+  <data name="L_Sat" xml:space="preserve">
+    <value>饱和</value>
+  </data>
+  <data name="L_Saturation" xml:space="preserve">
+    <value>饱和度</value>
+  </data>
+  <data name="L_Sharpening" xml:space="preserve">
+    <value>锐化</value>
+  </data>
+  <data name="L_Texture" xml:space="preserve">
+    <value>纹理</value>
+  </data>
+  <data name="L_Vignette" xml:space="preserve">
+    <value>暗角</value>
+  </data>
+  <data name="L_White" xml:space="preserve">
+    <value>白</value>
+  </data>
+  <data name="L_Curve" xml:space="preserve">
+    <value>曲线</value>
+  </data>
+  <data name="L_ColorMixer" xml:space="preserve">
+    <value>混色器</value>
+  </data>
+  <data name="L_Effects" xml:space="preserve">
+    <value>效果</value>
+  </data>
+  <data name="L_ColorGrading" xml:space="preserve">
+    <value>调色</value>
+  </data>
+  <data name="L_NoPixels" xml:space="preserve">
+    <value>该图层没有可调色的像素。</value>
+  </data>
+  <data name="L_Quality" xml:space="preserve">
+    <value>质量</value>
+  </data>
+  <data name="L_Matte" xml:space="preserve">
+    <value>透明区域背景</value>
+  </data>
+  <data name="L_MatteTip" xml:space="preserve">
+    <value>填充透明区域的颜色</value>
+  </data>
+  <data name="T_L_Size" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="T_L_Hardness" xml:space="preserve">
+    <value>硬度</value>
+  </data>
+  <data name="T_L_Opacity" xml:space="preserve">
+    <value>不透明度</value>
+  </data>
+  <data name="T_L_Corner" xml:space="preserve">
+    <value>圆角</value>
+  </data>
+  <data name="T_L_LineWidth" xml:space="preserve">
+    <value>线宽</value>
+  </data>
+  <data name="T_L_Layers" xml:space="preserve">
+    <value>图层</value>
+  </data>
+  <data name="L_NoLayer" xml:space="preserve">
+    <value>未选择图层</value>
+  </data>
+  <data name="T_L_Blend" xml:space="preserve">
+    <value>混合</value>
+  </data>
+  <data name="T_L_PaintMask" xml:space="preserve">
+    <value>绘制蒙版</value>
+  </data>
+  <data name="T_L_Visible" xml:space="preserve">
+    <value>可见</value>
+  </data>
+  <data name="T_L_Import" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="T_L_Raise" xml:space="preserve">
+    <value>上移</value>
+  </data>
+  <data name="T_L_Lower" xml:space="preserve">
+    <value>下移</value>
+  </data>
+  <data name="T_L_Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="T_L_Details" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="L_Ready" xml:space="preserve">
+    <value>就绪</value>
+  </data>
+  <data name="T_L_Free" xml:space="preserve">
+    <value>自由</value>
+  </data>
+  <data name="T_L_Original" xml:space="preserve">
+    <value>原始</value>
+  </data>
+  <data name="T_L_Rectangle" xml:space="preserve">
+    <value>矩形</value>
+  </data>
+  <data name="T_L_Ellipse" xml:space="preserve">
+    <value>椭圆</value>
+  </data>
+  <data name="T_L_Line" xml:space="preserve">
+    <value>直线</value>
+  </data>
+  <data name="L_Diffusion" xml:space="preserve">
+    <value>扩散</value>
+  </data>
+  <data name="L_Bloom" xml:space="preserve">
+    <value>泛光</value>
+  </data>
+  <data name="L_Halation" xml:space="preserve">
+    <value>卤化</value>
+  </data>
+  <data name="L_Shadows" xml:space="preserve">
+    <value>阴影</value>
+  </data>
+  <data name="L_Midtones" xml:space="preserve">
+    <value>中间调</value>
+  </data>
+  <data name="L_Highlights" xml:space="preserve">
+    <value>高光</value>
+  </data>
+  <data name="L_Global" xml:space="preserve">
+    <value>全局</value>
+  </data>
+  <data name="Chan_RGB" xml:space="preserve">
+    <value>RGB</value>
+  </data>
+  <data name="Chan_Red" xml:space="preserve">
+    <value>红</value>
+  </data>
+  <data name="Chan_Green" xml:space="preserve">
+    <value>绿</value>
+  </data>
+  <data name="Chan_Blue" xml:space="preserve">
+    <value>蓝</value>
+  </data>
+  <data name="Tool_Move" xml:space="preserve">
+    <value>移动</value>
+  </data>
+  <data name="Tool_RectSelect" xml:space="preserve">
+    <value>矩形选区</value>
+  </data>
+  <data name="Tool_EllipseSelect" xml:space="preserve">
+    <value>椭圆选区</value>
+  </data>
+  <data name="Tool_Brush" xml:space="preserve">
+    <value>画笔</value>
+  </data>
+  <data name="Tool_Eraser" xml:space="preserve">
+    <value>橡皮擦</value>
+  </data>
+  <data name="Tool_Crop" xml:space="preserve">
+    <value>裁剪</value>
+  </data>
+  <data name="Tool_Shape" xml:space="preserve">
+    <value>形状</value>
+  </data>
+  <data name="Tool_Wand" xml:space="preserve">
+    <value>魔棒</value>
+  </data>
+  <data name="L_WandTolerance.Text" xml:space="preserve">
+    <value>容差</value>
+  </data>
+  <data name="L_WandSample.Text" xml:space="preserve">
+    <value>取样</value>
+  </data>
+  <data name="L_WandPoint.Content" xml:space="preserve">
+    <value>取点</value>
+  </data>
+  <data name="L_Wand3x3.Content" xml:space="preserve">
+    <value>3×3 平均</value>
+  </data>
+  <data name="L_Wand5x5.Content" xml:space="preserve">
+    <value>5×5 平均</value>
+  </data>
+  <data name="L_WandContiguous.Content" xml:space="preserve">
+    <value>连续</value>
+  </data>
+  <data name="L_WandAllLayers.Content" xml:space="preserve">
+    <value>所有图层</value>
+  </data>
+  <data name="M_ContentFill.Text" xml:space="preserve">
+    <value>内容感知填充</value>
+  </data>
+  <data name="S_ContentFilled" xml:space="preserve">
+    <value>已为 {0} 完成内容感知填充。</value>
+  </data>
+  <data name="S_ContentFillNoDonors" xml:space="preserve">
+    <value>没有足够的周边像素可供填充——请缩小选区。</value>
+  </data>
+  <data name="M_InvertPixels.Text" xml:space="preserve">
+    <value>反相像素</value>
+  </data>
+  <data name="S_PixelsInverted" xml:space="preserve">
+    <value>已反相 {0} 的像素。</value>
+  </data>
+  <data name="S_Filled" xml:space="preserve">
+    <value>已在选区内填充 {0}。</value>
+  </data>
+  <data name="S_MaskFilled" xml:space="preserve">
+    <value>已填充 {0} 的蒙版。</value>
+  </data>
+  <data name="S_PixelsCleared" xml:space="preserve">
+    <value>已清除 {0} 的选区像素。</value>
+  </data>
+  <data name="S_LayersFlippedHorizontal" xml:space="preserve">
+    <value>已水平翻转 {0} 个图层。</value>
+  </data>
+  <data name="S_LayersFlippedVertical" xml:space="preserve">
+    <value>已垂直翻转 {0} 个图层。</value>
+  </data>
+  <data name="S_CanvasFlippedHorizontal" xml:space="preserve">
+    <value>已水平翻转画布。</value>
+  </data>
+  <data name="S_CanvasFlippedVertical" xml:space="preserve">
+    <value>已垂直翻转画布。</value>
+  </data>
+  <data name="S_FlipRefused" xml:space="preserve">
+    <value>翻转会把某个放置推到支持范围之外。</value>
+  </data>
+  <data name="S_NoPixelsToInvert" xml:space="preserve">
+    <value>{0} 没有可反相的像素。</value>
+  </data>
+  <data name="M_Distort.Text" xml:space="preserve">
+    <value>自由扭曲…</value>
+  </data>
+  <data name="L_DistortTopLeft" xml:space="preserve">
+    <value>左上角</value>
+  </data>
+  <data name="L_DistortTopRight" xml:space="preserve">
+    <value>右上角</value>
+  </data>
+  <data name="L_DistortBottomRight" xml:space="preserve">
+    <value>右下角</value>
+  </data>
+  <data name="L_DistortBottomLeft" xml:space="preserve">
+    <value>左下角</value>
+  </data>
+  <data name="L_DistortX" xml:space="preserve">
+    <value>X:</value>
+  </data>
+  <data name="L_DistortY" xml:space="preserve">
+    <value>Y:</value>
+  </data>
+  <data name="S_Distorted" xml:space="preserve">
+    <value>已扭曲 {0}。</value>
+  </data>
+  <data name="S_DistortUnusable" xml:space="preserve">
+    <value>扭曲形状不可用（角点重叠或退化）。</value>
+  </data>
+  <data name="M_Dither.Text" xml:space="preserve">
+    <value>抖动…</value>
+  </data>
+  <data name="L_DitherStyle" xml:space="preserve">
+    <value>样式</value>
+  </data>
+  <data name="L_DitherPixelSize" xml:space="preserve">
+    <value>像素大小</value>
+  </data>
+  <data name="L_DitherLineSpacing" xml:space="preserve">
+    <value>扫描线间距</value>
+  </data>
+  <data name="L_DitherLevels" xml:space="preserve">
+    <value>色阶数</value>
+  </data>
+  <data name="S_Dithered" xml:space="preserve">
+    <value>已对 {0} 应用抖动。</value>
+  </data>
+  <data name="DitherStyle_Atkinson" xml:space="preserve">
+    <value>Atkinson(经典 Mac)</value>
+  </data>
+  <data name="DitherStyle_FloydSteinberg" xml:space="preserve">
+    <value>Floyd–Steinberg</value>
+  </data>
+  <data name="DitherStyle_Bayer2" xml:space="preserve">
+    <value>Bayer 2 × 2</value>
+  </data>
+  <data name="DitherStyle_Bayer4" xml:space="preserve">
+    <value>Bayer 4 × 4</value>
+  </data>
+  <data name="DitherStyle_Bayer8" xml:space="preserve">
+    <value>Bayer 8 × 8</value>
+  </data>
+  <data name="DitherStyle_HalftoneDots" xml:space="preserve">
+    <value>半调网点</value>
+  </data>
+  <data name="DitherStyle_HalftoneLines" xml:space="preserve">
+    <value>半调线条</value>
+  </data>
+  <data name="DitherStyle_HalftoneDiamonds" xml:space="preserve">
+    <value>半调菱形</value>
+  </data>
+  <data name="DitherStyle_MacPatterns" xml:space="preserve">
+    <value>Mac 图案</value>
+  </data>
+  <data name="DitherStyle_Ascii" xml:space="preserve">
+    <value>ASCII</value>
+  </data>
+  <data name="DitherStyle_Scanlines" xml:space="preserve">
+    <value>扫描线(CRT)</value>
+  </data>
+  <data name="M_InvertMask.Text" xml:space="preserve">
+    <value>反相蒙版</value>
+  </data>
+  <data name="M_FillForeground.Text" xml:space="preserve">
+    <value>以前景色填充</value>
+  </data>
+  <data name="M_FillBackground.Text" xml:space="preserve">
+    <value>以背景色填充</value>
+  </data>
+  <data name="M_ClearSelection.Text" xml:space="preserve">
+    <value>清除选区像素</value>
+  </data>
+  <data name="M_FlipLayerHorizontal.Text" xml:space="preserve">
+    <value>水平翻转图层</value>
+  </data>
+  <data name="M_FlipLayerVertical.Text" xml:space="preserve">
+    <value>垂直翻转图层</value>
+  </data>
+  <data name="M_FlipCanvasHorizontal.Text" xml:space="preserve">
+    <value>水平翻转画布</value>
+  </data>
+  <data name="M_FlipCanvasVertical.Text" xml:space="preserve">
+    <value>垂直翻转画布</value>
+  </data>
+  <data name="M_CanvasSize.Text" xml:space="preserve">
+    <value>画布大小…</value>
+  </data>
+  <data name="Dlg_Anchor" xml:space="preserve">
+    <value>定位锚点</value>
+  </data>
+  <data name="Dlg_AnchorPosition" xml:space="preserve">
+    <value>锚点第 {0} 行第 {1} 列</value>
+  </data>
+  <data name="Dlg_ExtensionFill.Text" xml:space="preserve">
+    <value>扩展填充</value>
+  </data>
+  <data name="Dlg_FillTransparent.Text" xml:space="preserve">
+    <value>透明</value>
+  </data>
+  <data name="Dlg_FillForeground.Text" xml:space="preserve">
+    <value>前景色</value>
+  </data>
+  <data name="Dlg_FillBackground.Text" xml:space="preserve">
+    <value>背景色</value>
+  </data>
+  <data name="Dlg_FillWhite.Text" xml:space="preserve">
+    <value>白色</value>
+  </data>
+  <data name="Dlg_FillBlack.Text" xml:space="preserve">
+    <value>黑色</value>
+  </data>
+  <data name="S_CanvasSized" xml:space="preserve">
+    <value>画布已改为 {0} × {1} 像素。</value>
+  </data>
+  <data name="S_CanvasSizeRefused" xml:space="preserve">
+    <value>画布大小被拒绝：超出支持范围，或会把某个图层推出可用范围。</value>
+  </data>
+  <data name="M_SelectSubject.Text" xml:space="preserve">
+    <value>选择主体（AI）</value>
+  </data>
+  <data name="M_RemoveSubject.Text" xml:space="preserve">
+    <value>移除主体（AI）</value>
+  </data>
+  <data name="S_MaskInverted" xml:space="preserve">
+    <value>已反相 {0} 的蒙版。</value>
+  </data>
+  <data name="S_AiNotWired" xml:space="preserve">
+    <value>AI 分割模型未接入——接口已预留（IAiSegmenter），接入后可用。</value>
+  </data>
+  <data name="S_AiNoSubject" xml:space="preserve">
+    <value>AI 未在画面中找到主体。</value>
+  </data>
+  <data name="S_SubjectSelected" xml:space="preserve">
+    <value>已按 AI 分割结果创建选区。</value>
+  </data>
+  <data name="S_SubjectRemoved" xml:space="preserve">
+    <value>已移除主体像素。</value>
+  </data>
+  <data name="M_ColorRange.Text" xml:space="preserve">
+    <value>色彩范围…</value>
+  </data>
+  <data name="L_ColorRangeHint.Text" xml:space="preserve">
+    <value>与前景色比较（去预乘），容差内的像素将入选；可叠加多个包含/排除色。</value>
+  </data>
+  <data name="L_ColorRangeFuzziness.Text" xml:space="preserve">
+    <value>容差</value>
+  </data>
+  <data name="L_ColorRangeInvert.Content" xml:space="preserve">
+    <value>反转</value>
+  </data>
+  <data name="L_ColorRangeAddInclude.Content" xml:space="preserve">
+    <value>前景色加入包含</value>
+  </data>
+  <data name="L_ColorRangeAddExclude.Content" xml:space="preserve">
+    <value>前景色加入排除</value>
+  </data>
+  <data name="L_ColorRangeClear.Content" xml:space="preserve">
+    <value>清空颜色</value>
+  </data>
+  <data name="L_ColorRangeIncludeCount" xml:space="preserve">
+    <value>包含色：{0} 个</value>
+  </data>
+  <data name="L_ColorRangeExcludeCount" xml:space="preserve">
+    <value>排除色：{0} 个</value>
+  </data>
+  <data name="S_ColorRangeNoColors" xml:space="preserve">
+    <value>未添加包含色。</value>
+  </data>
+  <data name="S_ColorRangeSelected" xml:space="preserve">
+    <value>色彩范围已选中 {0} 像素。</value>
+  </data>
+  <data name="S_ColorRangeEmpty" xml:space="preserve">
+    <value>色彩范围没有匹配的像素，选区已清除。</value>
+  </data>
+  <data name="L_ColorRangeSampling.Text" xml:space="preserve">
+    <value>点击画布取色：点击=替换 · Shift=加入 · Alt=排除</value>
+  </data>
+  <data name="L_ColorRangeApply.Content" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="L_ColorRangeCancel.Content" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="S_ColorRangeSampling" xml:space="preserve">
+    <value>色彩范围：点击画布取样，应用或取消结束。</value>
+  </data>
+  <data name="S_ColorRangeCancelled" xml:space="preserve">
+    <value>已取消色彩范围，选区还原。</value>
+  </data>
+  <data name="S_WandSelected" xml:space="preserve">
+    <value>魔棒已选中 {0} 像素。</value>
+  </data>
+  <data name="S_WandEmpty" xml:space="preserve">
+    <value>没有匹配的像素，选区已清除。</value>
+  </data>
+  <data name="Raw_Blend_Normal" xml:space="preserve">
+    <value>正常</value>
+  </data>
+  <data name="Raw_Blend_Darken" xml:space="preserve">
+    <value>变暗</value>
+  </data>
+  <data name="Raw_Blend_Multiply" xml:space="preserve">
+    <value>正片叠底</value>
+  </data>
+  <data name="Raw_Blend_ColorBurn" xml:space="preserve">
+    <value>颜色加深</value>
+  </data>
+  <data name="Raw_Blend_LinearBurn" xml:space="preserve">
+    <value>线性加深</value>
+  </data>
+  <data name="Raw_Blend_Lighten" xml:space="preserve">
+    <value>变亮</value>
+  </data>
+  <data name="Raw_Blend_Screen" xml:space="preserve">
+    <value>滤色</value>
+  </data>
+  <data name="Raw_Blend_ColorDodge" xml:space="preserve">
+    <value>颜色减淡</value>
+  </data>
+  <data name="Raw_Blend_LinearDodge" xml:space="preserve">
+    <value>线性减淡</value>
+  </data>
+  <data name="Raw_Blend_Overlay" xml:space="preserve">
+    <value>叠加</value>
+  </data>
+  <data name="Raw_Blend_SoftLight" xml:space="preserve">
+    <value>柔光</value>
+  </data>
+  <data name="Raw_Blend_HardLight" xml:space="preserve">
+    <value>强光</value>
+  </data>
+  <data name="Raw_Blend_VividLight" xml:space="preserve">
+    <value>亮光</value>
+  </data>
+  <data name="Raw_Blend_LinearLight" xml:space="preserve">
+    <value>线性光</value>
+  </data>
+  <data name="Raw_Blend_PinLight" xml:space="preserve">
+    <value>点光</value>
+  </data>
+  <data name="Raw_Blend_HardMix" xml:space="preserve">
+    <value>实色混合</value>
+  </data>
+  <data name="Raw_Blend_Difference" xml:space="preserve">
+    <value>差值</value>
+  </data>
+  <data name="Raw_Blend_Exclusion" xml:space="preserve">
+    <value>排除</value>
+  </data>
+  <data name="Raw_Blend_Subtract" xml:space="preserve">
+    <value>减去</value>
+  </data>
+  <data name="Raw_Blend_Divide" xml:space="preserve">
+    <value>划分</value>
+  </data>
+  <data name="Raw_Blend_Hue" xml:space="preserve">
+    <value>色相</value>
+  </data>
+  <data name="Raw_Blend_Saturation" xml:space="preserve">
+    <value>饱和度</value>
+  </data>
+  <data name="Raw_Blend_Color" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="Raw_Blend_Luminosity" xml:space="preserve">
+    <value>明度</value>
+  </data>
+  <data name="Raw_Adjustment_HueSaturation" xml:space="preserve">
+    <value>色相/饱和度</value>
+  </data>
+  <data name="Raw_Adjustment_Levels" xml:space="preserve">
+    <value>色阶</value>
+  </data>
+  <data name="Raw_Adjustment_Curves" xml:space="preserve">
+    <value>曲线</value>
+  </data>
+  <data name="Raw_Adjustment_Exposure" xml:space="preserve">
+    <value>曝光</value>
+  </data>
+  <data name="Raw_Adjustment_GradientMap" xml:space="preserve">
+    <value>渐变映射</value>
+  </data>
+  <data name="Raw_Adjustment_Grain" xml:space="preserve">
+    <value>颗粒</value>
+  </data>
+  <data name="Raw_Adjustment_AddNoise" xml:space="preserve">
+    <value>添加杂色</value>
+  </data>
+  <data name="Raw_Adjustment_GaussianBlur" xml:space="preserve">
+    <value>高斯模糊</value>
+  </data>
+  <data name="Raw_Adjustment_MotionBlur" xml:space="preserve">
+    <value>动感模糊</value>
+  </data>
+  <data name="Raw_Adjustment_Invert" xml:space="preserve">
+    <value>反相</value>
+  </data>
+  <data name="Raw_Adjustment_BlackWhite" xml:space="preserve">
+    <value>黑白</value>
+  </data>
+  <data name="Raw_Adjustment_ColorBalance" xml:space="preserve">
+    <value>色彩平衡</value>
+  </data>
+  <data name="Raw_Range_Master" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="Raw_Range_Reds" xml:space="preserve">
+    <value>红色</value>
+  </data>
+  <data name="Raw_Range_Yellows" xml:space="preserve">
+    <value>黄色</value>
+  </data>
+  <data name="Raw_Range_Greens" xml:space="preserve">
+    <value>绿色</value>
+  </data>
+  <data name="Raw_Range_Cyans" xml:space="preserve">
+    <value>青色</value>
+  </data>
+  <data name="Raw_Range_Blues" xml:space="preserve">
+    <value>蓝色</value>
+  </data>
+  <data name="Raw_Range_Magentas" xml:space="preserve">
+    <value>洋红</value>
+  </data>
+  <data name="S_Undo" xml:space="preserve">
+    <value>已撤销。</value>
+  </data>
+  <data name="S_Redo" xml:space="preserve">
+    <value>已重做。</value>
+  </data>
+  <data name="S_NoUndo" xml:space="preserve">
+    <value>没有可撤销的操作。</value>
+  </data>
+  <data name="S_NoRedo" xml:space="preserve">
+    <value>没有可重做的操作。</value>
+  </data>
+  <data name="S_NewDoc" xml:space="preserve">
+    <value>新建 1280×800 文档。</value>
+  </data>
+  <data name="S_Saved" xml:space="preserve">
+    <value>已保存。</value>
+  </data>
+  <data name="S_Deselected" xml:space="preserve">
+    <value>已取消选择。</value>
+  </data>
+  <data name="M_NewBlankLayer.Text" xml:space="preserve"><value>新建空白图层</value></data>
+  <data name="W_NewBlankLayer.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>新建空白图层（Ctrl+Shift+N）</value></data>
+  <data name="S_BlankLayerAdded" xml:space="preserve"><value>已添加 {0}。</value></data>
+  <data name="S_FolderAdded" xml:space="preserve">
+    <value>已添加文件夹组。</value>
+  </data>
+  <data name="S_GuideMoved" xml:space="preserve">
+    <value>参考线已移动。</value>
+  </data>
+  <data name="S_GuidesCleared" xml:space="preserve">
+    <value>参考线已清除。</value>
+  </data>
+  <data name="S_GuidesLocked" xml:space="preserve">
+    <value>参考线已锁定 — 在视图菜单里解锁。</value>
+  </data>
+  <data name="S_NoGuides" xml:space="preserve">
+    <value>没有可清除的参考线。</value>
+  </data>
+  <data name="S_GuideV" xml:space="preserve">
+    <value>已在画布中心添加垂直参考线 — 可拖动。</value>
+  </data>
+  <data name="S_GuideH" xml:space="preserve">
+    <value>已在画布中心添加水平参考线 — 可拖动。</value>
+  </data>
+  <data name="S_TransformApplied" xml:space="preserve">
+    <value>已应用变换。</value>
+  </data>
+  <data name="S_CropCancelled" xml:space="preserve">
+    <value>已取消裁剪。</value>
+  </data>
+  <data name="S_CropFirst" xml:space="preserve">
+    <value>请先拖出裁剪框。</value>
+  </data>
+  <data name="S_CropRange" xml:space="preserve">
+    <value>裁剪边界超出范围。</value>
+  </data>
+  <data name="S_PaintToolNeedsPixels" xml:space="preserve"><value>此工具编辑图层像素，请先选择图像缩略图。</value></data>
+  <data name="S_PaintMultipleLayers" xml:space="preserve"><value>当前选中了多个图层，请只选择一个图层后绘画。</value></data>
+  <data name="S_PaintHiddenLayer" xml:space="preserve"><value>“{0}”已隐藏或位于隐藏文件夹内，请先显示它再绘画。</value></data>
+  <data name="S_PaintNeedsLayer" xml:space="preserve">
+    <value>该图层没有可绘制的像素。</value>
+  </data>
+  <data name="S_PaintFolderHasNoPixels" xml:space="preserve">
+    <value>{0} 是文件夹，本身没有像素。请在其中的图层上绘制，或绘制文件夹的蒙版。</value>
+  </data>
+  <data name="S_PaintAdjustmentHasNoPixels" xml:space="preserve">
+    <value>{0} 是调整图层，没有可绘制的像素。请改在它的蒙版上绘制。</value>
+  </data>
+  <data name="S_PaintMaskTurnedOff" xml:space="preserve">
+    <value>图层蒙版已关闭。Shift+单击其缩略图重新开启后再绘制。</value>
+  </data>
+  <data name="S_PaintEmptySelection" xml:space="preserve">
+    <value>当前是空选区，没有可绘制的位置。选择 编辑 > 取消选择（Ctrl+D） 即可绘制整层。</value>
+  </data>
+  <data name="S_SelectPaint" xml:space="preserve">
+    <value>请选择要绘制的图层。</value>
+  </data>
+  <data name="S_SelectGroup" xml:space="preserve">
+    <value>请选择要编组的图层。</value>
+  </data>
+  <data name="S_SelectUngroup" xml:space="preserve">
+    <value>请选择要解组的文件夹。</value>
+  </data>
+  <data name="S_Ungrouped" xml:space="preserve">
+    <value>已移除文件夹并提升图层。</value>
+  </data>
+  <data name="S_NotProject" xml:space="preserve">
+    <value>该文件夹不是 Compositor 项目（缺少 manifest.json）。</value>
+  </data>
+  <data name="S_ShapeTooBig" xml:space="preserve">
+    <value>形状过大。形状最多可覆盖与导入相同的像素预算。</value>
+  </data>
+  <data name="S_DiskChanged" xml:space="preserve">
+    <value>磁盘上的项目已更改，而本文档有未保存的编辑。在你处理之前保存会被阻止，任何内容都没有被覆盖。</value>
+  </data>
+  <data name="S_SaveConflict" xml:space="preserve">
+    <value>另一个程序在你上次保存之后改动了这个项目，本次保存已被拒绝，没有写入任何内容。撤销回到已保存的版本，或不保存关闭后重新打开，就能看到对方的改动。</value>
+  </data>
+  <data name="S_Reloaded" xml:space="preserve">
+    <value>已从磁盘重新载入项目。</value>
+  </data>
+  <data name="S_CamRawReset" xml:space="preserve">
+    <value>已重置 Camera Raw 草稿。</value>
+  </data>
+  <data name="S_CamRawApplied" xml:space="preserve">
+    <value>已应用 Camera Raw 调色（一步撤销）。</value>
+  </data>
+  <data name="S_MaskAdded" xml:space="preserve">
+    <value>已为 {0} 添加显示蒙版。</value>
+  </data>
+  <data name="S_HideAllMaskAdded" xml:space="preserve">
+    <value>已为 {0} 添加隐藏蒙版（图层已全部隐藏）。</value>
+  </data>
+  <data name="S_RevealSelectionMaskAdded" xml:space="preserve">
+    <value>已为 {0} 由选区生成显示蒙版。</value>
+  </data>
+  <data name="S_HideSelectionMaskAdded" xml:space="preserve">
+    <value>已为 {0} 由选区生成隐藏蒙版。</value>
+  </data>
+  <data name="S_HasMask" xml:space="preserve">
+    <value>{0} 已有蒙版，请先移除。</value>
+  </data>
+  <data name="S_SelectionMaskNeedsSelection" xml:space="preserve">
+    <value>请先创建选区。</value>
+  </data>
+  <data name="S_CopiedPixels" xml:space="preserve">
+    <value>已复制选区像素（{0}）。</value>
+  </data>
+  <data name="S_CutPixels" xml:space="preserve">
+    <value>已剪切选区像素（{0}）。</value>
+  </data>
+  <data name="S_PastedPixels" xml:space="preserve">
+    <value>已粘贴为新图层 {0}。</value>
+  </data>
+  <data name="S_NoPixelsToCopy" xml:space="preserve">
+    <value>{0} 没有可复制的像素。</value>
+  </data>
+  <data name="S_ClipboardEmpty" xml:space="preserve">
+    <value>剪贴板没有内容。</value>
+  </data>
+  <data name="S_LayerViaCopy" xml:space="preserve">
+    <value>已通过拷贝新建图层 {0}。</value>
+  </data>
+  <data name="S_PastedExternal" xml:space="preserve">
+    <value>已从剪贴板粘贴外部图像（{0} × {1}，已居中）。</value>
+  </data>
+  <data name="S_PasteTooLarge" xml:space="preserve">
+    <value>剪贴板图像超出像素上限，无法粘贴。</value>
+  </data>
+  <data name="S_SystemClipboardFailed" xml:space="preserve">
+    <value>已复制（系统剪贴板不可用，仅应用内有效）。</value>
+  </data>
+  <data name="S_SelectionExpanded" xml:space="preserve">
+    <value>选区已扩展 {0} 像素。</value>
+  </data>
+  <data name="S_SelectionContracted" xml:space="preserve">
+    <value>选区已收缩 {0} 像素。</value>
+  </data>
+  <data name="S_SelectionContractedAway" xml:space="preserve">
+    <value>选区已完全收缩。</value>
+  </data>
+  <data name="S_SelectionFeathered" xml:space="preserve">
+    <value>选区边缘已羽化 {0} 像素。</value>
+  </data>
+  <data name="M_LoadLayerPixels.Text" xml:space="preserve"><value>图层的像素</value></data><data name="M_LoadMaskBlack.Text" xml:space="preserve"><value>蒙版的黑色区域</value></data><data name="M_ExpandSelection.Text" xml:space="preserve">
+    <value>扩展选区</value>
+  </data>
+  <data name="M_ContractSelection.Text" xml:space="preserve">
+    <value>收缩选区</value>
+  </data>
+  <data name="M_FeatherSelection.Text" xml:space="preserve">
+    <value>羽化选区</value>
+  </data>
+  <data name="M_SelectionAmountTitle" xml:space="preserve">
+    <value>选区数量</value>
+  </data>
+  <data name="M_SelectionAmountDescription" xml:space="preserve">
+    <value>数量（1–{0} 像素）：</value>
+  </data>
+  <data name="S_MaskLinked" xml:space="preserve">
+    <value>已链接 {0} 的蒙版（随图层移动）。</value>
+  </data>
+  <data name="S_MaskUnlinked" xml:space="preserve">
+    <value>已取消 {0} 的蒙版链接（可独立移动）。</value>
+  </data>
+  <data name="S_MaskEnabled" xml:space="preserve">
+    <value>已启用 {0} 的蒙版。</value>
+  </data>
+  <data name="S_MaskDisabled" xml:space="preserve">
+    <value>已停用 {0} 的蒙版。</value>
+  </data>
+  <data name="S_ClippingCreated" xml:space="preserve">
+    <value>已为 {0} 创建剪贴蒙版。</value>
+  </data>
+  <data name="S_ClippingReleased" xml:space="preserve">
+    <value>已释放 {0} 的剪贴蒙版。</value>
+  </data>
+  <data name="S_ClippingRefused" xml:space="preserve">
+    <value>无法创建剪贴蒙版（需要下方相邻的普通图层）。</value>
+  </data>
+  <data name="S_MaskRemoved" xml:space="preserve">
+    <value>已移除 {0} 的蒙版。</value>
+  </data>
+  <data name="S_NoMask" xml:space="preserve">
+    <value>{0} 没有蒙版。</value>
+  </data>
+  <data name="S_AdjustmentAdded" xml:space="preserve">
+    <value>已添加 {0} 调整图层。</value>
+  </data>
+  <data name="S_AdjustmentSuffix" xml:space="preserve">
+    <value>{0} 调整</value>
+  </data>
+  <data name="S_CropLive" xml:space="preserve">
+    <value>裁剪 {0:0}×{1:0} — 框内拖动移动，点“应用裁剪”提交。</value>
+  </data>
+  <data name="S_Cropped" xml:space="preserve">
+    <value>已裁剪为 {0:0}×{1:0}。</value>
+  </data>
+  <data name="S_Exported" xml:space="preserve">
+    <value>已导出 {0}（{1}×{2}，质量 {3:0}%）。</value>
+  </data>
+  <data name="S_ExternalFail" xml:space="preserve">
+    <value>无法载入外部更改：{0}</value>
+  </data>
+  <data name="M_ExternalConflictTitle" xml:space="preserve">
+    <value>“{0}” 在磁盘上被更改了。</value>
+  </data>
+  <data name="M_ExternalConflictBody" xml:space="preserve">
+    <value>另一个程序修改了这个项目。你可以还原成磁盘上的版本（放弃未保存的修改），或者保留你现在的内容。</value>
+  </data>
+  <data name="Dlg_Revert" xml:space="preserve">
+    <value>还原</value>
+  </data>
+  <data name="Dlg_KeepMine" xml:space="preserve">
+    <value>保留我的修改</value>
+  </data>
+  <data name="S_ExternalKept" xml:space="preserve">
+    <value>已保留你的未保存修改；下次保存将覆盖磁盘上的那一份。</value>
+  </data>
+  <data name="S_ExternalWait" xml:space="preserve">
+    <value>项目在磁盘上被更改了；本次编辑结束后会询问你怎么处理。</value>
+  </data>
+  <data name="S_CloseConfirmFail" xml:space="preserve">
+    <value>无法确认未保存的更改：{0} 窗口已保持打开，没有丢弃任何内容；可以再次关闭。</value>
+  </data>
+  <data name="S_RecoveryFail" xml:space="preserve">
+    <value>结束编辑时出错：{0}</value>
+  </data>
+  <data name="S_ImportedLayers" xml:space="preserve">
+    <value>已导入 {0}（{1} 个图层）。</value>
+  </data>
+  <data name="S_ImportedPsdCropped" xml:space="preserve">
+    <value>{0} 已将 {1} 个图层裁剪到画布以适应内存。</value>
+  </data>
+  <data name="S_Imported" xml:space="preserve">
+    <value>已导入 {0}（{1}×{2}）。</value>
+  </data>
+  <data name="S_Opened" xml:space="preserve">
+    <value>已打开 {0}。</value>
+  </data>
+  <data name="S_SavedTo" xml:space="preserve">
+    <value>已保存到 {0}。</value>
+  </data>
+  <data name="S_ShapeAdded" xml:space="preserve">
+    <value>已在活动图层上方的新图层添加 {0}。</value>
+  </data>
+  <data name="S_Deleted" xml:space="preserve">
+    <value>已删除 {0}。</value>
+  </data>
+  <data name="Dlg_DeleteLiveSource" xml:space="preserve"><value>这些图层提供剪贴蒙版</value></data>
+  <data name="Dlg_DeleteLiveBody" xml:space="preserve"><value>烘焙将当前剪贴覆盖写入依赖图层的像素，并将其文字或形状栅格化；这些图层自身的蒙版和效果仍可编辑。移除链接会显示其原有像素。两种选择均可撤销。</value></data>
+  <data name="Dlg_DeleteLiveAdjustments" xml:space="preserve"><value>依赖的调整图层无论选择哪种操作，都会移除剪贴链接。</value></data>
+  <data name="Dlg_BakeAndDelete" xml:space="preserve"><value>烘焙后删除</value></data>
+  <data name="Dlg_UnlinkAndDelete" xml:space="preserve"><value>移除链接后删除</value></data>
+  <data name="S_BakingDeletion" xml:space="preserve"><value>正在烘焙剪贴蒙版…</value></data>
+  <data name="S_LayersDeleted" xml:space="preserve"><value>已删除 {0} 个图层。</value></data>
+  <data name="S_DeleteSourceChanged" xml:space="preserve"><value>文档已变化，本次删除未应用。</value></data>
+  <data name="S_LayerDeletionFailed" xml:space="preserve"><value>无法删除所选图层。</value></data>
+  <data name="S_DeletePlaneFailed" xml:space="preserve"><value>无法修改选中的像素或蒙版。</value></data>
+  <data name="S_ClearingSelection" xml:space="preserve"><value>正在清除所选像素…</value></data>
+  <data name="A_EffectRow" xml:space="preserve"><value>{0}效果</value></data>
+  <data name="A_EffectRowHelp" xml:space="preserve"><value>单击选择，双击编辑，按住 Alt 拖动复制。</value></data>
+  <data name="A_HideEffect" xml:space="preserve"><value>隐藏{0}</value></data>
+  <data name="A_ShowEffect" xml:space="preserve"><value>显示{0}</value></data>
+  <data name="S_EffectRemoved" xml:space="preserve"><value>已删除{0}。</value></data>
+  <data name="S_EffectShown" xml:space="preserve"><value>已显示{0}。</value></data>
+  <data name="S_EffectHidden" xml:space="preserve"><value>已隐藏{0}。</value></data>
+  <data name="S_EffectSelectionFailed" xml:space="preserve"><value>无法选择此效果。</value></data>
+  <data name="S_EffectChangeFailed" xml:space="preserve"><value>无法修改此效果。</value></data>
+  <data name="S_LayerContextFailed" xml:space="preserve"><value>无法打开或使用图层菜单。</value></data>
+  <data name="A_AddLayerMask" xml:space="preserve"><value>添加图层蒙版</value></data>
+  <data name="S_CreatingSelectionMask" xml:space="preserve"><value>正在从选区创建蒙版…</value></data>
+  <data name="S_SelectionMaskUnavailable" xml:space="preserve"><value>无法为此选区创建蒙版。</value></data>
+  <data name="S_MaskSourceChanged" xml:space="preserve"><value>文档已变化，本次蒙版未应用。</value></data>
+  <data name="S_SelectionMaskFailed" xml:space="preserve"><value>无法创建选区蒙版。</value></data>
+  <data name="A_AddMaskAll" xml:space="preserve"><value>添加图层蒙版（按住 Alt 单击添加黑色蒙版）</value></data>
+  <data name="A_AddMaskSelection" xml:space="preserve"><value>添加显示选区的蒙版（按住 Alt 单击隐藏选区）</value></data>
+  <data name="A_StopViewingMask" xml:space="preserve"><value>返回图像（也可按住 Alt 单击蒙版缩略图）</value></data>
+  <data name="L_MaskAloneTitle.Text" xml:space="preserve"><value>图层蒙版</value></data>
+  <data name="M_ContextDeleteEffect" xml:space="preserve"><value>删除{0}</value></data>
+  <data name="M_ContextDeleteMask" xml:space="preserve"><value>删除蒙版</value></data>
+  <data name="M_ContextDeleteLayer" xml:space="preserve"><value>删除图层</value></data>
+  <data name="M_ContextDeleteLayers" xml:space="preserve"><value>删除所选图层</value></data>
+  <data name="M_ContextAddMask" xml:space="preserve"><value>添加蒙版</value></data>
+  <data name="M_ContextRevealMask" xml:space="preserve"><value>显示全部（白色）</value></data>
+  <data name="M_ContextHideMask" xml:space="preserve"><value>隐藏全部（黑色）</value></data>
+  <data name="M_ContextHideLayer" xml:space="preserve"><value>隐藏图层</value></data>
+  <data name="M_ContextShowLayer" xml:space="preserve"><value>显示图层</value></data>
+  <data name="S_PlaneEditUnchanged" xml:space="preserve"><value>选区内没有需要更改的像素。</value></data>
+  <data name="S_Lowered" xml:space="preserve">
+    <value>{0} 已下移。</value>
+  </data>
+  <data name="S_Raised" xml:space="preserve">
+    <value>{0} 已上移。</value>
+  </data>
+  <data name="S_MultiSelect" xml:space="preserve">
+    <value>已选中 {0} 个图层 · Ctrl+单击移出一个</value>
+  </data>
+  <data name="S_GroupOne" xml:space="preserve">
+    <value>{0} 现在包含 {1}。</value>
+  </data>
+  <data name="S_GroupMany" xml:space="preserve">
+    <value>{0} 现在包含 {1} 个图层。</value>
+  </data>
+  <data name="S_CannotImport" xml:space="preserve">
+    <value>无法导入 {0}。</value>
+  </data>
+  <data name="S_CannotSave" xml:space="preserve">
+    <value>无法保存 {0}。</value>
+  </data>
+  <data name="S_CannotSaveTo" xml:space="preserve">
+    <value>无法保存到 {0}。</value>
+  </data>
+  <data name="S_CannotExport" xml:space="preserve">
+    <value>无法导出 {0}。</value>
+  </data>
+  <data name="S_CannotOpen" xml:space="preserve">
+    <value>无法打开 {0}。</value>
+  </data>
+  <data name="S_Rotation" xml:space="preserve">
+    <value>旋转 {0:0.#}° · 尺寸 {1:0.#}×{2:0.#}</value>
+  </data>
+  <data name="S_TransformPos" xml:space="preserve">
+    <value>尺寸 {0:0.#}×{1:0.#} · 位置 ({2:0.#}, {3:0.#})</value>
+  </data>
+  <data name="Dlg_ExportJpeg" xml:space="preserve">
+    <value>导出 JPEG</value>
+  </data>
+  <data name="Dlg_Export" xml:space="preserve">
+    <value>导出…</value>
+  </data>
+  <data name="T_Dlg_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Dlg_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Dlg_SaveChanges" xml:space="preserve">
+    <value>保存更改？</value>
+  </data>
+  <data name="Dlg_Unsaved" xml:space="preserve">
+    <value>「{0}」有未保存的更改。</value>
+  </data>
+  <data name="Dlg_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Dlg_DontSave" xml:space="preserve">
+    <value>不保存</value>
+  </data>
+  <data name="Dlg_FailedTitle" xml:space="preserve">
+    <value>无法完成操作</value>
+  </data>
+  <data name="Dlg_OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="Dlg_Shortcuts" xml:space="preserve">
+    <value>键盘快捷键</value>
+  </data>
+  <data name="CE_Hint" xml:space="preserve">
+    <value>单击添加 · 拖动移动 · 拖出或右键移除</value>
+  </data>
+  <data name="CE_ParametricHint" xml:space="preserve">
+    <value>上下拖动抬升或压低这些色调 · 沿底边拖动分割线可改变每一段覆盖的色调范围</value>
+  </data>
+  <data name="CE_PointRemovedLeft" xml:space="preserve">
+    <value>已移除点（剩 {0} 个）。</value>
+  </data>
+  <data name="CE_PointRemoved" xml:space="preserve">
+    <value>已移除点。</value>
+  </data>
+  <data name="CE_EndpointsFixed" xml:space="preserve">
+    <value>端点无法移除。</value>
+  </data>
+  <data name="CE_TooClose" xml:space="preserve">
+    <value>与相邻点过近。</value>
+  </data>
+  <data name="CE_PointAdded" xml:space="preserve">
+    <value>已在 ({0:0}, {1:0}) 添加点。</value>
+  </data>
+  <data name="CE_MaxPoints" xml:space="preserve">
+    <value>一条曲线最多 {0} 个点。</value>
+  </data>
+  <data name="CE_InOut" xml:space="preserve">
+    <value>输入 {0:0}　输出 {1:0}</value>
+  </data>
+  <data name="T_S_ApplyCrop" xml:space="preserve">
+    <value>应用裁剪</value>
+  </data>
+  <data name="Dlg_Cancel.Content" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="L_Blend.Text" xml:space="preserve">
+    <value>混合</value>
+  </data>
+  <data name="L_Corner.Text" xml:space="preserve">
+    <value>圆角</value>
+  </data>
+  <data name="L_Delete.Content" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="L_Details.Content" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="L_Ellipse.Content" xml:space="preserve">
+    <value>椭圆</value>
+  </data>
+  <data name="L_Free.Content" xml:space="preserve">
+    <value>自由</value>
+  </data>
+  <data name="L_Hardness.Text" xml:space="preserve">
+    <value>硬度</value>
+  </data>
+  <data name="L_Import.Content" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="L_Layers.Text" xml:space="preserve">
+    <value>图层</value>
+  </data>
+  <data name="L_Line.Content" xml:space="preserve">
+    <value>直线</value>
+  </data>
+  <data name="L_LineWidth.Text" xml:space="preserve">
+    <value>线宽</value>
+  </data>
+  <data name="L_Lower.Content" xml:space="preserve">
+    <value>下移</value>
+  </data>
+  <data name="L_Opacity.Text" xml:space="preserve">
+    <value>不透明度</value>
+  </data>
+  <data name="L_Original.Content" xml:space="preserve">
+    <value>原始</value>
+  </data>
+  <data name="L_PaintMask.Content" xml:space="preserve">
+    <value>绘制蒙版</value>
+  </data>
+  <data name="L_Raise.Content" xml:space="preserve">
+    <value>上移</value>
+  </data>
+  <data name="L_Rectangle.Content" xml:space="preserve">
+    <value>矩形</value>
+  </data>
+  <data name="L_Size.Text" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="L_Visible.Content" xml:space="preserve">
+    <value>可见</value>
+  </data>
+  <data name="S_ApplyCrop.Content" xml:space="preserve">
+    <value>应用裁剪</value>
+  </data>
+  <data name="M_Merge.Text" xml:space="preserve">
+    <value>合并图层</value>
+  </data>
+  <data name="S_Merged" xml:space="preserve">
+    <value>已合并为 {{0}}。</value>
+  </data>
+  <data name="M_MergeDown" xml:space="preserve">
+    <value>向下合并</value>
+  </data>
+  <data name="M_MergeGroup" xml:space="preserve">
+    <value>合并文件夹组</value>
+  </data>
+  <data name="S_MergeDown" xml:space="preserve">
+    <value>已向下合并入 {0}。</value>
+  </data>
+  <data name="S_MergeGroup" xml:space="preserve">
+    <value>文件夹组已合并为 {0}。</value>
+  </data>
+  <data name="S_Renamed" xml:space="preserve">
+    <value>已将「{0}」重命名为「{1}」。</value>
+  </data>
+  <data name="V_ShowGrid.Text" xml:space="preserve">
+    <value>显示像素网格</value>
+  </data>
+  <data name="M_TrimDialog" xml:space="preserve">
+    <value>修边…</value>
+  </data>
+  <data name="L_AutoLevels" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="L_AutoContrast" xml:space="preserve">
+    <value>对比度</value>
+  </data>
+  <data name="L_AutoColor" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="L_AutoNeutral" xml:space="preserve">
+    <value>颜色 + 中性灰</value>
+  </data>
+  <data name="Tool_Blur" xml:space="preserve">
+    <value>模糊工具</value>
+  </data>
+  <data name="L_BlurMode.Content" xml:space="preserve">
+    <value>模糊</value>
+  </data>
+  <data name="L_SmudgeMode.Content" xml:space="preserve">
+    <value>涂抹</value>
+  </data>
+  <data name="L_LiquifyMode.Content" xml:space="preserve">
+    <value>液化</value>
+  </data>
+  <data name="L_BlurRadius.Text" xml:space="preserve">
+    <value>半径</value>
+  </data>
+  <data name="Tool_Clone" xml:space="preserve">
+    <value>仿制图章</value>
+  </data>
+  <data name="L_CloneAligned.Content" xml:space="preserve">
+    <value>对齐</value>
+  </data>
+  <data name="L_CloneAllLayers.Content" xml:space="preserve">
+    <value>所有图层</value>
+  </data>
+  <data name="L_CloneHint.Text" xml:space="preserve">
+    <value>Alt 点击定源</value>
+  </data>
+  <data name="S_CloneSourceSet" xml:space="preserve">
+    <value>仿制源已设到 {0}, {1}。</value>
+  </data>
+  <data name="S_CloneNoSource" xml:space="preserve">
+    <value>请先按住 Alt 点击设置仿制源。</value>
+  </data>
+  <data name="M_Trim.Text" xml:space="preserve">
+    <value>修边…</value>
+  </data>
+  <data name="L_TrimBasedOn" xml:space="preserve">
+    <value>基于</value>
+  </data>
+  <data name="L_TrimTransparent" xml:space="preserve">
+    <value>透明像素</value>
+  </data>
+  <data name="L_TrimTopLeft" xml:space="preserve">
+    <value>左上角颜色</value>
+  </data>
+  <data name="L_TrimBottomRight" xml:space="preserve">
+    <value>右下角颜色</value>
+  </data>
+  <data name="L_TrimTop" xml:space="preserve">
+    <value>顶部</value>
+  </data>
+  <data name="L_TrimBottom" xml:space="preserve">
+    <value>底部</value>
+  </data>
+  <data name="L_TrimLeft" xml:space="preserve">
+    <value>左侧</value>
+  </data>
+  <data name="L_TrimRight" xml:space="preserve">
+    <value>右侧</value>
+  </data>
+  <data name="L_TrimTolerance" xml:space="preserve">
+    <value>容差</value>
+  </data>
+  <data name="S_Trimmed" xml:space="preserve">
+    <value>已修边至 {0}。</value>
+  </data>
+  <data name="S_TrimNothing" xml:space="preserve">
+    <value>没有可修边的内容，画布保持 {0}。</value>
+  </data>
+  <data name="M_ImageSize" xml:space="preserve">
+    <value>图像大小…</value>
+  </data>
+  <data name="Dlg_Width" xml:space="preserve">
+    <value>宽度</value>
+  </data>
+  <data name="Dlg_Height" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="Dlg_LockRatio" xml:space="preserve">
+    <value>锁定比例</value>
+  </data>
+  <data name="Dlg_Confirm" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="S_Resized" xml:space="preserve">
+    <value>已调整为 {0} × {1}。</value>
+  </data>
+  <data name="S_SlowFrame" xml:space="preserve">
+    <value>慢帧 {0}×{1}：{2:0.0} ms</value>
+  </data>
+  <data name="U_Pixels" xml:space="preserve">
+    <value>像素</value>
+  </data>
+  <data name="U_Percent" xml:space="preserve">
+    <value>百分比</value>
+  </data>
+  <data name="U_Inches" xml:space="preserve">
+    <value>英寸</value>
+  </data>
+  <data name="U_Centimeters" xml:space="preserve">
+    <value>厘米</value>
+  </data>
+  <data name="M_SelectAll.Text" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="M_InvertSelection.Text" xml:space="preserve">
+    <value>反选</value>
+  </data>
+  <data name="S_SelectAll" xml:space="preserve">
+    <value>已全选。</value>
+  </data>
+  <data name="S_Inverted" xml:space="preserve">
+    <value>已反选。</value>
+  </data>
+  <data name="M_Duplicate" xml:space="preserve">
+    <value>复制图层</value>
+  </data>
+  <data name="M_MoveOut" xml:space="preserve">
+    <value>移出文件夹</value>
+  </data>
+  <data name="M_Rename" xml:space="preserve">
+    <value>重命名图层…</value>
+  </data>
+  <data name="S_Duplicated" xml:space="preserve">
+    <value>已复制 {0} 个图层。</value>
+  </data>
+  <data name="S_MovedOut" xml:space="preserve">
+    <value>已移出文件夹。</value>
+  </data>
+  <data name="M_CopyMerged.Text" xml:space="preserve">
+    <value>合并复制</value>
+  </data>
+  <data name="T_AppName" xml:space="preserve">
+    <value>Compositor</value>
+  </data>
+  <data name="S_TitleFormat" xml:space="preserve">
+    <value>{0}{1} — Compositor</value>
+  </data>
+  <data name="L_EditedSuffix" xml:space="preserve">
+    <value> — 已编辑</value>
+  </data>
+  <data name="M_Untitled" xml:space="preserve">
+    <value>未命名</value>
+  </data>
+  <data name="M_CloseProject" xml:space="preserve"><value>关闭项目</value></data><data name="M_ClearMenu" xml:space="preserve"><value>清除菜单</value></data><data name="M_NoRecentProjects" xml:space="preserve">
+    <value>无最近的项目</value>
+  </data>
+  <data name="S_ToolMoveHint" xml:space="preserve">
+    <value>拖动以移动所选图层 · Ctrl+拖动时不吸附</value>
+  </data>
+  <data name="S_ToolRectSelectHint" xml:space="preserve">
+    <value>拖出矩形 · Ctrl+D 取消选择</value>
+  </data>
+  <data name="S_ToolEllipseSelectHint" xml:space="preserve">
+    <value>拖出椭圆 · Ctrl+D 取消选择</value>
+  </data>
+  <data name="S_ToolBrushHint" xml:space="preserve">
+    <value>拖动绘画 · Shift 单击续接上一笔 · 按住 Shift 锁定水平或垂直方向</value>
+  </data>
+  <data name="S_ToolEraserHint" xml:space="preserve">
+    <value>拖动擦除 · Shift 单击续接上一笔 · 按住 Shift 锁定水平或垂直方向</value>
+  </data>
+  <data name="S_ToolCropHint" xml:space="preserve">
+    <value>拖出矩形，然后点“应用裁剪”</value>
+  </data>
+  <data name="S_ToolShapeHint" xml:space="preserve">
+    <value>在新图层上拖出矩形/椭圆/直线 · Shift 约束为正方形（或 45° 直线）</value>
+  </data>
+  <data name="S_ToolWandHint" xml:space="preserve">
+    <value>点击相近像素即可选中 · 取消勾选“连续”可选中全部匹配</value>
+  </data>
+  <data name="S_ToolCloneHint" xml:space="preserve">
+    <value>Alt 点击定源 · 随后拖动盖章（Shift = 取自所有图层）</value>
+  </data>
+  <data name="S_ToolBlurHint" xml:space="preserve">
+    <value>拖动以模糊笔刷下的内容 · 半径在下方设置</value>
+  </data>
+  <data name="L_Contrast" xml:space="preserve">
+    <value>对比度</value>
+  </data>
+  <data name="L_Whites" xml:space="preserve">
+    <value>白色</value>
+  </data>
+  <data name="L_Blacks" xml:space="preserve">
+    <value>黑色</value>
+  </data>
+  <data name="L_Temperature" xml:space="preserve">
+    <value>温度</value>
+  </data>
+  <data name="L_Tint" xml:space="preserve">
+    <value>色调</value>
+  </data>
+  <data name="L_Vibrance" xml:space="preserve">
+    <value>自然饱和度</value>
+  </data>
+  <data name="M_Apply" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="M_Reset" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="L_Gaussian" xml:space="preserve">
+    <value>高斯</value>
+  </data>
+  <data name="L_Monochromatic" xml:space="preserve">
+    <value>单色</value>
+  </data>
+  <data name="L_Colorize" xml:space="preserve">
+    <value>着色</value>
+  </data>
+  <data name="M_AdjustmentNeedsProject" xml:space="preserve">
+    <value>这类调整的设置暂时需要项目文件或 MCP 编辑。</value>
+  </data>
+  <data name="CE_PointMoved" xml:space="preserve">
+    <value>点 ({0:0}, {1:0})。</value>
+  </data>
+  <data name="SC_New" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="SC_Open" xml:space="preserve">
+    <value>打开源文件…</value>
+  </data>
+  <data name="SC_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="SC_ImportImage" xml:space="preserve">
+    <value>导入图像…</value>
+  </data>
+  <data name="SC_Undo" xml:space="preserve">
+    <value>撤销</value>
+  </data>
+  <data name="SC_Redo" xml:space="preserve">
+    <value>重做</value>
+  </data>
+  <data name="SC_Deselect" xml:space="preserve">
+    <value>取消选择</value>
+  </data>
+  <data name="SC_FitToWindow" xml:space="preserve">
+    <value>适应窗口</value>
+  </data>
+  <data name="SC_Zoom100" xml:space="preserve">
+    <value>缩放 100%</value>
+  </data>
+  <data name="SC_ZoomIn" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="SC_ZoomOut" xml:space="preserve">
+    <value>缩小</value>
+  </data>
+  <data name="M_FileTypeJpeg" xml:space="preserve">
+    <value>JPEG 图像</value>
+  </data>
+  <data name="M_FileTypePng" xml:space="preserve">
+    <value>PNG 图像</value>
+  </data>
+  <data name="M_LayerEffects.Text" xml:space="preserve">
+    <value>图层效果…</value>
+  </data>
+  <data name="M_LayerEffectsDialog" xml:space="preserve">
+    <value>图层效果…</value>
+  </data>
+  <data name="S_LayerEffectsSet" xml:space="preserve">
+    <value>已设置图层 {0} 的效果。</value>
+  </data>
+  <data name="L_EffectStroke" xml:space="preserve">
+    <value>描边</value>
+  </data>
+  <data name="L_EffectShadow" xml:space="preserve">
+    <value>投影</value>
+  </data>
+  <data name="L_EffectInnerShadow" xml:space="preserve">
+    <value>内阴影</value>
+  </data>
+  <data name="L_EffectColorOverlay" xml:space="preserve">
+    <value>颜色叠加</value>
+  </data>
+  <data name="L_EffectOuterGlow" xml:space="preserve">
+    <value>外发光</value>
+  </data>
+  <data name="L_EffectInnerGlow" xml:space="preserve">
+    <value>内发光</value>
+  </data>
+  <data name="L_EffectKind" xml:space="preserve">
+    <value>效果</value>
+  </data>
+  <data name="L_EffectPosition" xml:space="preserve">
+    <value>位置</value>
+  </data>
+  <data name="L_EffectOutside" xml:space="preserve">
+    <value>外侧</value>
+  </data>
+  <data name="L_EffectInside" xml:space="preserve">
+    <value>内侧</value>
+  </data>
+  <data name="L_Color" xml:space="preserve">
+    <value>颜色</value>
+  </data>
+  <data name="L_EffectSize" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="L_EffectOpacity" xml:space="preserve">
+    <value>不透明度</value>
+  </data>
+  <data name="L_Blur" xml:space="preserve">
+    <value>模糊</value>
+  </data>
+  <data name="M_DitherDialog" xml:space="preserve">
+    <value>抖动…</value>
+  </data>
+  <data name="M_DistortDialog" xml:space="preserve">
+    <value>自由扭曲…</value>
+  </data>
+  <data name="L_DitherPixelShape" xml:space="preserve"><value>像素形状</value></data>
+  <data name="L_DitherTextSize" xml:space="preserve"><value>文字大小（像素）</value></data>
+  <data name="L_DitherCharacters" xml:space="preserve"><value>字符</value></data>
+  <data name="L_DitherCellSize" xml:space="preserve"><value>网点大小（像素）</value></data>
+  <data name="L_DitherAngle" xml:space="preserve"><value>角度（度）</value></data>
+  <data name="L_DitherDiffusion" xml:space="preserve"><value>扩散（%）</value></data>
+  <data name="L_DitherDensity" xml:space="preserve"><value>墨量</value></data>
+  <data name="L_DitherContrast" xml:space="preserve"><value>对比度</value></data>
+  <data name="L_DitherColors" xml:space="preserve"><value>颜色</value></data>
+  <data name="L_DitherScanlineDots" xml:space="preserve"><value>点化（%）</value></data>
+  <data name="L_DitherGlow" xml:space="preserve"><value>辉光（%）</value></data>
+  <data name="L_DitherWobble" xml:space="preserve"><value>左右摆动（像素）</value></data>
+  <data name="L_DitherDarkColor" xml:space="preserve"><value>暗色</value></data>
+  <data name="L_DitherLightColor" xml:space="preserve"><value>亮色</value></data>
+  <data name="L_DitherPreview" xml:space="preserve"><value>预览</value></data>
+  <data name="L_DitherLightOnDark" xml:space="preserve"><value>深底亮线</value></data>
+  <data name="DitherPalette_BlackWhite" xml:space="preserve"><value>黑白</value></data>
+  <data name="DitherPalette_TwoColors" xml:space="preserve"><value>双色</value></data>
+  <data name="DitherPalette_Original" xml:space="preserve"><value>原色</value></data>
+  <data name="DitherShape_Square" xml:space="preserve"><value>方形</value></data>
+  <data name="DitherShape_Dot" xml:space="preserve"><value>圆点</value></data>
+
+  <data name="Tool_Text" xml:space="preserve">
+    <value>文字</value>
+  </data>
+  <data name="S_ToolTextHint" xml:space="preserve">
+    <value>单击放置文字层 · 文字使用前景色</value>
+  </data>
+  <data name="M_TextDialog" xml:space="preserve">
+    <value>文字</value>
+  </data>
+  <data name="L_TextContent" xml:space="preserve">
+    <value>文字</value>
+  </data>
+  <data name="L_TextFont" xml:space="preserve">
+    <value>字体</value>
+  </data>
+  <data name="L_TextSize" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="L_TextTracking" xml:space="preserve">
+    <value>字距</value>
+  </data>
+  <data name="L_TextLeading" xml:space="preserve">
+    <value>行距（0 = 自动）</value>
+  </data>
+  <data name="L_TextAlign" xml:space="preserve">
+    <value>对齐</value>
+  </data>
+  <data name="L_AlignLeft" xml:space="preserve">
+    <value>左对齐</value>
+  </data>
+  <data name="L_AlignCenter" xml:space="preserve">
+    <value>居中</value>
+  </data>
+  <data name="L_AlignRight" xml:space="preserve">
+    <value>右对齐</value>
+  </data>
+  <data name="S_TextAdded" xml:space="preserve">
+    <value>已添加文字层 {0}。</value>
+  </data>
+  <data name="S_TextUpdated" xml:space="preserve">
+    <value>已更新文字层 {0}。</value>
+  </data>
+  <data name="S_TextRefused" xml:space="preserve">
+    <value>文字无效或超出尺寸限制。</value>
+  </data>
+
+  <data name="Tool_Lasso" xml:space="preserve"><value>套索</value></data>
+  <data name="L_LassoFreehand.Content" xml:space="preserve"><value>自由套索</value></data>
+  <data name="L_LassoPolygonal.Content" xml:space="preserve"><value>多边形套索</value></data>
+  <data name="L_SelectionNew.Content" xml:space="preserve"><value>新选区</value></data>
+  <data name="L_SelectionAdd.Content" xml:space="preserve"><value>相加</value></data>
+  <data name="L_SelectionSubtract.Content" xml:space="preserve"><value>相减</value></data>
+  <data name="L_LassoAntialias.Content" xml:space="preserve"><value>抗锯齿</value></data>
+  <data name="S_ToolLassoHint" xml:space="preserve"><value>拖出自由轮廓或逐点点击多边形。Shift 相加，Alt 相减；Enter 完成，Esc 取消，退格撤回一点。Tab 切换套索模式。</value></data>
+  <data name="S_LassoApplied" xml:space="preserve"><value>已应用套索选区。</value></data>
+  <data name="Tool_Gradient" xml:space="preserve"><value>渐变</value></data>
+  <data name="L_GradientLinear.Content" xml:space="preserve"><value>线性</value></data>
+  <data name="L_GradientRadial.Content" xml:space="preserve"><value>径向</value></data>
+  <data name="L_GradientTransparent.Content" xml:space="preserve"><value>前景色到透明</value></data>
+  <data name="L_GradientBackground.Content" xml:space="preserve"><value>前景色到背景色</value></data>
+  <data name="L_GradientReverse.Content" xml:space="preserve"><value>反向</value></data>
+  <data name="L_GradientMask.Content" xml:space="preserve"><value>绘制蒙版</value></data>
+  <data name="L_GradientApply.Content" xml:space="preserve"><value>应用</value></data>
+  <data name="L_GradientCancel.Content" xml:space="preserve"><value>取消</value></data>
+  <data name="S_ToolGradientHint" xml:space="preserve"><value>拖动端点调整渐变；Shift 按 45° 限角，Enter 应用，Esc 取消，数字键设置不透明度。</value></data>
+  <data name="S_GradientRefused" xml:space="preserve"><value>请选择一个可见且可绘制的图层或已启用的蒙版；选区不能为空。</value></data>
+  <data name="S_GradientApplied" xml:space="preserve"><value>已应用渐变。</value></data>
+  <data name="S_GradientUnchanged" xml:space="preserve"><value>渐变未改变图像，或草稿所依据的内容已经变化。</value></data>
+  <data name="S_GradientFailed" xml:space="preserve"><value>无法应用渐变。</value></data>
+  <data name="Tool_Healing" xml:space="preserve"><value>污点修复</value></data>
+  <data name="L_HealContentAware.Content" xml:space="preserve"><value>内容感知</value></data>
+  <data name="L_HealCreateTexture.Content" xml:space="preserve"><value>创建纹理</value></data>
+  <data name="L_HealProximity.Content" xml:space="preserve"><value>邻近匹配</value></data>
+  <data name="S_ToolHealingHint" xml:space="preserve"><value>拖过污点后松开鼠标修复。J 选择此工具，Tab 切换模式，数字键设定不透明度，Esc 取消。</value></data>
+  <data name="S_HealingBusy" xml:space="preserve"><value>请先完成或取消修复笔画，再继续操作。Esc 可取消。</value></data>
+  <data name="S_HealingRefused" xml:space="preserve"><value>请选择单个可见图像层，并确保选区非空。污点修复不作用于蒙版、文件夹或调整层。</value></data>
+  <data name="S_HealingWorking" xml:space="preserve"><value>正在修复污点… Esc 可取消。</value></data>
+  <data name="S_HealingFailed" xml:space="preserve"><value>无法修复污点。</value></data>
+  <data name="S_HealingApplied" xml:space="preserve"><value>已应用污点修复。</value></data>
+  <data name="S_HealingUnchanged" xml:space="preserve"><value>修复没有改变像素，或笔画已过期。</value></data>
+  <data name="S_HealingCanceled" xml:space="preserve"><value>已取消污点修复。</value></data>
+  <data name="L_HistogramLoading" xml:space="preserve"><value>正在计算直方图…</value></data>
+  <data name="L_HistogramInput" xml:space="preserve"><value>下方像素，按透明度加权。</value></data>
+  <data name="L_HistogramFailed" xml:space="preserve"><value>无法计算直方图。</value></data>
+  <data name="L_Reversed" xml:space="preserve"><value>反转</value></data>
+  <data name="L_TintHue" xml:space="preserve"><value>色调色相</value></data>
+  <data name="L_TintSaturation" xml:space="preserve"><value>色调饱和度</value></data>
+  <data name="L_PairCyanRed" xml:space="preserve"><value>青 / 红</value></data>
+  <data name="L_PairMagentaGreen" xml:space="preserve"><value>洋红 / 绿</value></data>
+  <data name="L_PairYellowBlue" xml:space="preserve"><value>黄 / 蓝</value></data>
+  <data name="L_BalanceRow" xml:space="preserve"><value>{0}{1}</value></data>
+  <data name="L_PreserveLuminosity" xml:space="preserve"><value>保留亮度</value></data>
+  <data name="L_GrainSize" xml:space="preserve"><value>大小</value></data>
+  <data name="L_Roughness" xml:space="preserve"><value>粗糙度</value></data>
+  <data name="L_Seed" xml:space="preserve"><value>种子</value></data>
+  <data name="W_Adjustment.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>新建调整图层</value></data>
+  <data name="W_Background.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>背景色</value></data>
+  <data name="W_DeleteLayer.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>删除所选效果、图层或当前蒙版</value></data>
+  <data name="W_Effects.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>图层效果</value></data>
+  <data name="W_Fit.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>适合窗口 (Ctrl+0)</value></data>
+  <data name="W_Folder.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>新建文件夹</value></data>
+  <data name="W_Foreground.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>前景色</value></data>
+  <data name="W_Import.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>导入图像</value></data>
+  <data name="W_Mask.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>添加图层蒙版（按住 Alt 单击添加黑色蒙版）</value></data>
+  <data name="W_MoreLayers.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>更多图层命令</value></data>
+  <data name="W_New.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>新建画布 (Ctrl+N)</value></data>
+  <data name="W_PanelResize.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>拖动调整图层面板宽度</value></data>
+  <data name="W_ResetColors.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>默认颜色</value></data>
+  <data name="W_SwapColors.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>交换颜色</value></data>
+  <data name="W_ZoomIn.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>放大</value></data>
+  <data name="W_ZoomOut.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>缩小</value></data>
+  <data name="M_Fit.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>缩放至整个画布 (Ctrl+0)</value></data>
+  <data name="M_Zoom100.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>实际大小 (Ctrl+1)</value></data>
+  <data name="V_ShowGrid.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve"><value>800% 起可见</value></data>
+  <data name="W_Fit.Content" xml:space="preserve"><value>适合窗口</value></data>
+  <data name="S_SelectionFailed" xml:space="preserve"><value>无法生成选区。</value></data>
+  <data name="S_SelectionWorking" xml:space="preserve"><value>正在生成选区…</value></data>
+  <data name="S_SelectionMoved" xml:space="preserve"><value>选区轮廓已移动。</value></data>
+  <data name="W_MaskLabel" xml:space="preserve"><value>图层蒙版</value></data>
+  <data name="N_Background.Content" xml:space="preserve"><value>背景色</value></data>
+  <data name="N_Foreground.Content" xml:space="preserve"><value>前景色</value></data>
+  <data name="N_Rulers.Text" xml:space="preserve"><value>显示标尺</value></data>
+  <data name="V_ShowGuides.Text" xml:space="preserve"><value>参考线</value></data>
+  <data name="V_Snap.Text" xml:space="preserve"><value>吸附</value></data>
+  <data name="V_LockGuides.Text" xml:space="preserve"><value>锁定参考线</value></data>
+  <data name="V_SnapTo.Text" xml:space="preserve"><value>吸附到</value></data>
+  <data name="V_Grid.Text" xml:space="preserve"><value>网格</value></data>
+  <data name="V_SnapToGrid.Text" xml:space="preserve"><value>网格</value></data>
+  <data name="V_GridSettings.Text" xml:space="preserve"><value>网格设置…</value></data>
+  <data name="M_GridSettings" xml:space="preserve"><value>网格</value></data>
+  <data name="L_GridColor" xml:space="preserve"><value>颜色</value></data>
+  <data name="L_GridCustomColor" xml:space="preserve"><value>自定义颜色</value></data>
+  <data name="L_GridStyle" xml:space="preserve"><value>样式</value></data>
+  <data name="L_GridOpacity" xml:space="preserve"><value>不透明度</value></data>
+  <data name="L_GridlineEvery" xml:space="preserve"><value>主线间隔</value></data>
+  <data name="L_GridPixels" xml:space="preserve"><value>像素</value></data>
+  <data name="L_GridSubdivisions" xml:space="preserve"><value>细分份数</value></data>
+  <data name="S_GridSubdivisionEvery" xml:space="preserve"><value>每 {0} 像素一条细分线。</value></data>
+  <data name="S_GridRangeHint" xml:space="preserve"><value>主线间隔请取 2–4096 像素，细分份数取 1–64，且不得超过主线间隔的像素数。</value></data>
+  <data name="Dlg_RestoreDefaults" xml:space="preserve"><value>恢复默认值</value></data>
+  <data name="Dlg_SheetCancel" xml:space="preserve"><value>取消</value></data>
+  <data name="GridPreset_LightGray" xml:space="preserve"><value>浅灰</value></data>
+  <data name="GridPreset_LightBlue" xml:space="preserve"><value>浅蓝</value></data>
+  <data name="GridPreset_LightRed" xml:space="preserve"><value>浅红</value></data>
+  <data name="GridPreset_Green" xml:space="preserve"><value>绿色</value></data>
+  <data name="GridPreset_MediumBlue" xml:space="preserve"><value>中蓝</value></data>
+  <data name="GridPreset_Yellow" xml:space="preserve"><value>黄色</value></data>
+  <data name="GridPreset_Magenta" xml:space="preserve"><value>洋红</value></data>
+  <data name="GridPreset_Cyan" xml:space="preserve"><value>青色</value></data>
+  <data name="GridPreset_Black" xml:space="preserve"><value>黑色</value></data>
+  <data name="GridPreset_Custom" xml:space="preserve"><value>自定</value></data>
+  <data name="GridStyle_Lines" xml:space="preserve"><value>实线</value></data>
+  <data name="GridStyle_DashedLines" xml:space="preserve"><value>虚线</value></data>
+  <data name="GridStyle_Dots" xml:space="preserve"><value>点线</value></data>
+  <data name="V_SnapToGuides.Text" xml:space="preserve"><value>参考线</value></data>
+  <data name="V_SnapToLayers.Text" xml:space="preserve"><value>图层</value></data>
+  <data name="V_SnapToBounds.Text" xml:space="preserve"><value>文档边界</value></data>
+  <data name="N_SampleRing.Content" xml:space="preserve"><value>取样环</value></data>
+  <data name="S_ToolEyedropperHint" xml:space="preserve"><value>采样合成 sRGB 颜色 · 透明像素保留当前颜色</value></data>
+  <data name="S_ToolHandHint" xml:space="preserve"><value>拖动平移 · 空格临时平移 · 双指缩放</value></data>
+  <data name="S_ToolZoomHint" xml:space="preserve"><value>点击放大 · Alt 点击缩小 · 左右拖动连续缩放</value></data>
+  <data name="Tool_Eyedropper" xml:space="preserve"><value>吸管</value></data>
+  <data name="Tool_Hand" xml:space="preserve"><value>手形</value></data>
+  <data name="Tool_Zoom" xml:space="preserve"><value>缩放</value></data>
+  <data name="A_LayerVisibility" xml:space="preserve"><value>图层可见性</value></data>
+  <data name="SC_Rulers" xml:space="preserve"><value>显示标尺</value></data>
+  <data name="SC_TemporaryPan" xml:space="preserve"><value>临时平移</value></data>
+  <data name="Tr_FreeTransform.Text" xml:space="preserve"><value>自由变换</value></data>
+  <data name="Tr_AutoSelect" xml:space="preserve"><value>自动选择</value></data>
+  <data name="Tr_AutoSelectTip" xml:space="preserve"><value>点击画布上的可见内容以选中所属图层；透明区域会穿透到下方图层。按住 Ctrl 可临时切换自动选择。</value></data>
+  <data name="Tr_ShowControls" xml:space="preserve"><value>显示控件</value></data>
+  <data name="Tr_LockRatio" xml:space="preserve"><value>锁定比例</value></data>
+  <data name="Tr_Pixels" xml:space="preserve"><value>像素</value></data>
+  <data name="Tr_Target" xml:space="preserve"><value>变换目标</value></data>
+  <data name="Tr_Scale" xml:space="preserve"><value>缩放</value></data>
+  <data name="Tr_X" xml:space="preserve"><value>X 位置</value></data>
+  <data name="Tr_Y" xml:space="preserve"><value>Y 位置</value></data>
+  <data name="Tr_Width" xml:space="preserve"><value>宽度</value></data>
+  <data name="Tr_Height" xml:space="preserve"><value>高度</value></data>
+  <data name="Tr_Rotation" xml:space="preserve"><value>旋转</value></data>
+  <data name="Tr_Sampling" xml:space="preserve"><value>采样</value></data>
+  <data name="Tr_SamplingNearest" xml:space="preserve"><value>最近邻</value></data>
+  <data name="Tr_SamplingSmooth" xml:space="preserve"><value>平滑</value></data>
+  <data name="Tr_SamplingHighQuality" xml:space="preserve"><value>高质量</value></data>
+  <data name="Tr_FlipH" xml:space="preserve"><value>水平翻转</value></data>
+  <data name="Tr_FlipV" xml:space="preserve"><value>垂直翻转</value></data>
+  <data name="Tr_Apply" xml:space="preserve"><value>应用</value></data>
+  <data name="Tr_Transform" xml:space="preserve"><value>变换</value></data>
+  <data name="Tr_TransformMask" xml:space="preserve"><value>变换蒙版</value></data>
+  <data name="Tr_Unavailable" xml:space="preserve"><value>请选择可见像素图层，或包含可见像素图层的文件夹。</value></data>
+  <data name="A_PixelThumbnail" xml:space="preserve"><value>点击编辑像素；Ctrl 点击加载不透明像素选区；Ctrl+Shift 添加；Ctrl+Alt 减去。</value></data>
+  <data name="A_MaskThumbnail" xml:space="preserve"><value>点击编辑蒙版；Shift 点击启停；Alt 点击单独查看；Alt 拖动复制；Ctrl 点击加载黑色区域选区（Shift 添加，Alt 减去）。</value></data>
+  <data name="A_MaskLink" xml:space="preserve"><value>链接或取消链接图层与蒙版</value></data>
+  <data name="A_ShapeCorner" xml:space="preserve"><value>圆角半径（像素）</value></data>
+  <data name="A_ShapeLineWidth" xml:space="preserve"><value>线宽（像素）</value></data>
+  <data name="S_LoadMaskSelection" xml:space="preserve"><value>已加载蒙版选区。</value></data>
+  <data name="S_LoadLayerSelection" xml:space="preserve"><value>已加载图层选区。</value></data>
+  <data name="S_EmptySelectionPaint" xml:space="preserve"><value>当前选区为空。选择“选区 &gt; 取消选区”（Ctrl+D）即可在任意位置作画。</value></data>
+<data name="S_SelectedPixelsMoved" xml:space="preserve"><value>已移动所选像素。</value></data>
+<data name="S_SelectedPixelsDuplicated" xml:space="preserve"><value>已复制所选像素。</value></data>
+<data name="S_SelectedPixelsFailed" xml:space="preserve"><value>无法移动所选像素。</value></data>
+  <data name="S_CanvasUpdateFailed" xml:space="preserve"><value>画布更新失败。</value></data>
+<data name="S_DitherFailed" xml:space="preserve"><value>无法应用抖动。</value></data>
+<data name="S_DitherSourceChanged" xml:space="preserve"><value>抖动期间图层已变化，请重试。</value></data>
+<data name="L_ShortcutEditorHint" xml:space="preserve"><value>点击一个快捷键，再按下你想要的新组合键。保存之后才会生效。一行里用「/」隔开两个组合键，表示两个都能用；重新绑定之后只会留下你按下的那一个。</value></data>
+<data name="L_ShortcutPressKeys" xml:space="preserve"><value>请按键…</value></data>
+<data name="S_ShortcutNeedsModifier" xml:space="preserve"><value>{0} 还缺修饰键：请加上 Ctrl、Alt 或 Shift，否则会挡住正常输入。</value></data>
+<data name="S_ShortcutReserved" xml:space="preserve"><value>{0} 是 Windows 保留的快捷键。</value></data>
+<data name="S_ShortcutConflict" xml:space="preserve"><value>{0} 同时被指派给了 {1} 和 {2}。</value></data>
+<data name="S_ShortcutAliasLost" xml:space="preserve"><value>{0} 目前有两个组合键；重新绑定之后只会留下你按下的那一个。</value></data>
+<data name="S_ShortcutsSaved" xml:space="preserve"><value>快捷键已更新。</value></data>
+<data name="S_ShortcutsCancelled" xml:space="preserve"><value>快捷键改动已放弃。</value></data>
+<data name="DlgGroupCanvas" xml:space="preserve"><value>画布按键</value></data>
+<data name="S_ShortcutCanvasPlain" xml:space="preserve"><value>{0} 不能绑给 {1}：画布按键不带 Ctrl 或 Alt，那两个修饰键归菜单。</value></data>
+<data name="S_ShortcutFixedKey" xml:space="preserve"><value>{0} 不能绑给 {1}：这条命令只认按键本身，加修饰键会被忽略。</value></data>
+<data name="SC_BrushSizeDecrease" xml:space="preserve"><value>减小笔刷大小</value></data>
+<data name="SC_BrushSizeIncrease" xml:space="preserve"><value>增大笔刷大小</value></data>
+<data name="SC_BrushHardnessDecrease" xml:space="preserve"><value>减小笔刷硬度</value></data>
+<data name="SC_BrushHardnessIncrease" xml:space="preserve"><value>增大笔刷硬度</value></data>
+<data name="S_ChipShortcut" xml:space="preserve"><value>{0}（{1}）</value></data>
+<data name="L_SwapColorsTip" xml:space="preserve"><value>交换颜色</value></data>
+<data name="L_ResetColorsTip" xml:space="preserve"><value>默认颜色</value></data>
+<data name="SC_Left" xml:space="preserve"><value>左</value></data>
+<data name="SC_Right" xml:space="preserve"><value>右</value></data>
+<data name="SC_Up" xml:space="preserve"><value>上</value></data>
+<data name="SC_Down" xml:space="preserve"><value>下</value></data>
+<data name="SC_ArrowNudgeOutline" xml:space="preserve"><value>向{0}微移 {1} 像素</value></data>
+<data name="SC_ArrowMovePixels" xml:space="preserve"><value>把选内像素向{0}移动 {1} 像素</value></data>
+<data name="DlgGroupTextEditing" xml:space="preserve"><value>文字编辑按键</value></data>
+<data name="SC_TrackingDecrease" xml:space="preserve"><value>减小字距 {0} 点</value></data>
+<data name="SC_TrackingIncrease" xml:space="preserve"><value>增大字距 {0} 点</value></data>
+<data name="SC_LeadingDecrease" xml:space="preserve"><value>减小行距 {0} 点</value></data>
+<data name="SC_LeadingIncrease" xml:space="preserve"><value>增大行距 {0} 点</value></data>
+<data name="SC_ApplyOperation" xml:space="preserve"><value>应用当前画布操作</value></data>
+<data name="SC_CancelOperation" xml:space="preserve"><value>取消当前画布操作</value></data>
+<data name="SC_DeleteTarget" xml:space="preserve"><value>删除选区、蒙版、图层或套索节点</value></data>
+<data name="A_ClosePanel" xml:space="preserve"><value>关闭面板</value></data>
+<data name="L_FilterLimitedToSelection" xml:space="preserve"><value>仅作用于选区</value></data>
+<data name="S_PreviewFailed" xml:space="preserve"><value>预览失败：{0}</value></data>
+<data name="SC_OpacityDigit" xml:space="preserve"><value>不透明度数字 {0}（连按两位得到精确百分比）</value></data>
+<data name="SC_SwapColors" xml:space="preserve"><value>交换前景色与背景色</value></data>
+<data name="SC_ResetColors" xml:space="preserve"><value>恢复默认颜色</value></data>
+<data name="S_ImportedPsdBlendFallback" xml:space="preserve"><value>{0} 不支持的 Photoshop 混合模式（{1}）已按正常模式导入；文件夹保持穿透。</value></data>
+<data name="M_LensCorrection.Text" xml:space="preserve"><value>镜头校正…</value></data>
+<data name="M_BloomFilter.Text" xml:space="preserve"><value>发光 / 光晕…</value></data><data name="M_BloomDialog" xml:space="preserve"><value>发光 / 光晕</value></data><data name="S_Bloomed" xml:space="preserve"><value>已对 {0} 应用发光。</value></data><data name="S_BloomFailed" xml:space="preserve"><value>发光未能应用。</value></data><data name="S_BloomTooLarge" xml:space="preserve"><value>光晕需要的空间超过图层可长大的上限。</value></data><data name="M_MotionBlurFilter.Text" xml:space="preserve"><value>动感模糊…</value></data><data name="M_MotionBlurDialog" xml:space="preserve"><value>动感模糊</value></data><data name="S_MotionBlurred" xml:space="preserve"><value>已对 {0} 应用动感模糊。</value></data><data name="S_MotionBlurFailed" xml:space="preserve"><value>动感模糊未能应用。</value></data><data name="S_MotionBlurTooLarge" xml:space="preserve"><value>拖影需要的空间超过图层可长大的上限。</value></data><data name="M_GaussianBlurFilter.Text" xml:space="preserve"><value>高斯模糊…</value></data><data name="M_GaussianBlurDialog" xml:space="preserve"><value>高斯模糊</value></data><data name="S_GaussianBlurred" xml:space="preserve"><value>已对 {0} 应用高斯模糊。</value></data><data name="S_GaussianBlurFailed" xml:space="preserve"><value>图层模糊失败。</value></data><data name="S_GaussianBlurTooLarge" xml:space="preserve"><value>模糊需要的空间超过图层可长大的上限。</value></data><data name="M_AddNoiseFilter.Text" xml:space="preserve"><value>添加杂色…</value></data><data name="M_AddNoiseDialog" xml:space="preserve"><value>添加杂色</value></data><data name="S_AddNoised" xml:space="preserve"><value>已对 {0} 应用添加杂色。</value></data><data name="S_AddNoiseFailed" xml:space="preserve"><value>添加杂色未能应用。</value></data><data name="M_TonalContrast.Text" xml:space="preserve"><value>色调对比…</value></data>
+
+<data name="M_CameraRawFilter.Text" xml:space="preserve"><value>Camera Raw 滤镜…</value></data>
+
+<data name="M_CameraRawFilterDialog" xml:space="preserve"><value>Camera Raw 滤镜</value></data>
+
+<data name="L_GlowStyle" xml:space="preserve"><value>样式</value></data>
+<data name="L_GradingWheel" xml:space="preserve"><value>调色</value></data>
+<data name="S_LayerCopied" xml:space="preserve"><value>已将 {0} 个图层复制到 {1}。</value></data><data name="S_LayerCopyBusy" xml:space="preserve"><value>等正在进行的编辑结束后再跨工程复制图层。</value></data><data name="S_LayerCopyFailed" xml:space="preserve"><value>这些图层放不下这个项目。</value></data><data name="H_NewProjectDrop" xml:space="preserve"><value>新建工程（点击）· 把图层拖到这里可开成新工程</value></data><data name="S_FilterEditOpen" xml:space="preserve"><value>先结束或取消正在打开的滤镜，再开始另一个。</value></data><data name="M_TonalContrastDialog" xml:space="preserve"><value>色调对比</value></data>
+<data name="L_TonalAmount" xml:space="preserve"><value>强度</value></data>
+<data name="L_TonalShadows" xml:space="preserve"><value>阴影</value></data>
+<data name="L_TonalMidtones" xml:space="preserve"><value>中间调</value></data>
+<data name="L_TonalHighlights" xml:space="preserve"><value>高光</value></data>
+<data name="L_TonalRadius" xml:space="preserve"><value>半径</value></data>
+<data name="S_TonalContrasted" xml:space="preserve"><value>已对 {0} 应用色调对比。</value></data>
+<data name="S_TonalContrastFailed" xml:space="preserve"><value>色调对比未能应用。</value></data>
+<data name="M_Vignette.Text" xml:space="preserve"><value>暗角…</value></data>
+<data name="M_VignetteDialog" xml:space="preserve"><value>暗角</value></data>
+<data name="L_VignetteColor" xml:space="preserve"><value>颜色</value></data>
+<data name="L_VignetteAmount" xml:space="preserve"><value>强度</value></data>
+<data name="L_VignetteMidpoint" xml:space="preserve"><value>中点</value></data>
+<data name="L_VignetteRoundness" xml:space="preserve"><value>圆度</value></data>
+<data name="L_VignetteFeather" xml:space="preserve"><value>羽化</value></data>
+<data name="L_VignetteHighlights" xml:space="preserve"><value>高光保护</value></data>
+<data name="H_VignetteColor" xml:space="preserve"><value>选择暗角的颜色</value></data>
+<data name="H_VignetteAmount" xml:space="preserve"><value>把选定的颜色混进边缘，中间保持不变</value></data>
+<data name="H_VignetteHighlights" xml:space="preserve"><value>保护靠近边缘的亮部</value></data>
+<data name="S_Vignetted" xml:space="preserve"><value>已对 {0} 应用暗角。</value></data>
+<data name="S_VignetteFailed" xml:space="preserve"><value>暗角未能应用。</value></data>
+<data name="M_LensCorrectionDialog" xml:space="preserve"><value>镜头校正</value></data>
+<data name="L_RemoveDistortion" xml:space="preserve"><value>移除畸变</value></data>
+<data name="L_LensCorrectionHint" xml:space="preserve"><value>正值把向外弯的线拉直（桶形畸变），负值把向内弯的线拉直（枕形畸变）。</value></data>
+<data name="S_LensCorrected" xml:space="preserve"><value>已对 {0} 应用镜头校正。</value></data>
+<data name="S_LensCorrectionFailed" xml:space="preserve"><value>镜头校正未能应用。</value></data>
+  <data name="S_TextDefaultsSet" xml:space="preserve">
+    <value>已记住文字设置，下一次点击就用它。</value>
+  </data>
+  <data name="T_TextSettings.Content" xml:space="preserve">
+    <value>字体…</value>
+  </data>
+  <data name="T_TextSettings.ToolTipService.ToolTip" xml:space="preserve">
+    <value>下一次点击新文字所用的字体、字号与行距。</value>
+  </data>
+  <data name="A_InlineText" xml:space="preserve">
+    <value>正在编辑 {0} 的文字</value>
+  </data>
+  <data name="A_InlineTextNew" xml:space="preserve">
+    <value>正在输入新文字</value>
+  </data>
+  <data name="A_NavZoom" xml:space="preserve">
+    <value>缩放百分比</value>
+  </data>
+  <data name="A_EyeTarget" xml:space="preserve">
+    <value>取样目标</value>
+  </data>
+  <data name="A_HealMode" xml:space="preserve">
+    <value>修复模式</value>
+  </data>
+  <data name="A_GradientShape" xml:space="preserve">
+    <value>渐变形状</value>
+  </data>
+  <data name="A_GradientStyle" xml:space="preserve">
+    <value>渐变样式</value>
+  </data>
+  <data name="A_LassoKind" xml:space="preserve">
+    <value>套索种类</value>
+  </data>
+  <data name="A_SelectionMode" xml:space="preserve">
+    <value>选区模式</value>
+  </data>
+  <data name="A_CropRatio" xml:space="preserve">
+    <value>裁切比例</value>
+  </data>
+  <data name="A_ShapeKind" xml:space="preserve">
+    <value>形状</value>
+  </data>
+  <data name="A_BlurMode" xml:space="preserve">
+    <value>模糊模式</value>
+  </data>
+  <data name="A_ZoomIn" xml:space="preserve">
+    <value>放大</value>
+  </data>
+  <data name="A_ZoomOut" xml:space="preserve">
+    <value>缩小</value>
+  </data>
+  <data name="A_SwapColors" xml:space="preserve">
+    <value>交换前景色与背景色</value>
+  </data>
+  <data name="A_ResetColors" xml:space="preserve">
+    <value>恢复默认颜色</value>
+  </data>
+  <data name="S_ExportedPng" xml:space="preserve">
+    <value>已导出 {0}（{1}×{2}）。</value>
+  </data>
+  <data name="S_ExportedPngDpi" xml:space="preserve">
+    <value>已导出 {0}（{1}×{2}，{3:0} DPI）。</value>
+  </data>
+  <data name="L_Calibration" xml:space="preserve">
+    <value>校准</value>
+  </data>
+  <data name="L_Process" xml:space="preserve">
+    <value>处理版本</value>
+  </data>
+  <data name="L_ProcessV1Summary" xml:space="preserve">
+    <value>最早期的响应。色相、饱和度与阴影色调的位移大约只有版本 6 的一半。</value>
+  </data>
+  <data name="L_ProcessV2Summary" xml:space="preserve">
+    <value>比版本 1 稍强。下面的滑块仍明显达不到当前的观感。</value>
+  </data>
+  <data name="L_ProcessV3Summary" xml:space="preserve">
+    <value>颜色比版本 2 更浓。原色位移仍比当前处理温和。</value>
+  </data>
+  <data name="L_ProcessV4Summary" xml:space="preserve">
+    <value>2012 年的响应。校准能达到版本 6 的大部分强度。</value>
+  </data>
+  <data name="L_ProcessV5Summary" xml:space="preserve">
+    <value>接近当前处理，原色与阴影位移略微柔和。</value>
+  </data>
+  <data name="L_ProcessV6Summary" xml:space="preserve">
+    <value>当前默认。下面的校准滑块按完整强度施加。</value>
+  </data>
+  <data name="L_ShadowTint" xml:space="preserve">
+    <value>阴影色调</value>
+  </data>
+  <data name="L_RedHue" xml:space="preserve">
+    <value>红色色相</value>
+  </data>
+  <data name="L_RedSaturation" xml:space="preserve">
+    <value>红色饱和度</value>
+  </data>
+  <data name="L_GreenHue" xml:space="preserve">
+    <value>绿色色相</value>
+  </data>
+  <data name="L_GreenSaturation" xml:space="preserve">
+    <value>绿色饱和度</value>
+  </data>
+  <data name="L_BlueHue" xml:space="preserve">
+    <value>蓝色色相</value>
+  </data>
+  <data name="L_BlueSaturation" xml:space="preserve">
+    <value>蓝色饱和度</value>
+  </data>
+  <data name="L_WhiteBalance" xml:space="preserve">
+    <value>白平衡</value>
+  </data>
+  <data name="L_WhiteBalanceSelector" xml:space="preserve">
+    <value>取色器</value>
+  </data>
+  <data name="A_WhiteBalanceSelector" xml:space="preserve">
+    <value>白平衡取色器</value>
+  </data>
+  <data name="L_WhiteBalanceClickHint" xml:space="preserve">
+    <value>在原始图层上点一下。再点一次取色器就停止。</value>
+  </data>
+  <data name="S_WhiteBalanceAutoApplied" xml:space="preserve">
+    <value>白平衡已按图层的平均色取定。</value>
+  </data>
+  <data name="S_WhiteBalanceNoAnswer" xml:space="preserve">
+    <value>无可取之处：该图层没有可见像素。</value>
+  </data>
+  <data name="L_Optics" xml:space="preserve">
+    <value>光学</value>
+  </data>
+  <data name="L_RemoveChromaticAberration" xml:space="preserve">
+    <value>移除色差</value>
+  </data>
+  <data name="L_LensProfile" xml:space="preserve">
+    <value>启用镜头配置文件校正</value>
+  </data>
+  <data name="L_NoLensMetadata" xml:space="preserve">
+    <value>这一层没有镜头元数据。配置文件滑块定的是一般的校正强度。</value>
+  </data>
+  <data name="L_ProfileDistortion" xml:space="preserve">
+    <value>配置文件畸变</value>
+  </data>
+  <data name="L_ProfileVignetting" xml:space="preserve">
+    <value>配置文件暗角</value>
+  </data>
+  <data name="L_ManualOptics" xml:space="preserve">
+    <value>手动</value>
+  </data>
+  <data name="L_Distortion" xml:space="preserve">
+    <value>畸变</value>
+  </data>
+  <data name="L_Defringe" xml:space="preserve">
+    <value>去色边</value>
+  </data>
+  <data name="L_DefringeSelector" xml:space="preserve">
+    <value>取色器</value>
+  </data>
+  <data name="A_DefringeSelector" xml:space="preserve">
+    <value>去色边取色器</value>
+  </data>
+  <data name="L_DefringeClickHint" xml:space="preserve">
+    <value>在图层上的色边点一下。再点一次取色器就停止。</value>
+  </data>
+  <data name="L_PurpleAmount" xml:space="preserve">
+    <value>紫色强度</value>
+  </data>
+  <data name="L_PurpleHueLow" xml:space="preserve">
+    <value>紫色色相下限</value>
+  </data>
+  <data name="L_PurpleHueHigh" xml:space="preserve">
+    <value>紫色色相上限</value>
+  </data>
+  <data name="L_GreenAmount" xml:space="preserve">
+    <value>绿色强度</value>
+  </data>
+  <data name="L_GreenHueLow" xml:space="preserve">
+    <value>绿色色相下限</value>
+  </data>
+  <data name="L_GreenHueHigh" xml:space="preserve">
+    <value>绿色色相上限</value>
+  </data>
+  <data name="L_LensVignetting" xml:space="preserve">
+    <value>镜头暗角</value>
+  </data>
+  <data name="L_LensMidpoint" xml:space="preserve">
+    <value>镜头暗角中点</value>
+  </data>
+  <data name="L_Geometry" xml:space="preserve">
+    <value>几何</value>
+  </data>
+  <data name="L_Projection" xml:space="preserve">
+    <value>投影</value>
+  </data>
+  <data name="L_GeometryProjectionCaption" xml:space="preserve">
+    <value>透视允许更强的梯形校正；直线投影把变形做得更温和。</value>
+  </data>
+  <data name="L_GeometryVertical" xml:space="preserve">
+    <value>垂直</value>
+  </data>
+  <data name="L_GeometryHorizontal" xml:space="preserve">
+    <value>水平</value>
+  </data>
+  <data name="L_GeometryRotate" xml:space="preserve">
+    <value>旋转</value>
+  </data>
+  <data name="L_GeometryAspect" xml:space="preserve">
+    <value>纵横比</value>
+  </data>
+  <data name="L_GeometryScale" xml:space="preserve">
+    <value>缩放</value>
+  </data>
+  <data name="L_GeometryOffsetX" xml:space="preserve">
+    <value>X 偏移</value>
+  </data>
+  <data name="L_GeometryOffsetY" xml:space="preserve">
+    <value>Y 偏移</value>
+  </data>
+  <data name="L_ConstrainCrop" xml:space="preserve">
+    <value>约束裁剪</value>
+  </data>
+  <data name="L_GeometryRefused" xml:space="preserve">
+    <value>这一组数值把画面收成没有面积的形状，没法变形，所以什么都没动。</value>
+  </data>
+  <data name="L_Upright" xml:space="preserve">
+    <value>直立</value>
+  </data>
+  <data name="L_GuidesModeCaption" xml:space="preserve">
+    <value>关闭保持画面原样。直立按你在画面上画的线来摆正。</value>
+  </data>
+  <data name="L_DrawGuides" xml:space="preserve">
+    <value>绘制参考线</value>
+  </data>
+  <data name="A_DrawGuides" xml:space="preserve">
+    <value>绘制参考线开关</value>
+  </data>
+  <data name="L_ClearGuides" xml:space="preserve">
+    <value>清除参考线</value>
+  </data>
+  <data name="A_ClearGuides" xml:space="preserve">
+    <value>清除全部参考线</value>
+  </data>
+  <data name="L_GuidesDragHint" xml:space="preserve">
+    <value>在图层上拖动就能放一条参考线。至少画两条。</value>
+  </data>
+  <data name="L_MixerPage" xml:space="preserve">
+    <value>混色页面</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_MixerPage row.</comment>
+  </data>
+  <data name="L_MixerComponent" xml:space="preserve">
+    <value>分量</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_MixerComponent row.</comment>
+  </data>
+  <data name="L_MixerFamily" xml:space="preserve">
+    <value>颜色组</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_MixerFamily row.</comment>
+  </data>
+  <data name="L_PointColorPicker" xml:space="preserve">
+    <value>取色</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointColorPicker row.</comment>
+  </data>
+  <data name="A_PointColorPicker" xml:space="preserve">
+    <value>在画面上取一个颜色</value>
+    <comment>Camera Raw Color Mixer: the Mac's A_PointColorPicker row.</comment>
+  </data>
+  <data name="L_PointColorClickHint" xml:space="preserve">
+    <value>点击画面保存一个颜色，最多八个。</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointColorClickHint row.</comment>
+  </data>
+  <data name="A_PointColorChip" xml:space="preserve">
+    <value>已取颜色</value>
+    <comment>Camera Raw Color Mixer: the Mac's A_PointColorChip row.</comment>
+  </data>
+  <data name="L_PointHueShift" xml:space="preserve">
+    <value>色相偏移</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointHueShift row.</comment>
+  </data>
+  <data name="L_PointSaturationShift" xml:space="preserve">
+    <value>饱和度偏移</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointSaturationShift row.</comment>
+  </data>
+  <data name="L_PointLuminanceShift" xml:space="preserve">
+    <value>明度偏移</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointLuminanceShift row.</comment>
+  </data>
+  <data name="L_PointHueRange" xml:space="preserve">
+    <value>色相范围</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointHueRange row.</comment>
+  </data>
+  <data name="L_PointSaturationRange" xml:space="preserve">
+    <value>饱和度范围</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointSaturationRange row.</comment>
+  </data>
+  <data name="L_PointLuminanceRange" xml:space="preserve">
+    <value>明度范围</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_PointLuminanceRange row.</comment>
+  </data>
+  <data name="L_VisualizeRange" xml:space="preserve">
+    <value>显示范围</value>
+    <comment>Camera Raw Color Mixer: the Mac's L_VisualizeRange row.</comment>
+  </data>
+  <data name="L_TargetedAdjustment" xml:space="preserve">
+    <value>定向调整</value>
+  </data>
+  <data name="A_TargetedCurve" xml:space="preserve">
+    <value>在画面上拖动，调整指针下那个明度的曲线</value>
+  </data>
+  <data name="A_TargetedMixer" xml:space="preserve">
+    <value>在画面上拖动某种颜色，相近的颜色族一起动。</value>
+  </data>
+  <data name="L_CurveChannel" xml:space="preserve">
+    <value>曲线通道</value>
+    <comment>The channel a point curve is edited on, and the one a targeted curve drag nudges.</comment>
+  </data>
+  <data name="L_CurvePointReadout" xml:space="preserve">
+    <value>选中的曲线点</value>
+  </data>
+  <data name="L_CurvePreset" xml:space="preserve">
+    <value>曲线预设</value>
+  </data>
+  <data name="L_CurvePage" xml:space="preserve">
+    <value>曲线页面</value>
+    <comment>Parametric lifts tonal regions; Point places anchors on the curve.</comment>
+  </data>
+  <data name="L_GroupLight" xml:space="preserve">
+    <value>光线</value>
+    <comment>Camera Raw's first section header, the row that carries the group's eye button.</comment>
+  </data>
+  <data name="L_GroupColor" xml:space="preserve">
+    <value>颜色</value>
+    <comment>Camera Raw's white balance and vibrance section header.</comment>
+  </data>
+  <data name="A_HideGroup" xml:space="preserve">
+    <value>隐藏 {0}</value>
+    <comment>The eye on a Camera Raw section header while that group is showing; {0} is the group's own name.</comment>
+  </data>
+  <data name="A_ShowGroup" xml:space="preserve">
+    <value>显示 {0}</value>
+    <comment>The same eye once the group is hidden.</comment>
+  </data>
+  <data name="H_HideGroupPreview" xml:space="preserve">
+    <value>在预览中隐藏 {0}</value>
+  </data>
+  <data name="H_ShowGroupPreview" xml:space="preserve">
+    <value>在预览中显示 {0}</value>
+  </data>
+  <data name="L_ScopeHistogram" xml:space="preserve">
+    <value>直方图</value>
+  </data>
+  <data name="L_ScopeVectorscope" xml:space="preserve">
+    <value>矢量示波器</value>
+  </data>
+  <data name="A_ScopeHistogram" xml:space="preserve">
+    <value>RGB 直方图</value>
+  </data>
+  <data name="H_ScopeHint" xml:space="preserve">
+    <value>色阶从左到右由黑到白：黑场、阴影、中间调、高光、白场。右键可切换到矢量示波器。</value>
+  </data>
+  <data name="A_ShadowClipping" xml:space="preserve">
+    <value>阴影溢色指示器</value>
+  </data>
+  <data name="H_ShadowClipping" xml:space="preserve">
+    <value>在预览中把溢出的阴影画成蓝色。</value>
+  </data>
+  <data name="A_HighlightClipping" xml:space="preserve">
+    <value>高光溢色指示器</value>
+  </data>
+  <data name="H_HighlightClipping" xml:space="preserve">
+    <value>在预览中把溢出的高光画成红色。</value>
+  </data>
+  <data name="S_FilterApplying" xml:space="preserve"><value>正在应用…</value></data>
+  <data name="S_SavedWithNewChanges" xml:space="preserve"><value>已保存。较新的修改尚未保存。</value></data>
+  <data name="L_BrushSmoothing.Text" xml:space="preserve"><value>平滑</value></data>
+  <data name="H_BrushSmoothing" xml:space="preserve"><value>画笔以这段距离跟随指针，过滤小幅抖动；松开后补到指针终点。</value></data>
+  <data name="PsdConversion_Title" xml:space="preserve">
+    <value>打开“{0}”？</value>
+  </data>
+  <data name="PsdConversion_Intro" xml:space="preserve">
+    <value>Compositor 将转换这些 Photoshop 功能。在你继续之前不会应用任何更改。</value>
+  </data>
+  <data name="PsdConversion_Import" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="AI_Operation" xml:space="preserve"><value>操作</value></data>
+  <data name="AI_Remove" xml:space="preserve"><value>移除</value></data>
+  <data name="AI_Replace" xml:space="preserve"><value>替换</value></data>
+  <data name="AI_Expand" xml:space="preserve"><value>扩图</value></data>
+  <data name="AI_Prompt" xml:space="preserve"><value>描述想要的效果</value></data>
+  <data name="AI_PromptHint" xml:space="preserve"><value>希望这个区域变成什么？</value></data>
+  <data name="AI_RemovePrompt" xml:space="preserve"><value>移除选中的物体，用周围环境自然补全该区域，保留选区以外的内容。</value></data>
+  <data name="AI_ExpandPrompt" xml:space="preserve"><value>向透明区域自然延伸图像，匹配原图构图、光线与纹理，保留原图内容。</value></data>
+  <data name="AI_Left" xml:space="preserve"><value>左侧（像素）</value></data>
+  <data name="AI_Right" xml:space="preserve"><value>右侧（像素）</value></data>
+  <data name="AI_Top" xml:space="preserve"><value>顶部（像素）</value></data>
+  <data name="AI_Bottom" xml:space="preserve"><value>底部（像素）</value></data>
+  <data name="AI_Connection" xml:space="preserve"><value>连接方式</value></data>
+  <data name="AI_Account" xml:space="preserve"><value>ChatGPT 账号（实验性）</value></data>
+  <data name="AI_Model" xml:space="preserve"><value>模型</value></data>
+  <data name="AI_KeyHint" xml:space="preserve"><value>输入密钥，或使用已保存的密钥</value></data>
+  <data name="AI_Endpoint" xml:space="preserve"><value>API 基础地址</value></data>
+  <data name="AI_SaveKey" xml:space="preserve"><value>保存密钥</value></data>
+  <data name="AI_ForgetKey" xml:space="preserve"><value>删除密钥</value></data>
+  <data name="AI_SignIn" xml:space="preserve"><value>在浏览器中登录</value></data>
+  <data name="AI_SignOut" xml:space="preserve"><value>退出账号</value></data>
+  <data name="AI_AccountNote" xml:space="preserve"><value>账号出图取决于账号权限和服务可用性。API Key 使用独立计费。</value></data>
+  <data name="AI_Settings" xml:space="preserve"><value>连接设置与密钥</value></data>
+  <data name="AI_ApiPrivacyTitle" xml:space="preserve"><value>API 数据隐私提醒</value></data>
+  <data name="AI_ApiPrivacyNote" xml:space="preserve"><value>生成时会向所填 API 服务发送完整画布（不只选区）、蒙版和提示词。第三方中转可能留存、转售或滥用这些数据，导致隐私泄露。请核实服务方的数据政策，避免上传个人隐私、商业机密等敏感内容。</value></data>
+  <data name="AI_Generate" xml:space="preserve"><value>生成</value></data>
+  <data name="AI_Stop" xml:space="preserve"><value>停止</value></data>
+  <data name="AI_Version" xml:space="preserve"><value>版本</value></data>
+  <data name="AI_Compare" xml:space="preserve"><value>对比</value></data>
+  <data name="AI_Original" xml:space="preserve"><value>原图</value></data>
+  <data name="AI_Result" xml:space="preserve"><value>结果</value></data>
+  <data name="AI_UploadNote" xml:space="preserve"><value>点击生成后，将可见画布、选区蒙版和描述发送到所选服务。</value></data>
+  <data name="AI_KeyRequired" xml:space="preserve"><value>请填写 API 密钥，或切换至 ChatGPT 账号登录。</value></data>
+  <data name="AI_KeySaved" xml:space="preserve"><value>密钥已加密保存至当前 Windows 用户。</value></data>
+  <data name="AI_KeyForgotten" xml:space="preserve"><value>已删除保存的 API 密钥。</value></data>
+  <data name="AI_KeySaveFailed" xml:space="preserve"><value>无法保存或删除密钥，请检查密钥和本地存储。</value></data>
+  <data name="AI_AccountSaveFailed" xml:space="preserve"><value>无法更新保存的账号。</value></data>
+  <data name="AI_SignedOut" xml:space="preserve"><value>已退出账号。</value></data>
+  <data name="AI_SigningIn" xml:space="preserve"><value>请在浏览器中完成登录…</value></data>
+  <data name="AI_SignedIn" xml:space="preserve"><value>账号已连接。</value></data>
+  <data name="AI_Cancelled" xml:space="preserve"><value>已停止，文档未改变。</value></data>
+  <data name="AI_SignInFailed" xml:space="preserve"><value>登录失败，请重试，或退出账号以清除旧的登录信息。</value></data>
+  <data name="AI_PromptRequired" xml:space="preserve"><value>请先描述想要的效果。</value></data>
+  <data name="AI_EdgeInvalid" xml:space="preserve"><value>扩展量须为 0～8192 的整数，且至少一侧大于 0。</value></data>
+  <data name="AI_EndpointInvalid" xml:space="preserve"><value>请输入有效的 HTTPS API 基础地址。</value></data>
+  <data name="AI_Generating" xml:space="preserve"><value>正在生成… 可随时停止请求。</value></data>
+  <data name="AI_Ready" xml:space="preserve"><value>预览已就绪。对比版本后，可接受为新图层。</value></data>
+  <data name="AI_Failed" xml:space="preserve"><value>生成失败，请检查连接后重试。</value></data>
+  <data name="AI_Title" xml:space="preserve"><value>AI 编辑</value></data>
+  <data name="AI_Accept" xml:space="preserve"><value>接受为新图层</value></data>
+  <data name="AI_Accepted" xml:space="preserve"><value>AI 结果已添加为新图层，可一次撤销。</value></data>
+  <data name="M_Ai.Title" xml:space="preserve"><value>AI</value></data>
+  <data name="M_AiRemove.Text" xml:space="preserve"><value>移除…</value></data>
+  <data name="M_AiReplace.Text" xml:space="preserve"><value>替换…</value></data>
+  <data name="M_AiExpand.Text" xml:space="preserve"><value>扩图…</value></data>
+  <data name="L_AiPreview.Text" xml:space="preserve"><value>AI 预览 · 尚未应用</value></data>
+  <data name="B_AiRemove.Content" xml:space="preserve"><value>AI 移除</value></data>
+  <data name="B_AiReplace.Content" xml:space="preserve"><value>替换</value></data>
+  <data name="B_AiExpand.Content" xml:space="preserve"><value>扩图</value></data>
+  <data name="L_AiWorking.Text" xml:space="preserve"><value>AI 正在创作…</value></data>
+  <data name="AI_References" xml:space="preserve"><value>参考图与保留要求</value></data>
+  <data name="AI_AddReferences" xml:space="preserve"><value>添加参考图片</value></data>
+  <data name="AI_RemoveReference" xml:space="preserve"><value>移除</value></data>
+  <data name="AI_Preserve" xml:space="preserve"><value>需要保留的特征</value></data>
+  <data name="AI_PreserveHint" xml:space="preserve"><value>例如：保留同一张脸、发型和服装颜色。</value></data>
+  <data name="AI_ReferencesNote" xml:space="preserve"><value>最多添加四张参考图，并指定各自用途。保留要求用于指导模型；选区外像素仍由本地保护。</value></data>
+  <data name="AI_ReferencesLimit" xml:space="preserve"><value>最多选择四张参考图片。</value></data>
+  <data name="AI_ReferencesFailed" xml:space="preserve"><value>无法读取所选参考图片。</value></data>
+  <data name="AI_Reference_general" xml:space="preserve"><value>通用参考</value></data>
+  <data name="AI_Reference_identity" xml:space="preserve"><value>人物 / 身份</value></data>
+  <data name="AI_Reference_clothing" xml:space="preserve"><value>服装</value></data>
+  <data name="AI_Reference_style" xml:space="preserve"><value>风格</value></data>
+  <data name="AI_Reference_composition" xml:space="preserve"><value>构图</value></data>
+  <data name="W_SingleColumnTools" xml:space="preserve"><value>切换为单列工具栏</value></data>
+  <data name="W_DoubleColumnTools" xml:space="preserve"><value>切换为双列工具栏</value></data>
+  <data name="W_PreviousOptions" xml:space="preserve"><value>显示前面的工具选项</value></data>
+  <data name="W_NextOptions" xml:space="preserve"><value>显示更多工具选项</value></data>
+  <data name="M_OpenProjectFolder.Text" xml:space="preserve"><value>打开工程文件夹…</value></data>
+  <data name="SelectionMode_New" xml:space="preserve"><value>新建</value></data>
+  <data name="SelectionMode_Add" xml:space="preserve"><value>添加</value></data>
+  <data name="SelectionMode_Subtract" xml:space="preserve"><value>减去</value></data>
+  <data name="QT_Feather" xml:space="preserve"><value>羽化</value></data>
+  <data name="QT_Invert" xml:space="preserve"><value>反选</value></data>
+  <data name="QT_Deselect" xml:space="preserve"><value>取消选区</value></data>
+  <data name="QT_BrushSize" xml:space="preserve"><value>笔刷半径（像素）</value></data>
+  <data name="QT_BrushHardness" xml:space="preserve"><value>笔刷硬度（%）</value></data>
+  <data name="QT_BrushOpacity" xml:space="preserve"><value>笔刷不透明度（%）</value></data>
+  <data name="QT_BrushTip" xml:space="preserve"><value>笔尖预览</value></data>
+  <data name="QT_AlignLeft" xml:space="preserve"><value>左对齐</value></data>
+  <data name="QT_AlignCenter" xml:space="preserve"><value>水平居中</value></data>
+  <data name="QT_AlignRight" xml:space="preserve"><value>右对齐</value></data>
+  <data name="QT_AlignTop" xml:space="preserve"><value>顶端对齐</value></data>
+  <data name="QT_AlignMiddle" xml:space="preserve"><value>垂直居中</value></data>
+  <data name="QT_AlignBottom" xml:space="preserve"><value>底端对齐</value></data>
+  <data name="QT_DistributeHorizontal" xml:space="preserve"><value>水平等距分布</value></data>
+  <data name="QT_DistributeVertical" xml:space="preserve"><value>垂直等距分布</value></data>
+  <data name="QT_Group" xml:space="preserve"><value>成组</value></data>
+  <data name="QT_TextFont" xml:space="preserve"><value>字体</value></data>
+  <data name="QT_TextSize" xml:space="preserve"><value>字号（像素）</value></data>
+  <data name="QT_TextColor" xml:space="preserve"><value>文字颜色</value></data>
+  <data name="QT_TextLeft" xml:space="preserve"><value>文字左对齐</value></data>
+  <data name="QT_TextCenter" xml:space="preserve"><value>文字居中</value></data>
+  <data name="QT_TextRight" xml:space="preserve"><value>文字右对齐</value></data>
+  <data name="QT_TextMore" xml:space="preserve"><value>更多…</value></data>
+  <data name="LP_Lock" xml:space="preserve"><value>锁定</value></data>
+  <data name="LP_Transparency" xml:space="preserve"><value>锁定透明度</value></data>
+  <data name="LP_Pixels" xml:space="preserve"><value>锁定像素</value></data>
+  <data name="LP_Position" xml:space="preserve"><value>锁定位置与变换</value></data>
+  <data name="LP_All" xml:space="preserve"><value>全部锁定</value></data>
+  <data name="LP_Inherited" xml:space="preserve"><value>受父文件夹锁定；请选择该文件夹解锁。</value></data>
+  <data name="LP_Local" xml:space="preserve"><value>锁定状态按工程保存在本机。</value></data>
+  <data name="LP_NoHits" xml:space="preserve"><value>此处没有可见图层</value></data>
+  <data name="LP_MoreHits" xml:space="preserve"><value>另有 {0} 个命中图层，请使用图层面板</value></data>
+  <data name="LP_Blocked" xml:space="preserve"><value>请先解锁图层再编辑。</value></data>
+  <data name="H_Layers" xml:space="preserve"><value>图层</value></data>
+  <data name="H_Title" xml:space="preserve"><value>历史记录</value></data>
+  <data name="H_Initial" xml:space="preserve"><value>初始状态</value></data>
+  <data name="H_Oldest" xml:space="preserve"><value>最早保留状态</value></data>
+  <data name="H_Hint" xml:space="preserve"><value>点击步骤恢复。历史记录仅保留在本次编辑会话。</value></data>
+  <data name="H_RedoHint" xml:space="preserve"><value>灰色步骤可以重做。开始新编辑会移除后续分支。</value></data>
+  <data name="H_Busy" xml:space="preserve"><value>请先结束当前编辑，再切换历史步骤。</value></data>
+  <data name="H_Restored" xml:space="preserve"><value>已恢复历史状态</value></data>
+  <data name="H_Expired" xml:space="preserve"><value>此历史步骤已不再保留。</value></data>
+  <data name="H_Brush" xml:space="preserve"><value>画笔</value></data>
+  <data name="H_Erase" xml:space="preserve"><value>橡皮擦</value></data>
+  <data name="H_Move" xml:space="preserve"><value>移动图层</value></data>
+  <data name="H_Scale" xml:space="preserve"><value>缩放图层</value></data>
+  <data name="H_Transform" xml:space="preserve"><value>变换</value></data>
+  <data name="H_Fill" xml:space="preserve"><value>填充</value></data>
+  <data name="H_Invert" xml:space="preserve"><value>像素反相</value></data>
+  <data name="H_Clear" xml:space="preserve"><value>清除选区像素</value></data>
+  <data name="H_Selection" xml:space="preserve"><value>更改选区</value></data>
+  <data name="H_Deselect" xml:space="preserve"><value>取消选区</value></data>
+  <data name="H_Text" xml:space="preserve"><value>编辑文字</value></data>
+  <data name="H_AI" xml:space="preserve"><value>接受 AI 结果</value></data>
+  <data name="H_Gradient" xml:space="preserve"><value>渐变</value></data>
+  <data name="H_Healing" xml:space="preserve"><value>修复</value></data>
+  <data name="H_Clone" xml:space="preserve"><value>仿制图章</value></data>
+  <data name="H_Blur" xml:space="preserve"><value>模糊笔触</value></data>
+  <data name="H_Warp" xml:space="preserve"><value>变形</value></data>
+  <data name="H_PixelsMove" xml:space="preserve"><value>移动选区像素</value></data>
+  <data name="H_Import" xml:space="preserve"><value>导入图像</value></data>
+  <data name="H_NewLayer" xml:space="preserve"><value>新建图层</value></data>
+  <data name="H_NewFolder" xml:space="preserve"><value>新建文件夹</value></data>
+  <data name="H_Shape" xml:space="preserve"><value>添加形状</value></data>
+  <data name="H_Duplicate" xml:space="preserve"><value>复制图层</value></data>
+  <data name="H_Delete" xml:space="preserve"><value>删除图层</value></data>
+  <data name="H_Group" xml:space="preserve"><value>成组</value></data>
+  <data name="H_Ungroup" xml:space="preserve"><value>取消成组</value></data>
+  <data name="H_Merge" xml:space="preserve"><value>合并图层</value></data>
+  <data name="H_Reorder" xml:space="preserve"><value>调整图层顺序</value></data>
+  <data name="H_Opacity" xml:space="preserve"><value>图层不透明度</value></data>
+  <data name="H_Blend" xml:space="preserve"><value>混合模式</value></data>
+  <data name="H_Visibility" xml:space="preserve"><value>图层可见性</value></data>
+  <data name="H_Rename" xml:space="preserve"><value>重命名图层</value></data>
+  <data name="H_Adjustment" xml:space="preserve"><value>颜色调整</value></data>
+  <data name="H_Effects" xml:space="preserve"><value>图层特效</value></data>
+  <data name="H_Mask" xml:space="preserve"><value>编辑蒙版</value></data>
+  <data name="H_Canvas" xml:space="preserve"><value>画布边界</value></data>
+  <data name="H_Resize" xml:space="preserve"><value>图像尺寸</value></data>
+  <data name="H_Flip" xml:space="preserve"><value>翻转</value></data>
+  <data name="H_Guides" xml:space="preserve"><value>编辑参考线</value></data>
+  <data name="H_Layout" xml:space="preserve"><value>图层排版</value></data>
+  <data name="H_Batch" xml:space="preserve"><value>批量编辑</value></data>
+  <data name="H_Pixels" xml:space="preserve"><value>编辑像素</value></data>
+</root>

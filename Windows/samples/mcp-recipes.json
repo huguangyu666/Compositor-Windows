@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "type": "Consolidated final MCP recipe, not a raw call log",
+  "instructions": [
+    "Open a blank .comp with the listed canvas dimensions. The live MCP surface currently has no create-document tool.",
+    "Use editor_state first and the latest documentToken/revision for every mutation.",
+    "Resolve returned layer IDs and batchAliases. $aliases work inside editor_batch; resolve them to real IDs for standalone calls.",
+    "Source paths below are relative to this file. Resolve them to absolute paths before import. Delete a temporary blank background through editor_layer_delete when present.",
+    "Inspect editor_preview before saving/exporting. Export to a new file; editor_export refuses overwrites."
+  ],
+  "orbit": {
+    "canvas": {
+      "width": 1280,
+      "height": 800
+    },
+    "source": "01-orbit-campaign.comp/images/15750214-6C5E-4582-A0FD-73700C2E6F4D.png",
+    "sourceMethod": "Separately generated with the built-in imagegen tool; imported through MCP",
+    "sourcePrompt": "Use case: ads-marketing. Asset: original background image for an editable Compositor exhibition poster, no typography. Landscape 1280x800 composition. Deep midnight navy nearly black seamless matte studio environment. One exquisite monumental asymmetrical sculptural loop of polished chrome and translucent cobalt blue glass occupies the RIGHT 60 percent of the frame. Inside the loop floats a small warm vermilion orange sphere. Strong sculptural forms, precise high-end product photography, subtle fine surface details, physically plausible beautiful studio reflections and caustics, quiet cyan rim light, soft grounded shadows. The sculpture fills most of the right side without touching edges. LEFT 40 percent must be very dark, calm empty negative space for later native editable typography. The bottom 15 percent stays dark for metadata. Museum-grade contemporary art direction, highly refined, restrained luxury science-fiction material study. No words, no letters, no typography, no logos, no watermarks, no interface. Generate only the artwork, not a screenshot or poster mockup.",
+    "import": {
+      "tool": "editor_layer_import",
+      "arguments": {
+        "path": "01-orbit-campaign.comp/images/15750214-6C5E-4582-A0FD-73700C2E6F4D.png",
+        "name": "Chrome & cobalt · generated source"
+      }
+    },
+    "importResultAlias": "photo",
+    "batch": [
+      {
+        "tool": "editor_select",
+        "arguments": {
+          "mode": "clear"
+        }
+      },
+      {
+        "tool": "editor_layer_transform",
+        "arguments": {
+          "layerId": "$photo",
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 800
+        }
+      },
+      {
+        "tool": "editor_text",
+        "arguments": {
+          "content": "COMPOSITOR   /   DESIGN STUDIES",
+          "fontName": "Segoe UI",
+          "fontSize": 15,
+          "alignment": "Left",
+          "tracking": 2,
+          "leading": 0,
+          "color": [
+            0.6,
+            0.75,
+            0.85
+          ],
+          "boxWidth": 650,
+          "boxHeight": 70,
+          "x": 56,
+          "y": 40
+        },
+        "as": "text1"
+      },
+      {
+        "tool": "editor_text",
+        "arguments": {
+          "content": "ORBIT",
+          "fontName": "Arial Black",
+          "fontSize": 110,
+          "alignment": "Left",
+          "tracking": -6,
+          "leading": 0,
+          "color": [
+            0.94,
+            0.96,
+            0.97
+          ],
+          "boxWidth": 610,
+          "boxHeight": 210,
+          "x": 48,
+          "y": 130
+        },
+        "as": "text2"
+      },
+      {
+        "tool": "editor_text",
+        "arguments": {
+          "content": "OF IDEAS.",
+          "fontName": "Arial",
+          "fontSize": 68,
+          "alignment": "Left",
+          "tracking": -1,
+          "leading": 0,
+          "color": [
+            0.94,
+            0.96,
+            0.97
+          ],
+          "boxWidth": 610,
+          "boxHeight": 155,
+          "x": 56,
+          "y": 274
+        },
+        "as": "text3"
+      },
+      {
+        "tool": "editor_text",
+        "arguments": {
+          "content": "An exploration of light,\nmaterial & possibility.",
+          "fontName": "Segoe UI",
+          "fontSize": 21,
+          "alignment": "Left",
+          "tracking": 0,
+          "leading": 31,
+          "color": [
+            0.57,
+            0.68,
+            0.76
+          ],
+          "boxWidth": 440,
+          "boxHeight": 95,
+          "x": 60,
+          "y": 419
+        },
+        "as": "text4"
+      },
+      {
+        "tool": "editor_text",
+        "arguments": {
+          "content": "EXHIBITION   /   01",
+          "fontName": "Segoe UI",
+          "fontSize": 14,
+          "alignment": "Left",
+          "tracking": 2,
+          "leading": 0,
+          "color": [
+            1,
+            0.37,
+            0.19
+          ],
+          "boxWidth": 430,
+          "boxHeight": 75,
+          "x": 60,
+          "y": 637
+        },
+        "as": "text5"
+      },
+      {
+        "tool": "editor_text",
+        "arguments": {
+          "content": "BUILT IN COMPOSITOR",
+          "fontName": "Segoe UI",
+          "fontSize": 12,
+          "alignment": "Left",
+          "tracking": 2,
+          "leading": 0,
+          "color": [
+            0.5,
+            0.63,
+            0.72
+          ],
+          "boxWidth": 500,
+          "boxHeight": 70,
+          "x": 60,
+          "y": 690
+        },
+        "as": "text6"
+      },
+      {
+        "tool": "editor_text",
+        "arguments": {
+          "content": "01 — 26",
+          "fontName": "Segoe UI",
+          "fontSize": 13,
+          "alignment": "Right",
+          "tracking": 1,
+          "leading": 0,
+          "color": [
+            0.55,
+            0.68,
+            0.78
+          ],
+          "boxWidth": 220,
+          "boxHeight": 70,
+          "x": 967,
+          "y": 690
+        },
+        "as": "text7"
+      },
+      {
+        "tool": "editor_layout",
+        "arguments": {
+          "operation": "group",
+          "name": "Editable typography · MCP batch",
+          "layerIds": [
+            "$text1",
+            "$text2",
+            "$text3",
+            "$text4",
+            "$text5",
+            "$text6",
+            "$text7"
+          ]
+        }
+      }
+    ],
+    "finish": [
+      "editor_preview",
+      "editor_save",
+      "editor_open",
+      "editor_export"
+    ]
+  }
+}

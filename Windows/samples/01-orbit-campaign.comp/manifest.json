@@ -1,0 +1,330 @@
+{
+  "format": "com.compositor.project",
+  "version": 11,
+  "colorSpace": "sRGB",
+  "resolution": 72,
+  "documentID": "2A450670-74A0-401C-B00E-19DA2AB74A52",
+  "width": 1280,
+  "height": 800,
+  "activeLayerID": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+  "layers": [
+    {
+      "id": "15750214-6C5E-4582-A0FD-73700C2E6F4D",
+      "name": "Chrome \u0026 cobalt \u00B7 generated source",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          0,
+          0
+        ],
+        "size": [
+          1280,
+          800
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "imageFile": "15750214-6C5E-4582-A0FD-73700C2E6F4D.png",
+      "isGroup": false,
+      "opacity": 1,
+      "blendMode": "Normal"
+    },
+    {
+      "id": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+      "name": "Editable typography \u00B7 MCP batch",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          0,
+          0
+        ],
+        "size": [
+          1280,
+          800
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "isGroup": true,
+      "opacity": 1,
+      "blendMode": "Normal"
+    },
+    {
+      "id": "279FD45F-EF25-4DAF-921A-8B284798026A",
+      "name": "COMPOSITOR / DESIGN STUDIES",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          56,
+          40
+        ],
+        "size": [
+          650,
+          70
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "imageFile": "279FD45F-EF25-4DAF-921A-8B284798026A.png",
+      "parentID": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+      "isGroup": false,
+      "opacity": 1,
+      "blendMode": "Normal",
+      "text": {
+        "content": "COMPOSITOR   /   DESIGN STUDIES",
+        "fontName": "Segoe UI",
+        "fontSize": 15,
+        "red": 0.6,
+        "green": 0.75,
+        "blue": 0.85,
+        "alignment": "Left",
+        "tracking": 2,
+        "leading": 0,
+        "boxSize": {
+          "width": 650,
+          "height": 70
+        }
+      }
+    },
+    {
+      "id": "C2C4E260-1FCD-499D-B721-EA861C7E901F",
+      "name": "ORBIT",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          48,
+          130
+        ],
+        "size": [
+          610,
+          210
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "imageFile": "C2C4E260-1FCD-499D-B721-EA861C7E901F.png",
+      "parentID": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+      "isGroup": false,
+      "opacity": 1,
+      "blendMode": "Normal",
+      "text": {
+        "content": "ORBIT",
+        "fontName": "Arial Black",
+        "fontSize": 110,
+        "red": 0.94,
+        "green": 0.96,
+        "blue": 0.97,
+        "alignment": "Left",
+        "tracking": -6,
+        "leading": 0,
+        "boxSize": {
+          "width": 610,
+          "height": 210
+        }
+      }
+    },
+    {
+      "id": "18246F52-7CA7-4C77-BBA8-EBE77BA1AB6E",
+      "name": "OF IDEAS.",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          56,
+          274
+        ],
+        "size": [
+          610,
+          155
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "imageFile": "18246F52-7CA7-4C77-BBA8-EBE77BA1AB6E.png",
+      "parentID": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+      "isGroup": false,
+      "opacity": 1,
+      "blendMode": "Normal",
+      "text": {
+        "content": "OF IDEAS.",
+        "fontName": "Arial",
+        "fontSize": 68,
+        "red": 0.94,
+        "green": 0.96,
+        "blue": 0.97,
+        "alignment": "Left",
+        "tracking": -1,
+        "leading": 0,
+        "boxSize": {
+          "width": 610,
+          "height": 155
+        }
+      }
+    },
+    {
+      "id": "F20B2915-A933-4E36-ABE9-8E8E07DCBD24",
+      "name": "An exploration of light, material \u0026 poss",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          60,
+          419
+        ],
+        "size": [
+          440,
+          95
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "imageFile": "F20B2915-A933-4E36-ABE9-8E8E07DCBD24.png",
+      "parentID": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+      "isGroup": false,
+      "opacity": 1,
+      "blendMode": "Normal",
+      "text": {
+        "content": "An exploration of light,\nmaterial \u0026 possibility.",
+        "fontName": "Segoe UI",
+        "fontSize": 21,
+        "red": 0.57,
+        "green": 0.68,
+        "blue": 0.76,
+        "alignment": "Left",
+        "tracking": 0,
+        "leading": 31,
+        "boxSize": {
+          "width": 440,
+          "height": 95
+        }
+      }
+    },
+    {
+      "id": "E9B3F56C-51D0-4A43-858E-04BE79B03A98",
+      "name": "EXHIBITION / 01",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          60,
+          637
+        ],
+        "size": [
+          430,
+          75
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "imageFile": "E9B3F56C-51D0-4A43-858E-04BE79B03A98.png",
+      "parentID": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+      "isGroup": false,
+      "opacity": 1,
+      "blendMode": "Normal",
+      "text": {
+        "content": "EXHIBITION   /   01",
+        "fontName": "Segoe UI",
+        "fontSize": 14,
+        "red": 1,
+        "green": 0.37,
+        "blue": 0.19,
+        "alignment": "Left",
+        "tracking": 2,
+        "leading": 0,
+        "boxSize": {
+          "width": 430,
+          "height": 75
+        }
+      }
+    },
+    {
+      "id": "C87A808D-4AA6-4C1C-9412-EE294340F0D5",
+      "name": "BUILT IN COMPOSITOR",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          60,
+          690
+        ],
+        "size": [
+          500,
+          70
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "imageFile": "C87A808D-4AA6-4C1C-9412-EE294340F0D5.png",
+      "parentID": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+      "isGroup": false,
+      "opacity": 1,
+      "blendMode": "Normal",
+      "text": {
+        "content": "BUILT IN COMPOSITOR",
+        "fontName": "Segoe UI",
+        "fontSize": 12,
+        "red": 0.5,
+        "green": 0.63,
+        "blue": 0.72,
+        "alignment": "Left",
+        "tracking": 2,
+        "leading": 0,
+        "boxSize": {
+          "width": 500,
+          "height": 70
+        }
+      }
+    },
+    {
+      "id": "9520D956-F522-414B-A15A-5707AD658735",
+      "name": "01 \u2014 26",
+      "isVisible": true,
+      "transform": {
+        "origin": [
+          967,
+          690
+        ],
+        "size": [
+          220,
+          70
+        ],
+        "rotation": 0,
+        "flipX": false,
+        "flipY": false,
+        "sampling": "High quality"
+      },
+      "imageFile": "9520D956-F522-414B-A15A-5707AD658735.png",
+      "parentID": "EBE7604A-1395-4A7C-BE9C-6506563504A9",
+      "isGroup": false,
+      "opacity": 1,
+      "blendMode": "Normal",
+      "text": {
+        "content": "01 \u2014 26",
+        "fontName": "Segoe UI",
+        "fontSize": 13,
+        "red": 0.55,
+        "green": 0.68,
+        "blue": 0.78,
+        "alignment": "Right",
+        "tracking": 1,
+        "leading": 0,
+        "boxSize": {
+          "width": 220,
+          "height": 70
+        }
+      }
+    }
+  ]
+}
