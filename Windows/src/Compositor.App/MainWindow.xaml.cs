@@ -242,6 +242,7 @@ public sealed partial class MainWindow : Window
             ToolCombo.Items.Add(ToolLabel(tool));
         }
         InitializeWorkspace();
+        InitializeTimeline();
         ToolCombo.SelectedIndex = 0;
         ShapeKindCombo.SelectedIndex = 0;
         // C07b added these two fields with a plain TextBlock label beside them, which a screen reader and
@@ -294,6 +295,7 @@ public sealed partial class MainWindow : Window
         };
         Closed += (_, _) =>
         {
+            StopTimelinePlayback(); timelineExportCancellation?.Cancel();
             editorPipe?.Dispose();
             TrackEditorDocument(null);
             RetireAiEdit();
@@ -322,6 +324,7 @@ public sealed partial class MainWindow : Window
             CancelLevelsHistogram(); levelsHistogramCache.Clear();
             // The canvas is detached here, so no later draw pass can reach these Direct2D objects.
             fullTarget?.Dispose(); fullTarget = null; presented = null;
+            gpuPreviewRenderer?.Dispose(); gpuPreviewRenderer = null;
             checkerBrush?.Dispose(); checkerBrush = null;
             checkerTile?.Dispose(); checkerTile = null;
             // The window is gone, so this is the earliest point that may freeze the accepted log set.
@@ -335,7 +338,7 @@ public sealed partial class MainWindow : Window
         }
         else
         {
-            OpenDocument(EditorDocument.Create());
+            OpenNewDocument();
         }
         StartEditorMcp();
     }
@@ -499,6 +502,7 @@ public sealed partial class MainWindow : Window
 
     private void OpenDocument(EditorDocument newDocument, string? path = null)
     {
+        StopTimelinePlayback();
         RetireBlendPreview(redraw: false);
         EndOpacityEdit();
         layerPanelDrag = null;
@@ -580,6 +584,7 @@ public sealed partial class MainWindow : Window
         // `presented`, so both references to the same object go together.
         fullTarget?.Dispose();
         fullTarget = null;
+        gpuPreviewRenderer?.Dispose(); gpuPreviewRenderer = null; gpuPreviewUnavailable = gpuFramePresented = false;
         presented = null;
         pendingFullRender = true;
         if (path is not null)
@@ -589,6 +594,7 @@ public sealed partial class MainWindow : Window
         }
         UpdateTitle();
         UpdateDocSizeLabel();
+        ResetTimelineForDocument();
         RefreshAll();
     }
 
@@ -702,6 +708,8 @@ public sealed partial class MainWindow : Window
 
     private void OnDocumentChanged()
     {
+        if (!applyingTimeline) StopTimelinePlayback();
+        RefreshTimeline();
         if (!applyingOpacity) EndOpacityEdit();
         if (applyingBlendMode || applyingLayerOpacityKeys)
         {
@@ -759,6 +767,7 @@ public sealed partial class MainWindow : Window
 
     private void RefreshAll()
     {
+        RefreshTimeline();
         RefreshAiActions();
         UpdateDocSizeLabel();
         RenderCanvas();
@@ -845,7 +854,9 @@ public sealed partial class MainWindow : Window
     private void ApplyPendingInteraction()
     {
         if (document is null) return;
-        if (pendingTransformPoint is not null || pendingMoveDelta is not null) renderSnapshot = null;
+        // Detached drafts supply their own immutable placement snapshot. Only legacy
+        // moves mutate the live records and need to freeze the source metadata again.
+        if (pendingTransformPoint is not null && !transformPointerDraftActive || pendingMoveDelta is not null) renderSnapshot = null;
         ApplyPendingHealing();
         if (transformPointerDraftActive && pendingTransformPoint is { } draftPoint)
         {
@@ -1068,6 +1079,7 @@ public sealed partial class MainWindow : Window
             }
 
             var frameSource = healingStroke?.PreviewSnapshot ?? CaptureRenderSnapshot(owner.Snapshot);
+            int? animationFrame = TimelinePreviewActive ? timelineFrame : null;
             var blendRequest = blendPreview;
             compositor ??= new CanvasCompositor(frameSource);
             var active = compositor;
@@ -1082,6 +1094,12 @@ public sealed partial class MainWindow : Window
             var staging = bandBuffer;
             long revision = frameRevision;
             bool interactive = placementDragActive && transformRequest is null && floatingRequest is null;
+            bool cacheAdjustments = transformRequest is not { Finishing: false };
+            bool allowGpu = useGpuRendering && !gpuPreviewUnavailable && maskAloneId is null
+                && Environment.GetEnvironmentVariable("COMPOSITOR_DISABLE_GPU_PREVIEW") != "1";
+            bool cpuCanvasStale = gpuFramePresented;
+            var residentNoise = gpuPreviewRenderer?.NoiseSeeds ?? [];
+            long noiseBudget = gpuPreviewRenderer?.TextureBudget ?? (384L << 20);
 #if DEBUG
             var beforeRender = beforeFrameRender;
             inputWatch.Stop();
@@ -1135,27 +1153,41 @@ public sealed partial class MainWindow : Window
                     }
                     if (transformPreview is not null)
                         band = RectI.Union(band, CanvasCompositor.ChangedLayersBounds(active.Snapshot, transformPreview.Snapshot, transformRequest!.Edit.DirtyLayerIds));
-                    active.SetSnapshot(floatingSnapshot ?? pixelSnapshot ?? transformPreview?.Snapshot ?? gradientPreview?.Snapshot ?? blendRequest?.Snapshot.Value ?? frameSource);
+                    active.SetSnapshot(floatingSnapshot ?? pixelSnapshot ?? transformPreview?.Snapshot ?? gradientPreview?.Snapshot ?? blendRequest?.Snapshot.Value
+                        ?? (animationFrame is { } frame ? AnimationEvaluator.Evaluate(frameSource, frame) : frameSource));
 #if DEBUG
                     double preparationMs = watch.Elapsed.TotalMilliseconds;
                     frameTrace?.Invoke("preview-prepared");
 #endif
                     // The same band must reach both the compositor and the texture upload.
                     // Source-grid changes can spread through effects and live mask consumers.
-                    Surface surface;
-                    if (maskAloneId is { } maskId) surface = active.RenderMaskAlone(maskId, ref band);
-                    else
+                    var gpuScene = allowGpu ? GpuPreviewScene.TryCreate(active.Snapshot) : null;
+                    Dictionary<uint, float[]>? noise = null;
+                    if (gpuScene is not null)
                     {
+                        try { noise = gpuScene.PrepareGaussianNoise(residentNoise.ToHashSet(), noiseBudget); }
+                        catch (NotSupportedException) { gpuScene = null; }
+                    }
+                    Surface? surface = null;
+                    if (maskAloneId is { } maskId) surface = active.RenderMaskAlone(maskId, ref band);
+                    else if (gpuScene is null)
+                    {
+                        // GPU drafts did not update the CPU canvas. Settle/fallback must
+                        // restore the whole reference frame before incremental bands resume.
+                        if (cpuCanvasStale) band = new(0, 0, width, height);
                         band = active.ExpandPixelDirty(band);
-                        surface = active.Render(band.X, band.Y, band.X + band.Width, band.Y + band.Height, interactive);
+                        surface = active.Render(band.X, band.Y, band.X + band.Width, band.Y + band.Height, interactive, cacheAdjustments);
                     }
 #if DEBUG
                     double compositionMs = watch.Elapsed.TotalMilliseconds - preparationMs;
                     frameTrace?.Invoke("composition-finished");
 #endif
-                    long needed = (long)band.Width * band.Height * 4;
-                    if (staging is null || staging.LongLength < needed) staging = new byte[needed];
-                    SurfacePresentation.FillBgra(surface, staging, band.Width, band.X, band.Y, band.X + band.Width, band.Y + band.Height);
+                    if (gpuScene is null)
+                    {
+                        long needed = (long)band.Width * band.Height * 4;
+                        if (staging is null || staging.LongLength < needed) staging = new byte[needed];
+                        SurfacePresentation.FillBgra(surface!, staging, band.Width, band.X, band.Y, band.X + band.Width, band.Y + band.Height);
+                    }
                     watch.Stop();
 #if DEBUG
                     long allocated = GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
@@ -1178,18 +1210,49 @@ public sealed partial class MainWindow : Window
                                 return;
                             }
                             var uploadWatch = System.Diagnostics.Stopwatch.StartNew();
-                            if (fullTarget is null || fullTarget.SizeInPixels.Width != width || fullTarget.SizeInPixels.Height != height)
+                            if (gpuScene is not null)
                             {
-                                fullTarget?.Dispose();
-                                fullTarget = new CanvasRenderTarget(CanvasDevice.GetSharedDevice(), width, height, 96,
-                                    Windows.Graphics.DirectX.DirectXPixelFormat.B8G8R8A8UIntNormalized,
-                                    Microsoft.Graphics.Canvas.CanvasAlphaMode.Premultiplied);
-                            }
-                            fullTarget.SetPixelBytes(staging!, band.X, band.Y, band.Width, band.Height);
-                            bandBuffer = staging;
-                            presented = fullTarget;
-                            uploadWatch.Stop();
+                                try
+                                {
 #if DEBUG
+                                    beforeGpuPreviewRender?.Invoke();
+#endif
+                                    if (gpuPreviewRenderer?.MatchesSize(width, height) == false)
+                                    { gpuPreviewRenderer.Dispose(); gpuPreviewRenderer = null; }
+                                    gpuPreviewRenderer ??= new(CanvasDevice.GetSharedDevice(), width, height);
+                                    presented = gpuPreviewRenderer.Render(gpuScene, noise);
+#if DEBUG
+                                    if (Environment.GetEnvironmentVariable("COMPOSITOR_REQUIRE_GPU_PREVIEW") == "1")
+                                        _ = presented.GetPixelBytes(0, 0, 1, 1); // Fence GPU completion without downloading the whole frame.
+#endif
+                                }
+                                catch (Exception ex)
+                                {
+                                    gpuPreviewUnavailable = true;
+                                    gpuPreviewRenderer?.Dispose(); gpuPreviewRenderer = null;
+                                    presented = fullTarget;
+                                    App.Log($"GPU preview unavailable; using CPU: {ex}", LogLevel.Diagnostic);
+                                    pendingFullRender = true;
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                if (fullTarget is null || fullTarget.SizeInPixels.Width != width || fullTarget.SizeInPixels.Height != height)
+                                {
+                                    fullTarget?.Dispose();
+                                    fullTarget = new CanvasRenderTarget(CanvasDevice.GetSharedDevice(), width, height, 96,
+                                        Windows.Graphics.DirectX.DirectXPixelFormat.B8G8R8A8UIntNormalized,
+                                        Microsoft.Graphics.Canvas.CanvasAlphaMode.Premultiplied);
+                                }
+                                fullTarget.SetPixelBytes(staging!, band.X, band.Y, band.Width, band.Height);
+                                bandBuffer = staging;
+                                presented = fullTarget;
+                            }
+                            uploadWatch.Stop();
+                            gpuFramePresented = gpuScene is not null;
+#if DEBUG
+                            lastFrameUsedGpu = gpuScene is not null;
                             lastFrameProbe = new(band, inputMs, watch.Elapsed.TotalMilliseconds, uploadWatch.Elapsed.TotalMilliseconds, inputBytes, allocated,
                                 preparationMs, compositionMs, bgraMs);
                             // Input → the frame that shows it. Cleared here so a frame that had no accepted
@@ -1218,7 +1281,7 @@ public sealed partial class MainWindow : Window
                             frameTrace?.Invoke("draft-published");
 #endif
                             CanvasControl.Invalidate();
-                            if (pointerStroke is null && !HasPendingInteraction)
+                            if (pointerStroke is null && !placementDragActive && !HasPendingInteraction)
                             {
                                 if (transformRequest is { } thumbnailTransform && ReferenceEquals(thumbnailTransform.Edit, transformInspectorEdit)
                                     && transformPreview is not null)
@@ -1335,6 +1398,22 @@ public sealed partial class MainWindow : Window
 
     private CanvasRenderTarget? fullTarget;
     private CanvasBitmap? presented;
+    private GpuCanvasRenderer? gpuPreviewRenderer;
+    private bool gpuPreviewUnavailable, gpuFramePresented;
+    private bool useGpuRendering = true;
+
+    private void OnToggleGpuRendering(object sender, RoutedEventArgs args)
+    {
+        useGpuRendering = GpuRenderingToggle.IsChecked;
+        WriteFlag("gpu-rendering", useGpuRendering);
+        gpuPreviewUnavailable = false;
+        if (!useGpuRendering)
+        {
+            presented = null;
+            gpuPreviewRenderer?.Dispose(); gpuPreviewRenderer = null;
+        }
+        RenderCanvas();
+    }
 
     private bool HasPendingInteraction =>
         renderInputs.HasPending || pendingTransformPoint is not null || pendingMoveDelta is not null || pendingHealingPoints.Count > 0 || interactionDirty is not null;
@@ -4154,6 +4233,7 @@ public sealed partial class MainWindow : Window
     /// open filter dialog or an in-flight import out of sight.
     /// </summary>
     private bool ProjectEditsInFlight => document is { ActiveTextDraft: not null }
+        || timelineExporting
         || gradientEdit is not null || transformInspectorEdit is not null || floatingTransform is not null
         || pixelMove is not null || floatingDuplicate is not null || pointerStroke is not null || placementDragActive
         || healingStroke is not null || ditherOperation is not null || !pixelNudgeWork.IsCompleted
@@ -4279,6 +4359,8 @@ public sealed partial class MainWindow : Window
 
     private async void OnUndo(object sender, RoutedEventArgs e)
     {
+        if (timelineExporting) return;
+        StopTimelinePlayback(); CommitTimelineFields();
         EndOpacityEdit();
         if (IsDeletePending) return;
         if (IsFileImporting) return;
@@ -4301,6 +4383,8 @@ public sealed partial class MainWindow : Window
 
     private async void OnRedo(object sender, RoutedEventArgs e)
     {
+        if (timelineExporting) return;
+        StopTimelinePlayback(); CommitTimelineFields();
         EndOpacityEdit();
         if (IsDeletePending) return;
         if (IsFileImporting) return;
@@ -4477,6 +4561,7 @@ public sealed partial class MainWindow : Window
     private async void OnLayerSelected(object sender, SelectionChangedEventArgs e)
     {
         if (suppressPanelEvents) return;
+        StopTimelinePlayback(); CommitTimelineFields();
         RetireBlendPreview();
         EndOpacityEdit();
         effectSelection = null;
@@ -4516,6 +4601,7 @@ public sealed partial class MainWindow : Window
                 if (ids.Count != 1 || owner.Snapshot.Manifest.ActiveLayerId != selectedLayerId)
                 { paintOnMask = false; PaintMaskCheck.IsChecked = false; }
                 selectingLayer = true;
+                timelineLayer = selectedLayerId;
                 try { owner.SetActiveLayer(selectedLayerId); }
                 finally { selectingLayer = false; }
                 if (selectedLayerIds.Count > 1) SetStatus(Loc.F("S_MultiSelect", selectedLayerIds.Count));

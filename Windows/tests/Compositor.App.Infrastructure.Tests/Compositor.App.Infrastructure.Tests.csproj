@@ -17,6 +17,7 @@
   <ItemGroup>
     <Compile Include="..\..\src\Compositor.App\AppLogging.cs" Link="AppLogging.cs" />
     <Compile Include="..\..\src\Compositor.App\ShortcutChord.cs" Link="ShortcutChord.cs" />
+    <Compile Include="..\..\src\Compositor.App\UiLanguage.cs" Link="UiLanguage.cs" />
     <Compile Include="..\..\src\Compositor.App\Ai\*.cs" Link="Ai\%(Filename)%(Extension)" />
   </ItemGroup>
 

@@ -4,6 +4,13 @@ The Windows editor is a focused compositing tool. It covers the first editing lo
 .comp project, place raster layers, adjust their appearance, paint, crop, and export. It does not
 yet aim to reproduce every Photoshop or macOS Compositor panel.
 
+## Interface language
+
+The interface follows the Windows display language at startup. Chinese language variants use
+the Simplified Chinese translation; English and other languages use English. Menus, tooltips,
+tool options and panels use the same language. Restart Compositor after changing the Windows
+display language. Regional number formatting still follows your Windows regional settings.
+
 ## Window layout
 
 The workspace follows the original Compositor layout:
@@ -22,13 +29,23 @@ The workspace follows the original Compositor layout:
   exceed the window width, or use the previous/more arrows that appear at its edges. Flip commands
   use compact icons with named tooltips. Changing tools resets the strip to its start and keeps
   the canvas area at the same height.
-- The center canvas displays the CPU composite on a checkerboard transparency background.
+- The center canvas displays the GPU or CPU composite on a checkerboard transparency background.
 - The right Layers panel shows the stack from top to bottom with image/mask thumbnails, eye
   buttons, opacity, blend mode, and footer commands. Drag its left divider to resize it;
   the width is remembered locally. Adjustment properties scroll below the layer list.
 
 The status line reports import, save, export, watcher, and validation errors. The title adds
 Edited while the in-memory document is dirty.
+
+### GPU acceleration
+
+View > GPU Acceleration (Automatic Fallback) is on by default and remembers your choice.
+The canvas uses the Win2D device's hardware GPU, including compatible integrated graphics,
+for transforms, blending, masks, adjustments and layer effects. Software devices, unsupported
+shader features, texture size/memory limits and device errors use the complete CPU compositor.
+Turn the setting off to force CPU rendering; turn it on again to retry the hardware path.
+Saving, exports, source-pixel tools and solo-mask display still use CPU processing.
+See GPU canvas details (local development reference) for the measured scope and remaining limits.
 
 Tool shortcuts are V (Move), M (Rectangle), Shift+M (Ellipse), L (Lasso), W (Wand), C (Crop),
 B (Brush), E (Eraser), S (Clone), J (Healing), R (Blur), G (Gradient), T (Text), and U (Shape).
@@ -40,6 +57,39 @@ lasso draft. Otherwise it clears pixels inside the selection; on a mask, it fill
 the background gray level. An explicitly empty selection changes nothing. Without a selection,
 it removes a single targeted mask or deletes the selected layers. Text fields keep their own
 Delete/Backspace behavior. Rebinding Delete in Shortcuts also disables the default Backspace alias.
+
+## Layer animation timeline
+
+Open **View > Timeline**, then choose **Create layer animation timeline**. The default is five
+seconds at 24 fps. Duration, frame rate and looping are editable in the header. Changing frame
+rate preserves key times in seconds; shortening past an existing key is refused.
+
+Select a track by its layer name. The time ruler seeks the preview; Space plays/pauses when the
+tracks have focus, Left/Right step one frame, and Home/End go to the first/last frame. Drag the
+blue bar's ends to trim the layer's visible time, or move its body to shift the clip and its keys.
+In/Out fields use seconds; the out point is the first invisible frame.
+
+The lower fields edit center X/Y, width/height scale percentages, clockwise rotation and opacity.
+At the starting frame, choose **Add keyframe**, move the playhead, then change the desired fields
+and press Enter or leave the field. Each committed edit is one Undo. Drag a diamond to move all
+its properties together; Delete removes the current frame's keys. Linear, Ease in/out and Hold
+control the segment after the selected key. Outside the key range the nearest value is held.
+Folders and adjustment layers support opacity and visible time; animate individual drawable
+layers for position, scale and rotation.
+
+**Animation preview** keeps ordinary pixel/transform edits disabled while viewing the animation.
+Turn it off, or close the timeline, to edit the base artwork. Preview playback and seeking do not
+change source pixels or add history. Undo/Redo and Save remain available. Reopening an animated
+project restores the timeline at frame zero. New layers without tracks remain visible throughout.
+Canvas crop/size, image size and canvas flip carry position/rotation keys into the new document
+coordinates. Merging or deleting layers removes their tracks; Undo restores them.
+
+**Export PNG sequence…** writes all frames with transparency and a `sequence.json` frame-rate
+record into a new subfolder. The button becomes **Cancel export** during work; cancellation leaves
+partial frames in that subfolder without the completion record. Ordinary PNG/JPEG export and MCP
+canvas previews use the current animation frame when preview is enabled. MP4/GIF encoding, audio,
+video clips and folder transform keyframes are not implemented. Animated `.comp` projects use v12;
+current macOS builds accept v1–11 and refuse v12. Static projects remain v11.
 
 ## Canvas navigation and rulers
 

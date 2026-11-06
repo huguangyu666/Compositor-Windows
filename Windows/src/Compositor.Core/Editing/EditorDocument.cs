@@ -157,6 +157,7 @@ public sealed partial class EditorDocument
     private void EndChange()
     {
         pendingRedoRestore = null;
+        PruneAnimationTracks();
         IsDirty = true;
         if (suppressUndoHistory) return;
         TrimUndoHistory();
@@ -952,8 +953,11 @@ public sealed partial class EditorDocument
         if (flippedMap.Values.Any(transform => !transform.IsValid)) return false;
         if (manifest.Layers.Any(layer => layer.MaskPlacement is { } placement
             && !placement.Mirrored(horizontally, axis).IsValid)) return false;
+        if (!TryRemapAnimation(horizontally ? -1 : 1, horizontally ? 1 : -1,
+            horizontally ? manifest.Width : 0, horizontally ? 0 : manifest.Height, true, out var timeline)) return false;
 
         BeginChange();
+        manifest.Timeline = timeline;
         foreach (var (layer, flipped) in flippedMap)
         {
             if (layer.MaskPlacement is { } placement) layer.MaskPlacement = placement.Mirrored(horizontally, axis);
@@ -1317,8 +1321,10 @@ public sealed partial class EditorDocument
     {
         if (layerLocks.Count != 0 && Snapshot.Manifest.Layers.Any(l => !CanEditLayer(l.Id, LayerLocks.Position))) return false;
         if (width is < 1 or > Limits.MaxSide || height is < 1 or > Limits.MaxSide) return false;
+        if (!TryRemapAnimation(1, 1, -x, -y, false, out var timeline)) return false;
         BeginChange();
         var manifest = Snapshot.Manifest;
+        manifest.Timeline = timeline;
         foreach (var layer in manifest.Layers)
         {
             layer.Transform.Origin = new PointD(layer.Transform.Origin.X - x, layer.Transform.Origin.Y - y);
@@ -2184,6 +2190,7 @@ public sealed partial class EditorDocument
         if (manifest.Width == width && manifest.Height == height) return true;
         double sx = (double)width / manifest.Width;
         double sy = (double)height / manifest.Height;
+        if (!TryRemapAnimation(sx, sy, 0, 0, false, out var timeline)) return false;
 
         var savedList = manifest.Layers.ToList();
         var savedGuides = manifest.Guides?.ToList();
@@ -2271,6 +2278,7 @@ public sealed partial class EditorDocument
             RollbackImageSize(savedList, savedGuides, savedWidth, savedHeight, savedImages, savedMasks);
             return false;
         }
+        manifest.Timeline = timeline;
         EndChange();
         return true;
     }
@@ -2315,6 +2323,7 @@ public sealed partial class EditorDocument
         double offsetX = Math.Floor((width - oldWidth) * (anchor % 3) / 2.0);
         double offsetY = Math.Floor((height - oldHeight) * (anchor / 3) / 2.0);
         if (Math.Abs(offsetX) > 1_000_000 || Math.Abs(offsetY) > 1_000_000) return false;
+        if (!TryRemapAnimation(1, 1, offsetX, offsetY, false, out var timeline)) return false;
         bool grows = width > oldWidth || height > oldHeight;
         if (width == oldWidth && height == oldHeight && offsetX == 0 && offsetY == 0) return true;
 
@@ -2334,6 +2343,7 @@ public sealed partial class EditorDocument
         }
 
         BeginChange();
+        manifest.Timeline = timeline;
         foreach (var layer in manifest.Layers)
         {
             layer.Transform = Shifted(layer.Transform, offsetX, offsetY);

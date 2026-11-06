@@ -9,8 +9,10 @@ included in this release. There is no signature, installer or automatic update s
 
 ## Files
 
-- Native `.comp` folders retain layers, masks, text and adjustment metadata. Versions 1–11 are
-  read; new projects use version 11. Saving does not automatically upgrade an old manifest.
+- Native `.comp` folders retain layers, masks, text, adjustments and optional animation. Versions
+  1–12 are read; new static projects use version 11. Creating animation upgrades that document to
+  version 12 in the same Undo step. Current macOS builds reject animated v12 projects; clearing
+  animation does not downgrade them. Saving does not automatically upgrade an old manifest.
 - PSD/PSB import supports a subset of 8-bit RGB documents. Arbitrary Photoshop features and
   vector/advanced content are not guaranteed to reproduce exactly. PSD/PSB export is unavailable.
 - PNG/JPEG/TIFF and other supported Windows image formats can be imported as raster layers.
@@ -20,9 +22,14 @@ included in this release. There is no signature, installer or automatic update s
 
 ## Editing and automation
 
-The renderer is CPU based. Large selections, many layers and complex effects can still have
-noticeable latency. Some editable shape and transform interactions remain narrower than Photoshop.
+Canvas composition uses Direct3D 11 when supported, with automatic CPU fallback. Integrated GPUs
+may qualify; a dedicated graphics card is not required. Memory limits and unavailable hardware
+can select CPU rendering. Saving/export, decoding and several pixel operations remain on CPU.
+Large selections, many layers and complex effects can still have noticeable latency. Some editable shape and transform interactions remain narrower than Photoshop.
 Fonts and antialiasing may differ across systems; preserve native projects and inspect exports.
+
+The layer timeline supports editable keys and PNG sequences, without audio/video clips, MP4/GIF
+encoding or folder transform keys. See [timeline scope](timeline.md).
 
 Undo history is session-only. Layer locks are local preferences, not portable `.comp` metadata.
 Live MCP has no new-document command; open an existing project or create a blank document in the UI.

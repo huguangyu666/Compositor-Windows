@@ -204,6 +204,7 @@ public sealed partial class TransformEdit
         Format = source.Format, Version = source.Version, ColorSpace = source.ColorSpace, Resolution = source.Resolution,
         DocumentId = source.DocumentId, Width = source.Width, Height = source.Height, ActiveLayerId = source.ActiveLayerId,
         Guides = source.Guides?.Select(g => new CanvasGuide { Id = g.Id, Axis = g.Axis, Position = g.Position }).ToList(),
+        Timeline = source.Timeline?.Clone(),
         Layers = source.Layers.Select(l => new ProjectLayerRecord
         {
             Id = l.Id, Name = l.Name, IsVisible = l.IsVisible, Transform = Copy(l.Transform), ImageFile = l.ImageFile,

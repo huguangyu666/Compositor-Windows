@@ -40,8 +40,8 @@ public sealed partial class MainWindow
         if (scene.Snapshot.Images[id].Pixels[center + 3] != 0 || original.Pixels[center + 3] != 255
             || scene.Snapshot.Images[id].Pixels[3] != 255 || !ReferenceEquals(selection, scene.ActiveSelection))
             throw new InvalidOperationException("Clear changed its source, selection or pixels outside the rectangle.");
-        if (fullTarget!.GetPixelBytes(2048, 2048, 1, 1).Any(value => value != 0)
-            || fullTarget.GetPixelBytes(0, 0, 1, 1).Any(value => value != 255))
+        if (presented!.GetPixelBytes(2048, 2048, 1, 1).Any(value => value != 0)
+            || presented.GetPixelBytes(0, 0, 1, 1).Any(value => value != 255))
             throw new InvalidOperationException("The 4K clear GPU spot checks do not match.");
         OnUndo(this, new()); await WaitForFramesAsync();
         if (scene.CanUndo || !ReferenceEquals(original, scene.Snapshot.Images[id])) throw new InvalidOperationException("Clear did not undo once.");

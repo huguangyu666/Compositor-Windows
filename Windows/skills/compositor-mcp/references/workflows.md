@@ -3,6 +3,22 @@
 Use these examples with the current schemas and fresh editor state. Symbolic tokens and IDs below
 must be replaced with actual returned values; they are not executable project identifiers.
 
+## Layer animation
+
+Create a timeline with `editor_timeline` `operation=settings`, for example 120 frames at 24 fps.
+Choose a drawable layer ID from state. Set a starting key at frame 0, then an ending key at frame
+48. `values` uses absolute layer centers (`positionX/positionY`), base-size multipliers
+(`scaleX/scaleY`), clockwise degrees (`rotation`) and opacity 0–1. Set `interpolation=smooth`
+on the starting key for ease in/out. Keys and clips are ordinary Undo steps.
+
+Use `operation=seek, frame=24` and `editor_preview` to inspect interpolation. Seeking and preview
+do not change source pixels or history. `operation=clip` sets inclusive `inFrame` and exclusive
+`outFrame`. `editor_save` retains editable animation; `editor_export` exports the current preview
+frame. The GUI also exports an entire transparent PNG sequence. Disable preview with
+`operation=preview, enabled=false` before ordinary layer/pixel edits. Current macOS builds reject
+animated v12 packages; static Windows projects remain v11. There is no video/audio timeline or
+MP4/GIF encoder in this feature.
+
 ## Photography grading
 
 Infer the goal from the request and image: natural correction, a visibly stylized grade, or a

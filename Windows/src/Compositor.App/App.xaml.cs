@@ -14,6 +14,13 @@ public partial class App : Application
         // Start the consumer before anything can fail: its first disk access happens on its own
         // thread, so this cannot delay the window.
         AppLogging.Start();
+        // Unpackaged XAML and ResourceLoader need the same language before either loads resources.
+        string uiLanguage = UiLanguage.Resolve(System.Globalization.CultureInfo.CurrentUICulture.Name);
+#if DEBUG
+        uiLanguage = UiLanguage.Resolve(Environment.GetEnvironmentVariable("COMPOSITOR_PROBE_UI_LANGUAGE") ?? uiLanguage);
+#endif
+        Microsoft.Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = uiLanguage;
+        System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(uiLanguage);
         InitializeComponent();
         // The Mac pins dark for the whole app (NSApp.appearance = darkAqua); setting it at
         // the application level (before any window exists) carries flyouts and dialogs too,
@@ -48,6 +55,12 @@ public partial class App : Application
             MainAppWindow = projectPath is null ? new MainWindow() : new MainWindow(projectPath);
             MainAppWindow.Activate();
 #if DEBUG
+            if (Environment.GetCommandLineArgs().Contains("--layer-drag-perf") && MainAppWindow is MainWindow layerDragWindow)
+                layerDragWindow.DispatcherQueue.TryEnqueue(async () => await layerDragWindow.RunLayerDragPerfProbeAsync());
+            if (Environment.GetCommandLineArgs().Contains("--timeline-probe") && MainAppWindow is MainWindow timelineWindow)
+                timelineWindow.DispatcherQueue.TryEnqueue(async () => await timelineWindow.RunTimelineProbeAsync());
+            if (Environment.GetCommandLineArgs().Contains("--localization-probe") && MainAppWindow is MainWindow localizationWindow)
+                localizationWindow.DispatcherQueue.TryEnqueue(async () => await localizationWindow.RunLocalizationProbeAsync());
             if (Environment.GetCommandLineArgs().Contains("--ai-image-probe") && MainAppWindow is MainWindow aiImageWindow)
                 aiImageWindow.DispatcherQueue.TryEnqueue(async () => await aiImageWindow.RunAiImageProbeAsync());
             if (Environment.GetCommandLineArgs().Contains("--draft-exit-probe") && MainAppWindow is MainWindow draftExitWindow)

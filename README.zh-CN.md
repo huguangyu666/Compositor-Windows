@@ -4,7 +4,7 @@
 
 免费开源的 Windows 图像编辑器，采用 C# 和 WinUI 3。支持图层合成、摄影调色、AI 图像编辑，以及通过 MCP 让外部 AI 直接操作软件。
 
-**公开测试版 · Windows x64。** [下载 Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261105.1)。
+**公开测试版 · Windows x64。** [下载 Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261106)。
 双击 `Compositor.App.exe` 即可启动，已内置 .NET 和 WinUI 运行库；完整 ZIP 另含 MCP 程序、配套 Skill、中文说明和许可证。
 
 当前版本未签名，已在开发电脑上完成基本编辑、保存重开等验证，尚未验证干净系统和更多硬件环境。
@@ -16,6 +16,9 @@
 ## 主要能力
 
 - 图层、文件夹、混合模式、透明度、蒙版、调整层和图层效果。
+- Direct3D 11 画布加速，支持自动 CPU 回退和记忆开关。
+- 图层动画时间轴：出现时间、位置、缩放、旋转和透明度关键帧，支持预览和 PNG 序列导出。
+- 随 Windows 显示语言统一使用简体中文或英文界面。
 - 选区、画笔、裁切、变换、对齐，以及可编辑文字和形状。
 - 使用曲线、色彩平衡和局部蒙版调整进行摄影调色。
 - 自行填写兼容服务的 API 地址与 Key，结合选区和参考图生成，预览后接受为可撤销图层。
@@ -24,7 +27,7 @@
 
 ## 让 AI 直接操作编辑器
 
-提供 **28 个实时编辑工具＋6 个项目文件工具**，实时操作进入正常编辑流程和撤销历史。
+提供 **29 个实时编辑工具＋6 个项目文件工具**，实时操作进入正常编辑流程和撤销历史。
 配套 [compositor-mcp Skill](Windows/skills/compositor-mcp/SKILL.md) 包含调色、排版、蒙版、AI 预览与保存流程，
 安装方法见 [MCP 文档](Windows/docs/mcp.md)。
 
@@ -88,3 +91,7 @@ GitHub Windows CI 执行组件测试、生成两个 EXE 并验证 MCP 工具发�
 实验性账号适配器参考了 [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) 的 OAuth 与图像协议，
 参考提交为 `1f917e77c4562623aa49e9804d999524151a2f96`，使用原生 C# 实现，没有内置代理 EXE。
 其 [MIT 许可](Windows/third-party/CLIProxyAPI-LICENSE.txt) 随仓库保留。
+
+GPU 画布使用 Amer Koleci 及贡献者的 [Vortice.Windows](https://github.com/amerkoleci/Vortice.Windows)
+和 [Win2D](https://github.com/microsoft/Win2D)；保留 [Vortice MIT 许可](Windows/third-party/Vortice-LICENSE.txt)，
+仓库包含着色器源码与编译后的 SM5 字节码。

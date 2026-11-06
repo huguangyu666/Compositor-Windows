@@ -165,7 +165,7 @@ public sealed partial class MainWindow
             var samplePoint = viewport.ToView(new(50.5, 60.5));
             Require(BeginNavigationAt(samplePoint, false, false), "Eyedropper did not start.");
             report["compositeSample"] = new { red = (int)foregroundColor.R, green = (int)foregroundColor.G, blue = (int)foregroundColor.B,
-                premultipliedBgra = fullTarget?.GetPixelBytes(50, 60, 1, 1).Select(value => (int)value).ToArray() };
+                premultipliedBgra = presented?.GetPixelBytes(50, 60, 1, 1).Select(value => (int)value).ToArray() };
             Require(foregroundColor.R == 199 && foregroundColor.G == 100 && foregroundColor.B == 0, "Composite sample failed to unpremultiply sRGB.");
             Require(SampleRingCanvas.Visibility == Visibility.Visible, "Sample ring was not shown."); EndNavigationAt(samplePoint, false);
             var sampled = foregroundColor;

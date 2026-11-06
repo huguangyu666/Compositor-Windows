@@ -1046,7 +1046,8 @@ public sealed partial class MainWindow
 
     private async Task ExportAsync(bool jpeg)
     {
-        if (IsFileImporting) return;
+        if (IsFileImporting || timelineExporting) return;
+        StopTimelinePlayback(); CommitTimelineFields();
         var requestedOwner = document;
         await FinishTransformBeforeOutputAsync();
         if (windowClosed || !ReferenceEquals(document, requestedOwner)) return;
@@ -1120,7 +1121,8 @@ public sealed partial class MainWindow
             // The render is pure CPU work over an immutable snapshot — run it off the UI
             // thread; the encoding that follows stays in this async context.
             var (bytes, status) = await ExportBytesAndStatusAsync(
-                document.Snapshot, System.IO.Path.GetFileName(file.Path), jpeg, quality, matte);
+                TimelinePreviewActive ? AnimationEvaluator.Evaluate(CaptureEditorSnapshot(document.Snapshot), timelineFrame) : document.Snapshot,
+                System.IO.Path.GetFileName(file.Path), jpeg, quality, matte);
             await File.WriteAllBytesAsync(file.Path, bytes);
             SetStatus(status);
         }

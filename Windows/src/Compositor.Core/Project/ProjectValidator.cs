@@ -85,6 +85,8 @@ public static class ProjectValidator
             throw new ProjectFormatException(ProjectErrorKind.Invalid);
 
         ValidateGuides(manifest);
+        if (manifest.Timeline is { } timeline && (manifest.Version < 12 || !timeline.IsValidFor(manifest.Layers)))
+            throw new ProjectFormatException(ProjectErrorKind.Invalid);
     }
 
     private static void ValidateGuides(ProjectManifest manifest)

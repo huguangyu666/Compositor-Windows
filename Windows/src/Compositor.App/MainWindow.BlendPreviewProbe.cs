@@ -28,7 +28,7 @@ public sealed partial class MainWindow
             Require(await WaitUntilAsync(() => blendPickerSession is null, 2000), "The closed blend picker retained its session.");
             await WaitForFramesAsync();
         }
-        var originalFrame = fullTarget!.GetPixelBytes();
+        var originalFrame = presented!.GetPixelBytes();
         await Open(); var screen = Item(LayerBlendMode.Screen);
         var groups = BlendCombo.Items.OfType<ComboBoxItem>().Select(item => new { mode = item.Tag.ToString(),
             border = item.BorderThickness.ToString(), top = item.BorderThickness.Top, left = item.BorderThickness.Left,
@@ -45,7 +45,7 @@ public sealed partial class MainWindow
             && !scene.CanUndo && !scene.IsDirty && blendPreview?.Mode == LayerBlendMode.Screen, "Hovering edited the live document/history or lost its highlighted mode.");
         Require(ReferenceEquals(warm, compositor) && rows.All(row => layerRows.Values.Contains(row)), "Blend preview discarded compositor/row caches.");
         var preview = blendPreview!; AssertTransformUpload(preview.Snapshot.Value);
-        Require(!originalFrame.AsSpan().SequenceEqual(fullTarget.GetPixelBytes()), "The hover fixture showed no visible change.");
+        Require(!originalFrame.AsSpan().SequenceEqual(presented.GetPixelBytes()), "The hover fixture showed no visible change.");
         int beforeRepeat = presentedFrameCount; PreviewBlendItem(screen); await WaitForFramesAsync();
         Require(ReferenceEquals(preview, blendPreview) && presentedFrameCount == beforeRepeat, "The same highlighted mode rendered twice.");
         await Cancel();
@@ -56,8 +56,8 @@ public sealed partial class MainWindow
         await Open(); PreviewBlendItem(screen); await WaitForFramesAsync();
         Require(blendPreview?.Mode == LayerBlendMode.Screen, "The popup's stored-item focus replaced the hover before choosing.");
         AssertTransformUpload(blendPreview!.Snapshot.Value);
-        var expected = fullTarget.GetPixelBytes(8, 8, 1, 1); var published = new List<byte[]>();
-        frameTimelineProbe = name => { if (name == "pixels-uploaded") published.Add(fullTarget.GetPixelBytes(8, 8, 1, 1)); };
+        var expected = presented.GetPixelBytes(8, 8, 1, 1); var published = new List<byte[]>();
+        frameTimelineProbe = name => { if (name == "pixels-uploaded") published.Add(presented.GetPixelBytes(8, 8, 1, 1)); };
         try
         {
             BlendCombo.SelectedItem = screen;
@@ -65,7 +65,7 @@ public sealed partial class MainWindow
             Require(SelectedLayer?.BlendMode == LayerBlendMode.Screen && scene.CanUndo && blendPreview is null,
                 "Choosing a blend item did not commit its mode once.");
             report["blendChoicePublication"] = new { expected = Convert.ToHexString(expected),
-                frames = published.Select(Convert.ToHexString).ToArray(), current = Convert.ToHexString(fullTarget.GetPixelBytes(8, 8, 1, 1)) };
+                frames = published.Select(Convert.ToHexString).ToArray(), current = Convert.ToHexString(presented.GetPixelBytes(8, 8, 1, 1)) };
             Require(published.Count > 0 && published.All(frame => frame.AsSpan().SequenceEqual(expected)), "Choosing a blend item flashed back to the old mode.");
             AssertUploadedFrame(scene);
         }

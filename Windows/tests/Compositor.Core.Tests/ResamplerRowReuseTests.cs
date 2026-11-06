@@ -5,6 +5,24 @@ namespace Compositor.Core.Tests;
 
 public class ResamplerRowReuseTests
 {
+    [Theory]
+    [InlineData(LayerSampling.Smooth, false)]
+    [InlineData(LayerSampling.Smooth, true)]
+    [InlineData(LayerSampling.HighQuality, false)]
+    [InlineData(LayerSampling.HighQuality, true)]
+    public void LargePhotoDrawMatchesSerialBandsAcrossPartitionEdges(LayerSampling sampling, bool flipY)
+    {
+        var source = Pattern(671, 527); var before = source.Pixels.ToArray();
+        var transform = new LayerTransform { Origin = new(-3.25, 7.5), Size = new(1297.75, 1026.125),
+            Sampling = sampling, FlipX = !flipY, FlipY = flipY };
+        var actual = Pattern(1301, 1033); var expected = actual.Clone();
+        for (int y = 3; y < 1031; y += 19)
+            Resampler.Draw(source, transform, expected, 3, y, 1299, Math.Min(1031, y + 19));
+        Resampler.Draw(source, transform, actual, 3, 3, 1299, 1031);
+        Assert.Equal(expected.Pixels, actual.Pixels);
+        Assert.Equal(before, source.Pixels);
+    }
+
     // Captured from 20cc708 before sharing horizontal rows between output rows.
     [Theory]
     [InlineData(LayerSampling.Smooth, false, false, "44CFF4D7C06A736E6487328053620F4625FC9FA623128519A463311C19B97962")]

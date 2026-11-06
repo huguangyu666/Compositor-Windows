@@ -5,7 +5,7 @@
 A free, open-source Windows image editor built with C# and WinUI 3. Compose layers, edit photos,
 and let an external AI agent operate the editor through MCP.
 
-**Public Beta · Windows x64.** [Download the Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261105.1).
+**Public Beta · Windows x64.** [Download the Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261106).
 Run `Compositor.App.exe` directly; .NET and WinUI runtimes are bundled. The complete ZIP also
 includes the optional MCP server, agent skill, instructions and licenses.
 
@@ -20,6 +20,9 @@ saved the project and exported the image. The background artwork was generated s
 ## What you can do
 
 - Compose images with layers, folders, blend modes, opacity, masks, adjustments and effects.
+- Accelerate canvas composition with Direct3D 11, with automatic CPU fallback and a persistent switch.
+- Animate layer visibility, position, scale, rotation and opacity; preview and export PNG sequences.
+- Use a consistent Chinese or English interface selected from the Windows display language.
 - Select, paint, crop, transform and arrange images; create editable text and shapes.
 - Grade photos with Curves, Color Balance and locally masked adjustments.
 - Configure a compatible image API, use selections and reference images, preview results and
@@ -29,7 +32,7 @@ saved the project and exported the image. The background artwork was generated s
 
 ## Let AI operate the editor
 
-The MCP server exposes **28 live editing tools and 6 saved-project tools**. Local editing uses
+The MCP server exposes **29 live editing tools and 6 saved-project tools**. Local editing uses
 the editor's normal operations and Undo history. The bundled
 [compositor-mcp skill](Windows/skills/compositor-mcp/SKILL.md) provides workflows for grading,
 layout, masks, AI preview and saving. See [connection and skill setup](Windows/docs/mcp.md).
@@ -99,3 +102,7 @@ The experimental account adapter references the OAuth/image protocol from
 [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI), commit
 `1f917e77c4562623aa49e9804d999524151a2f96`, under its
 [MIT license](Windows/third-party/CLIProxyAPI-LICENSE.txt). It is implemented in C# and bundles no proxy executable.
+
+Canvas GPU integration uses [Vortice.Windows](https://github.com/amerkoleci/Vortice.Windows)
+by Amer Koleci and contributors under its [MIT license](Windows/third-party/Vortice-LICENSE.txt),
+and [Win2D](https://github.com/microsoft/Win2D). Shader sources and compiled SM5 bytecode are included.

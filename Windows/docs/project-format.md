@@ -27,7 +27,7 @@ has no image asset and groups child records by parentID.
 
 ## Version behavior
 
-The reader accepts manifest versions 1 through 11. A new Windows document defaults to version 11.
+The reader accepts manifest versions 1 through 12. A new static Windows document defaults to version 11.
 The saver writes the version number held in the manifest; it does not migrate an opened older
 manifest automatically. Thus, reading v1–v11 is not the same as upgrading every old project to v11.
 
@@ -46,6 +46,14 @@ The validator enforces the following introduction gates:
 | 9 | Gaussian Blur, Motion Blur, and Add Noise adjustments |
 | 10 | Text colorRuns |
 | 11 | Text fontRuns |
+| 12 | Optional layer-animation timeline; currently implemented on Windows |
+
+Creating a timeline upgrades the manifest to v12 as part of the same Undo step. Static documents
+stay v11 by default. Current macOS builds reject v12. See the canonical
+[v12 animation schema](../../docs/project-format.md#version-12-layer-animation-windows) for track
+names, ranges and interpolation. Playback evaluates a metadata copy while sharing source assets;
+it does not serialize transient frames, change source pixels or add Undo steps. Windows project
+saves retain the existing asset-first, atomic-manifest-last contract.
 
 The Windows model can represent adjustment, mask, text, guide, folder, transform, shape, and
 effects records. Shape and layer-effect JSON is stored as an opaque JSON value; Windows creates

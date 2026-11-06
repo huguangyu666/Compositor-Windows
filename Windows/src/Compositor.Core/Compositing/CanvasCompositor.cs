@@ -242,7 +242,9 @@ public sealed partial class CanvasCompositor
     /// <param name="interactive">A transient frame of a live placement drag (move or
     /// transform): layers place from the position-free content cache instead of re-resampling
     /// the source, and nothing is stored — the frame that settles recomputes exactly.</param>
-    public Surface Render(int x0, int y0, int x1, int y1, bool interactive = false)
+    /// <param name="cacheAdjustments">Store recomputed adjustment output for reuse. Exact
+    /// transform drafts can skip these copies without changing source sampling.</param>
+    public Surface Render(int x0, int y0, int x1, int y1, bool interactive = false, bool cacheAdjustments = true)
     {
         maskDisplayId = null;
         x0 = Math.Clamp(x0, 0, canvas.Width);
@@ -258,7 +260,7 @@ public sealed partial class CanvasCompositor
         for (int index = 0; index < drawnOrder.Count; index++)
         {
             if (!byId.TryGetValue(drawnOrder[index], out var layer)) continue;
-            DrawLayer(layer, x0, y0, x1, y1, index, interactive, prints);
+            DrawLayer(layer, x0, y0, x1, y1, index, interactive, prints, cacheAdjustments);
         }
         RememberRenderedMaskGeometry();
         return canvas;
@@ -370,7 +372,7 @@ public sealed partial class CanvasCompositor
         return false;
     }
 
-    private void DrawLayer(ProjectLayerRecord layer, int rx0, int ry0, int rx1, int ry1, int drawnIndex, bool interactive, ulong[] prints)
+    private void DrawLayer(ProjectLayerRecord layer, int rx0, int ry0, int rx1, int ry1, int drawnIndex, bool interactive, ulong[] prints, bool cacheAdjustments = true)
     {
         ulong fingerprint = prints[drawnIndex];
         ulong belowFingerprint = BelowFingerprint(drawnIndex, prints);
@@ -378,7 +380,7 @@ public sealed partial class CanvasCompositor
         // An adjustment layer changes the pixels below it within its own transform rect.
         if (layer.Adjustment is { } adjustment)
         {
-            DrawAdjustment(layer, adjustment, rx0, ry0, rx1, ry1, cache, belowFingerprint, interactive);
+            DrawAdjustment(layer, adjustment, rx0, ry0, rx1, ry1, cache, belowFingerprint, cacheAdjustments && !interactive);
             return;
         }
 
@@ -872,9 +874,9 @@ public sealed partial class CanvasCompositor
     /// by the sampling halo blur kinds need) and blended back through the layer's masks,
     /// opacity and blend mode. The adjusted content is cached against the layer's settings
     /// and the below-fingerprint, so moving one layer re-runs the adjustment across the
-    /// changed rectangle only. An interactive frame neither reads a below-stale cache nor stores.
+    /// changed rectangle only. Transient frames may reuse a current cache without storing output.
     /// </summary>
-    private void DrawAdjustment(ProjectLayerRecord layer, LayerAdjustment adjustment, int rx0, int ry0, int rx1, int ry1, LayerCache? cache, ulong belowFingerprint, bool interactive)
+    private void DrawAdjustment(ProjectLayerRecord layer, LayerAdjustment adjustment, int rx0, int ry0, int rx1, int ry1, LayerCache? cache, ulong belowFingerprint, bool cacheOutput)
     {
         var (bx0, by0, bx1, by1) = bounds[layer.Id];
         int x0 = Math.Max(bx0, rx0);
@@ -891,18 +893,19 @@ public sealed partial class CanvasCompositor
         if (copyX0 >= copyX1 || copyY0 >= copyY1) return;
 
         // The adjusted content depends on everything below it: a below-layer change (a moved
-        // layer, a stroke) invalidates the cache before the coverage check. An interactive frame
-        // never stores into the cache — and must not hit one whose below content changed,
+        // layer, a stroke) invalidates the cache before the coverage check. A transient frame
+        // can leave the old cache intact, but must not hit one whose below content changed,
         // or the drag would paint the frozen pre-move composite.
         bool belowChanged = cache is not null && cache.BelowFingerprint != belowFingerprint;
-        if (!interactive && cache is not null && belowChanged)
+        if (cacheOutput && cache is not null && belowChanged)
         {
             cache.BelowFingerprint = belowFingerprint;
             cache.Valid.Clear();
         }
 
-        bool store = cache is not null && !interactive;
+        bool store = cache is not null && cacheOutput;
         var mode = layer.BlendMode ?? LayerBlendMode.Normal;
+        double opacity = LiveOpacity(layer);
         Surface target;
         if (cache is not null && !belowChanged && Covered(cache.Valid, copyX0, copyY0, copyX1, copyY1))
         {
@@ -910,6 +913,19 @@ public sealed partial class CanvasCompositor
         }
         else
         {
+            // A full-strength point adjustment with no coverage, or one aligned pixel mask,
+            // can work on the canvas itself. Keep settled cache pixels without a round trip.
+            if (mode == LayerBlendMode.Normal && opacity >= 1 && margin == 0 && TryAdjustInPlace(layer, adjustment, copyX0, copyY0, copyX1, copyY1))
+            {
+                if (store)
+                {
+                    for (int y = copyY0; y < copyY1; y++)
+                        Array.Copy(canvas.Pixels, y * canvas.Stride + copyX0 * 4,
+                            cache!.Buffer.Pixels, y * cache.Buffer.Stride + copyX0 * 4, (copyX1 - copyX0) * 4);
+                    cache!.Valid.Add((copyX0, copyY0, copyX1, copyY1));
+                }
+                return;
+            }
             target = store ? cache!.Buffer : SharedLayerBuffer;
             ClearBufferRegion(target, copyX0, copyY0, copyX1, copyY1);
             for (int y = copyY0; y < copyY1; y++)
@@ -929,7 +945,6 @@ public sealed partial class CanvasCompositor
             if (store) cache!.Valid.Add((copyX0, copyY0, copyX1, copyY1));
         }
 
-        double opacity = LiveOpacity(layer);
         if (mode == LayerBlendMode.Normal)
         {
             // The adjusted buffer IS the content below, reprocessed: a Normal adjustment
@@ -969,6 +984,28 @@ public sealed partial class CanvasCompositor
             // the PDF rule does — over a fully transparent backdrop the adjusted color wins.
             Composite(target, mode, (float)opacity, copyX0, copyY0, copyX1, copyY1);
         }
+    }
+
+    private bool TryAdjustInPlace(ProjectLayerRecord layer, LayerAdjustment adjustment, int x0, int y0, int x1, int y1)
+    {
+        if (layer.MaskSourceId is not null) return false;
+        Guid? parent = layer.ParentId;
+        int depth = 0;
+        while (parent is { } id && depth++ < 64 && byId.TryGetValue(id, out var folder))
+        {
+            if (layerMasks.GetValueOrDefault(id) is not null) return false;
+            parent = folder.ParentId;
+        }
+        if (layerMasks.GetValueOrDefault(layer.Id) is { } mask)
+        {
+            var placement = Scaled(layer.MaskPlacement ?? layer.Transform);
+            if (mask.Width != canvas.Width || mask.Height != canvas.Height || placement.Origin != new PointD(0, 0)
+                || placement.Size != new SizeD(canvas.Width, canvas.Height) || placement.Rotation != 0 || placement.FlipX || placement.FlipY)
+                return false;
+            return AdjustmentEngine.TryApplyMaskedPoint(adjustment, mask, canvas, x0, y0, x1, y1);
+        }
+        AdjustmentEngine.Apply(adjustment, canvas, x0, y0, x1, y1);
+        return true;
     }
 
     /// <summary>
@@ -1073,27 +1110,55 @@ public sealed partial class CanvasCompositor
         double radians = transform.Radians;
         double cos = Math.Cos(radians), sin = Math.Sin(radians);
         double width = transform.Size.Width, height = transform.Size.Height;
+        // Document-sized masks on photo adjustments usually share the pixel grid. Their
+        // centers map directly to integer indices; no inverse transform is needed per pixel.
+        bool aligned = radians == 0 && width == mask.Width && height == mask.Height
+            && transform.Origin.X == Math.Truncate(transform.Origin.X) && transform.Origin.Y == Math.Truncate(transform.Origin.Y)
+            && Math.Abs(transform.Origin.X) <= int.MaxValue && Math.Abs(transform.Origin.Y) <= int.MaxValue;
+        int originX = aligned ? (int)transform.Origin.X : 0, originY = aligned ? (int)transform.Origin.Y : 0;
 
-        for (int y = y0; y < y1; y++)
+        if ((long)(x1 - x0) * (y1 - y0) >= AdjustmentEngine.ParallelPointPixels)
+            Parallel.For(y0, y1, AdjustmentEngine.ParallelPointOptions, ApplyRow);
+        else
+            for (int y = y0; y < y1; y++) ApplyRow(y);
+
+        void ApplyRow(int y)
         {
             double localY = y + 0.5 - center.Y;
             for (int x = x0; x < x1; x++)
             {
-                double localX = x + 0.5 - center.X;
-                double boxX = localX * cos + localY * sin;
-                double boxY = -localX * sin + localY * cos;
-                double unitX = boxX / width + 0.5, unitY = boxY / height + 0.5;
-                if (transform.FlipX) unitX = 1 - unitX;
-                if (transform.FlipY) unitY = 1 - unitY;
-                double pixelX = unitX * mask.Width, pixelY = unitY * mask.Height;
-                byte coverage = SampleMask(mask, pixelX, pixelY, outside);
+                byte coverage;
+                if (aligned)
+                {
+                    long mx = (long)x - originX, my = (long)y - originY;
+                    if (transform.FlipX) mx = mask.Width - 1 - mx;
+                    if (transform.FlipY) my = mask.Height - 1 - my;
+                    coverage = mx < 0 || mx >= mask.Width || my < 0 || my >= mask.Height ? outside
+                        : mask.Pixels[(int)my * mask.Width + (int)mx];
+                }
+                else
+                {
+                    double localX = x + 0.5 - center.X;
+                    double boxX = localX * cos + localY * sin;
+                    double boxY = -localX * sin + localY * cos;
+                    double unitX = boxX / width + 0.5, unitY = boxY / height + 0.5;
+                    if (transform.FlipX) unitX = 1 - unitX;
+                    if (transform.FlipY) unitY = 1 - unitY;
+                    coverage = SampleMask(mask, unitX * mask.Width, unitY * mask.Height, outside);
+                }
                 if (coverage == 255) continue;
                 int index = y * target.Stride + x * 4;
                 if (backdrop is not null)
                 {
+                    int backdropIndex = y * backdrop.Stride + x * 4;
+                    if (coverage == 0)
+                    {
+                        Unsafe.WriteUnaligned(ref target.Pixels[index], Unsafe.ReadUnaligned<uint>(ref backdrop.Pixels[backdropIndex]));
+                        continue;
+                    }
                     for (int channel = 0; channel < 4; channel++)
                         target.Pixels[index + channel] = (byte)((target.Pixels[index + channel] * coverage
-                            + backdrop.Pixels[index + channel] * (255 - coverage) + 127) / 255);
+                            + backdrop.Pixels[backdropIndex + channel] * (255 - coverage) + 127) / 255);
                     continue;
                 }
                 if (coverage == 0)

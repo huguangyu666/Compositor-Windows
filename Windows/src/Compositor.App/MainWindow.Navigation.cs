@@ -266,9 +266,9 @@ public sealed partial class MainWindow
     private bool SamplePalette(PointD viewPoint, bool background)
     {
         var pixel = viewport.ToDocument(viewPoint);
-        if (fullTarget is null || document is null || HasPendingInteraction || HasPendingDirty || workerBusy
+        if (presented is null || document is null || HasPendingInteraction || HasPendingDirty || workerBusy
             || pixel.X < 0 || pixel.Y < 0 || pixel.X >= document.Snapshot.Manifest.Width || pixel.Y >= document.Snapshot.Manifest.Height) return false;
-        var bytes = fullTarget.GetPixelBytes((int)Math.Floor(pixel.X), (int)Math.Floor(pixel.Y), 1, 1);
+        var bytes = presented.GetPixelBytes((int)Math.Floor(pixel.X), (int)Math.Floor(pixel.Y), 1, 1);
         if (CompositeColor.FromBgra(bytes) is not { } color) return false;
         var sampled = Microsoft.UI.ColorHelper.FromArgb(255, color.Red, color.Green, color.Blue);
         if (background) backgroundColor = sampled; else foregroundColor = sampled;

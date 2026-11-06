@@ -54,7 +54,7 @@ public class CameraRawCurvePresetTests
         nudged[1] = new CurvePoint(0.25, 0.19);
         Assert.Equal(CameraRawCurvePresets.Custom, CameraRawCurvePresets.Matching(nudged));
         // And a curve that contains another preset's points in a different order is not that preset either.
-        var reordered = Points(CameraRawCurvePresets.StrongContrast).Reverse().ToArray();
+        var reordered = Points(CameraRawCurvePresets.StrongContrast).AsEnumerable().Reverse().ToArray();
         Assert.Equal(CameraRawCurvePresets.Custom, CameraRawCurvePresets.Matching(reordered));
     }
 

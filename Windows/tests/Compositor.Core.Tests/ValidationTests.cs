@@ -41,7 +41,7 @@ public class ValidationTests
 
     [Theory]
     [InlineData(0)]
-    [InlineData(12)]
+    [InlineData(13)]
     [InlineData(-1)]
     public void RejectsUnsupportedVersions(int version)
     {

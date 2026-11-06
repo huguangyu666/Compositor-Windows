@@ -55,6 +55,7 @@ into shared `.comp` packages and saved-package tools do not have this local edit
 | --- | --- |
 | `editor_list` | List running editor PIDs; supply `appPid` if more than one is open. |
 | `editor_state` | Read the live document token/revision, dimensions, layers, selection, undo/redo and AI status. |
+| `editor_timeline` | Create/update `settings`, `seek` a frame, toggle `preview`, add `keyframe`, trim `clip`, `deleteKeyframe`, `moveKeyframe`, `shiftTrack` or `clear`. Positions are absolute layer centers; scales are base-size multipliers. Content edits are one Undo. Seeking/preview do not add history. Current animation frame is used by preview and export. |
 | `editor_preview` | Return an MCP PNG image: `view=canvas`, `result`, `original`, `layer`, or `mask`. Layer/mask views require `layerId`. `maxSide=64..2048`, default 1024. Optional `region={x,y,width,height}` crops document pixels, or raw mask-grid pixels for mask view. Mask previews are opaque grayscale. No upload or disk write. |
 | `editor_mask` | Refine a raster mask through native document-space `paint` points, mask-pixel `feather/expand/contract`, `invert`, opaque grayscale PNG `import`, `enable/disable` or `remove`. Gray values retain partial coverage. Brush value 0 hides, 255 reveals; radius .5–250, opacity greater than 0 through 1, hardness 0–1. Filters take amount 1–250. Import preserves the current mask grid and placement. The active selection constrains pixel edits by default (`respectSelection=false` ignores it). One Undo; source image pixels stay unchanged. |
 | `editor_mask_color` | Add an editable raster mask revealing matching colors. Requires `layerId`, 1–16 flat RGB triplets in `colors`, and optional `fuzziness=0..200` (default 40). Uses the existing binary Color Range algorithm, preserves source pixels, refuses an existing mask, and adds one undo step. |
@@ -81,6 +82,28 @@ into shared `.comp` packages and saved-package tools do not have this local edit
 | `editor_layer_visibility` | Set `visible` for `layerId`; one Undo. |
 | `editor_layer_opacity` | Set `opacity=0..1` for `layerId`; out-of-range values are refused. One Undo. |
 | `editor_layer_blend` | Set an advertised `blendMode` for a non-folder `layerId`, such as `Multiply` or `Soft Light`. Exact case-sensitive manifest names; one Undo. |
+
+`editor_state.timeline` includes duration, frame rate, loop, current frame, preview/playback state
+and serialized tracks (or null for a static document). `editor_timeline` uses integer frames;
+`inFrame` is inclusive and `outFrame` exclusive. `values` accepts `positionX`, `positionY`,
+`scaleX`, `scaleY`, `rotation` and `opacity`; interpolation is `linear`, `smooth` or `hold`.
+Folders and adjustments support opacity/clip only. `properties` optionally limits key removal or
+movement; moving to an occupied property frame replaces that key. Settings default to 120 frames,
+24 fps and loop enabled. Frame-rate changes preserve seconds. Disable animation preview with
+`operation=preview, enabled=false` before ordinary pixel/layer edits. Save, history and export work
+with preview enabled; seek and playback leave document history and source pixels untouched.
+
+Example, with fresh token/revision on each dependent call:
+
+```json
+{"operation":"settings","durationFrames":120,"framesPerSecond":24}
+{"operation":"keyframe","layerId":"<id>","frame":0,"values":{"positionX":100,"positionY":200,"opacity":0},"interpolation":"smooth"}
+{"operation":"keyframe","layerId":"<id>","frame":48,"values":{"positionX":500,"positionY":200,"opacity":1}}
+{"operation":"seek","frame":24}
+```
+
+Then use `editor_preview` to inspect the middle frame. Timeline is excluded from `editor_batch`.
+No animation operation uploads an image or requests a cloud model.
 
 All write tools require the latest `documentToken` and integer `revision` returned by
 `editor_state`. Read again after each write. A stale target is refused before changing anything.
@@ -146,7 +169,7 @@ rename, visibility, opacity, blend mode, combined transform/linked mask, reorder
 deletion; it checks exact Undo/Redo metadata, restored UI selection, invalid/stale requests,
 AI-preview exclusion and saved pixels. A separate custom API group checks editable endpoints,
 settings persistence, saved credentials, preview and Undo. All cloud responses are simulated.
-Discovery exposes 34 tools: 28 live tools and six package tools. Original package/watcher interoperability remains
+Discovery exposes 35 tools: 29 live tools and six package tools. Original package/watcher interoperability remains
 a separate probe.
 
 ## Build and launch

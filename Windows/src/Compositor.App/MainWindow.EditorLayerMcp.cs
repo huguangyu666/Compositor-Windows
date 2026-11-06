@@ -141,7 +141,7 @@ public sealed partial class MainWindow
     {
         layerSelectionRequest++; layerSelectionPointerTarget = null; effectSelection = null;
         bool solo = maskAloneLayerId is not null;
-        selectedLayerId = id; selectedLayerIds.Clear();
+        selectedLayerId = id; timelineLayer = id; selectedLayerIds.Clear();
         if (id is { } selected)
         {
             selectedLayerIds.Add(selected);

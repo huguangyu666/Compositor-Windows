@@ -11,3 +11,5 @@
 - [单文件 EXE 发布配置](docs/portable-build.md)
 
 源码位于 `src/`，测试位于 `tests/`，解决方案为 `Compositor.Windows.slnx`。
+
+本版新增 [GPU 加速与 CPU 回退](docs/gpu-rendering.md)、[图层动画时间轴](docs/timeline.md)，并统一中英文自动适配。

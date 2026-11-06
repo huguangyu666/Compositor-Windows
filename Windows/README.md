@@ -13,3 +13,6 @@ build commands and credits.
 
 The implementation is under `src/`; component tests are under `tests/`. The solution is
 `Compositor.Windows.slnx`. Build output belongs in ignored `artifacts/`, `bin/` and `obj/` folders.
+
+This version adds [GPU composition with CPU fallback](docs/gpu-rendering.md), a
+[layer animation timeline](docs/timeline.md) and consistent automatic Chinese/English localization.

@@ -109,6 +109,7 @@ public sealed partial class MainWindow
         GridToggle.IsChecked = showsGrid;
         PixelGridToggle.IsChecked = showPixelGrid;
         McpAnimationToggle.IsChecked = ReadFlag("mcp-operation-animation", true);
+        GpuRenderingToggle.IsChecked = useGpuRendering = ReadFlag("gpu-rendering", true);
         RefreshGuides();
         QueueViewportFrame();
     }

@@ -58,6 +58,10 @@ public sealed partial class MainWindow
             formatVersion = manifest.Version, activeLayerId = manifest.ActiveLayerId,
             selectedLayerIds = manifest.Layers.Where(layer => selectedLayerIds.Contains(layer.Id)).Select(layer => layer.Id),
             dirty = owner.IsDirty, canUndo = owner.CanUndo, canRedo = owner.CanRedo, busy = ProjectEditsInFlight,
+            timeline = manifest.Timeline is null ? null : new { durationFrames = manifest.Timeline.DurationFrames,
+                framesPerSecond = manifest.Timeline.FramesPerSecond, loop = manifest.Timeline.Loop,
+                currentFrame = timelineFrame, preview = TimelinePreviewActive, playing = timelinePlaying,
+                tracks = JsonSerializer.SerializeToNode(manifest.Timeline.Tracks, ManifestJson.Options) },
             selection = owner.ActiveSelection is { } selection ? new { x = selection.Bounds.X, y = selection.Bounds.Y, width = selection.Bounds.Width, height = selection.Bounds.Height } : null,
             layers = manifest.Layers.Select(layer => new { id = layer.Id, name = layer.Name, visible = layer.IsVisible, opacity = layer.OpacityOrOne,
                 parentId = layer.ParentId, blendMode = layer.BlendMode ?? LayerBlendMode.Normal,
@@ -87,9 +91,10 @@ public sealed partial class MainWindow
             throw new InvalidOperationException("The document or revision changed. Read editor_state and review the current canvas before editing.");
     }
 
-    private void RequireEditorIdle(bool allowAi = false)
+    private void RequireEditorIdle(bool allowAi = false, bool allowTimeline = false)
     {
-        if (windowClosed || document is null || ProjectEditsInFlight || !CanEditSelection || lassoPoints is not null || dragStart is not null
+        bool ready = CanEditSelection || allowTimeline && TimelinePreviewActive && CanEditSelectionBaseState && !renderInputs.HasPending && !timelinePlaying;
+        if (windowClosed || document is null || ProjectEditsInFlight || !ready || lassoPoints is not null || dragStart is not null
             || cropRectangle is not null || !allowAi && aiEditor is not null)
             throw new InvalidOperationException("The editor has an active edit, dialog or AI preview. Finish or cancel it before this operation.");
     }
@@ -103,6 +108,7 @@ public sealed partial class MainWindow
         if (name == "editor_preview") return await EditorPreviewAsync(args);
         RequireEditorTarget(args);
         var owner = document;
+        if (name == "editor_timeline") return await EditorTimelineAsync(args, owner);
         if (name is "editor_select" or "editor_batch" or "editor_text" or "editor_adjustment" or "editor_mask" or "editor_layout")
             return await EditorAutomationAsync(name, args, owner);
         if (name.StartsWith("editor_layer_", StringComparison.Ordinal))
@@ -188,12 +194,12 @@ public sealed partial class MainWindow
                 if (args["discard"]?.GetValue<bool>() == true) RetireAiEdit();
                 break;
             case "editor_history":
-                RequireEditorIdle();
+                StopTimelinePlayback(); RequireEditorIdle(allowTimeline: true);
                 bool changed = args["action"]?.GetValue<string>() switch { "undo" => ApplyHistory(false), "redo" => ApplyHistory(true), _ => throw new ArgumentException("action must be undo or redo.") };
                 if (!changed) throw new InvalidOperationException("No history step is available.");
                 break;
             case "editor_save":
-                RequireEditorIdle();
+                StopTimelinePlayback(); RequireEditorIdle(allowTimeline: true);
                 string? destination = args["path"]?.GetValue<string>();
                 if (destination is not null)
                 {
@@ -206,7 +212,7 @@ public sealed partial class MainWindow
                 if (!await SaveProjectAsync(false, destination)) throw new InvalidOperationException("The current document was not saved. Read editor_state before retrying.");
                 break;
             case "editor_open":
-                RequireEditorIdle();
+                StopTimelinePlayback(); RequireEditorIdle(allowTimeline: true);
                 if (owner.IsDirty) throw new InvalidOperationException("Save the unsaved current document before opening a project.");
                 string openPath = EditorPath(args["path"]?.GetValue<string>(), ".comp");
                 if (!ProjectStore.IsProjectDirectory(openPath)) throw new ArgumentException("The path is not a .comp project.");
@@ -214,10 +220,11 @@ public sealed partial class MainWindow
                 if (!string.Equals(projectPath, openPath, StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("The project did not open.");
                 break;
             case "editor_export":
-                RequireEditorIdle();
+                StopTimelinePlayback(); RequireEditorIdle(allowTimeline: true);
                 string exportPath = EditorPath(args["path"]?.GetValue<string>(), ".png");
                 if (File.Exists(exportPath) || !Directory.Exists(Path.GetDirectoryName(exportPath))) throw new ArgumentException("Choose a new PNG in an existing folder.");
                 var snapshot = CaptureEditorSnapshot(owner.Snapshot);
+                if (TimelinePreviewActive) snapshot = AnimationEvaluator.Evaluate(snapshot, timelineFrame);
                 if (args["layerId"] is { } exportLayer) IsolateEditorLayer(snapshot, Guid.Parse(exportLayer.GetValue<string>()));
                 await Task.Run(async () =>
                 {
@@ -276,7 +283,7 @@ public sealed partial class MainWindow
         if (view is not ("canvas" or "result" or "original" or "layer" or "mask")) throw new ArgumentException("Unknown preview view.");
         if (ProjectEditsInFlight) throw new InvalidOperationException("Finish the active document edit before reading a preview.");
         var state = EditorState();
-        string cacheKey = $"{editorDocumentToken}:{editorRevision}:{view}:{args["layerId"]}:{args["region"]}:{maxSide}:{aiEditor?.RequestId}:{aiEditor?.Status}:{aiEditor?.Candidates.Count}";
+        string cacheKey = $"{editorDocumentToken}:{editorRevision}:{view}:{args["layerId"]}:{args["region"]}:{maxSide}:{aiEditor?.RequestId}:{aiEditor?.Status}:{aiEditor?.Candidates.Count}:{(TimelinePreviewActive ? timelineFrame : -1)}";
         byte[]? cached = editorPreviewCache.FirstOrDefault(entry => entry.Key == cacheKey).Png;
         if (cached is not null) return EditorPreviewResult(state, view, maxSide, cached, true);
         ProjectSnapshot? snapshot = null;
@@ -289,7 +296,9 @@ public sealed partial class MainWindow
         }
         else if (view is "canvas" or "layer")
         {
-            snapshot = EditorPreview.Capture(document!, view == "layer" ? Guid.Parse(args["layerId"]?.GetValue<string>() ?? "") : null);
+            snapshot = EditorPreview.Capture(document!);
+            if (TimelinePreviewActive) snapshot = AnimationEvaluator.Evaluate(snapshot, timelineFrame);
+            if (view == "layer") IsolateEditorLayer(snapshot, Guid.Parse(args["layerId"]?.GetValue<string>() ?? ""));
         }
         else
         {

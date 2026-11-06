@@ -29,7 +29,8 @@ public sealed partial class MainWindow
 
     private bool CanEditSelection => CanEditSelectionCore && pixelMove is null && pixelNudgePending == 0;
     private bool CanEditSelectionCore => !renderInputs.HasPending && CanEditSelectionState;
-    private bool CanEditSelectionState => !IsFileImporting && document is not null && selectionMove is null && pointerStroke is null && healingStroke is null && !healingFinishing
+    private bool CanEditSelectionState => !TimelinePreviewActive && CanEditSelectionBaseState;
+    private bool CanEditSelectionBaseState => !timelineExporting && !IsFileImporting && document is not null && selectionMove is null && pointerStroke is null && healingStroke is null && !healingFinishing
         && floatingDuplicate is null && floatingTransform is null && transformInspectorEdit is null && gradientEdit is null && !renamingLayer && !textDialogOpen
         && !colorRangeSampling && !selectionAmountPending && StatusProgress.Visibility != Visibility.Visible;
 

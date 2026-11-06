@@ -117,13 +117,14 @@ public sealed partial class MainWindow
 
     private void NavigateHistory(Guid id)
     {
-        if (document is not { } owner || ProjectEditsInFlight || selectionWorkResult is not null || !CanEditSelectionState || IsDeletePending)
+        StopTimelinePlayback(); CommitTimelineFields();
+        if (document is not { } owner || ProjectEditsInFlight || selectionWorkResult is not null || !CanEditSelectionBaseState || IsDeletePending)
         { SetStatus(Loc.T("H_Busy")); RefreshHistoryPanel(force: true); return; }
         Guid starting = owner.CurrentHistoryId;
         QueueCanvasInput(owner, () =>
         {
             if (!ReferenceEquals(document, owner) || owner.CurrentHistoryId != starting || owner.ActiveTextDraft is not null
-                || selectionWorkResult is not null || !CanEditSelectionState) return;
+                || selectionWorkResult is not null || !CanEditSelectionBaseState) return;
             SetStatus(Loc.T(ApplyHistory(false, id) ? "H_Restored" : "H_Expired")); RefreshHistoryPanel(force: true);
         });
     }
@@ -156,6 +157,8 @@ public sealed partial class MainWindow
             "AddRasterMask" or "RemoveMask" or "ReplaceLayerMask" or "SetMaskEnabled" or "SetMaskLinked" or "ToggleClippingMask" => "Mask",
             "SetCanvasBounds" or "SetCanvasSize" or "TrimCanvas" => "Canvas", "ResizeImage" => "Resize",
             "FlipCanvas" or "FlipLayers" => "Flip", "AddGuide" or "MoveGuide" or "RemoveGuide" or "ClearGuides" => "Guides",
+            "AnimationSettings" or "AnimationClip" or "AnimationKeyframe" or "AnimationDeleteKeyframe"
+                or "AnimationMoveKeyframe" or "AnimationShiftTrack" or "AnimationClear" => operation,
             "editor_layout" => "Layout", "Batch" => "Batch", _ => "Pixels",
         };
         return Loc.T("H_" + key);

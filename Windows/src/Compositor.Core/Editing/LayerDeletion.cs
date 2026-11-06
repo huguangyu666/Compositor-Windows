@@ -81,6 +81,7 @@ public sealed partial class EditorDocument
             manifest.ActiveLayerId = manifest.Layers.Skip(Math.Max(0, activeIndex)).FirstOrDefault(layer => !edit.Removed.Contains(layer.Id))?.Id
                 ?? manifest.Layers.LastOrDefault(layer => !edit.Removed.Contains(layer.Id))?.Id;
         manifest.Layers.RemoveAll(layer => edit.Removed.Contains(layer.Id));
+        manifest.Timeline?.Tracks.RemoveAll(track => edit.Removed.Contains(track.LayerId));
         var remainingImages = Snapshot.Images.Where(p => !edit.Removed.Contains(p.Key)).ToDictionary();
         var remainingMasks = Snapshot.Masks.Where(p => !edit.Removed.Contains(p.Key)).ToDictionary();
         foreach (var layer in manifest.Layers)

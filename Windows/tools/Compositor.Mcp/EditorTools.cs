@@ -32,6 +32,23 @@ public static partial class Program
         }
         yield return Tool("editor_list", "List running Compositor editor processes. Live editor tools operate on unsaved in-memory documents and preserve normal undo.", new(), []);
         yield return Tool("editor_state", "Read the current live document, selection, layers, undo availability and AI job status. No upload. Poll this after editor_ai_start.", new(), []);
+        yield return Tool("editor_timeline", "Create and edit layer animation, or seek a preview frame without changing source pixels or history. Content edits are one Undo. Positions are absolute layer centers in document pixels; scale is relative to the base size (1=100%), rotation is clockwise degrees, opacity is 0–1. Clips use an inclusive inFrame and exclusive outFrame. Folder/adjustment tracks support opacity and clips. Read state after every edit; preview/export use the current frame. Disable preview to resume ordinary image editing.",
+            new() { ["operation"] = Choice("settings", "seek", "preview", "keyframe", "clip", "deleteKeyframe", "moveKeyframe", "shiftTrack", "clear"),
+                ["durationFrames"] = Field("integer", "settings: total frames 1–216000; default 120"),
+                ["framesPerSecond"] = Field("integer", "settings: 1–120, default 24; changes preserve key times in seconds"),
+                ["loop"] = Field("boolean", "settings: loop playback, default true"), ["enabled"] = Field("boolean", "preview: enable or disable animation preview"),
+                ["layerId"] = Field("string", "Layer UUID for keyframe/clip/deleteKeyframe/moveKeyframe/shiftTrack"),
+                ["frame"] = Field("integer", "seek/keyframe/deleteKeyframe/moveKeyframe destination: zero-based frame inside duration"),
+                ["inFrame"] = Field("integer", "clip: first visible frame"), ["outFrame"] = Field("integer", "clip: first invisible frame, up to durationFrames"),
+                ["fromFrame"] = Field("integer", "moveKeyframe: source frame"), ["deltaFrames"] = Field("integer", "shiftTrack: signed offset for clip and all keys"),
+                ["values"] = new JsonObject { ["type"] = "object", ["properties"] = new JsonObject {
+                    ["positionX"] = Field("number", "Center X, ±1000000"), ["positionY"] = Field("number", "Center Y, ±1000000"),
+                    ["scaleX"] = Field("number", "Width multiplier .001–1000"), ["scaleY"] = Field("number", "Height multiplier .001–1000"),
+                    ["rotation"] = Field("number", "Clockwise degrees, ±1000000; multiple turns allowed"), ["opacity"] = Field("number", "Opacity 0–1") },
+                    ["additionalProperties"] = false, ["minProperties"] = 1 },
+                ["properties"] = new JsonObject { ["type"] = "array", ["items"] = Choice("positionX", "positionY", "scaleX", "scaleY", "rotation", "opacity"),
+                    ["minItems"] = 1, ["maxItems"] = 6, ["uniqueItems"] = true, ["description"] = "Optional properties to delete or move; defaults to all six" },
+                ["interpolation"] = Choice("linear", "smooth", "hold") }, ["operation"], true);
         yield return Tool("editor_preview", "Return a bounded PNG as an MCP image of the live canvas, AI result, or original input. No cloud request or disk write.",
             new() { ["view"] = Choice("canvas", "result", "original", "layer", "mask"), ["layerId"] = Field("string", "Layer UUID for view=layer or mask"), ["maxSide"] = Field("integer", "Maximum preview side, 64–2048; default 1024."),
                 ["region"] = new JsonObject { ["type"] = "object", ["properties"] = new JsonObject { ["x"] = Field("integer", "Left pixel"), ["y"] = Field("integer", "Top pixel"), ["width"] = Field("integer", "Region width"), ["height"] = Field("integer", "Region height") },

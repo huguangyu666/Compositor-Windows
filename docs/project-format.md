@@ -1,10 +1,39 @@
-# Compositor project format, versions 1–11
+# Compositor project format, versions 1–12
 
 A `.comp` file is a macOS document package containing `manifest.json` and an `images/` directory of `<layer UUID>.png` assets.
 
-The manifest identifies `com.compositor.project`, version `11` for new saves (versions `1`–`10` remain readable), and the sRGB working space. It stores document UUID, pixel dimensions, active layer UUID, and layers in bottom-to-top order. Each layer stores its UUID, name, visibility, transform (origin, size, clockwise rotation, flips, sampling), and optional image filename. Blank layers have no image asset.
+The manifest identifies `com.compositor.project` and the sRGB working space. New static projects use version `11`; creating a Windows animation upgrades the project to `12`. Windows reads versions `1`–`12`. The current macOS implementation reads `1`–`11` and rejects version `12` before replacing the live document. It stores document UUID, pixel dimensions, active layer UUID, and layers in bottom-to-top order. Each layer stores its UUID, name, visibility, transform (origin, size, clockwise rotation, flips, sampling), and optional image filename. Blank layers have no image asset.
 
 Embedded PNGs preserve source pixels and transparency; transforms remain separate. Projects survive moving or deleting imported source photos. Saving uses a coordinated atomic package replacement. Unsupported versions, invalid metadata, missing assets, unsafe paths, and oversized data are rejected before replacing the live document.
+
+## Version 12: layer animation (Windows)
+
+An optional top-level `timeline` object stores required integer `durationFrames` (1–216000),
+required integer `framesPerSecond` (1–120), optional `loop` (default true), and `tracks` (default
+empty). Each track has required `layerID`, inclusive `inFrame` and exclusive `outFrame` inside
+the duration. A layer without a track is visible for the whole duration. A track never overrides
+the layer's own hidden flag or inherited visibility.
+
+Tracks have optional arrays `positionX`, `positionY`, `scaleX`, `scaleY`, `rotation` and `opacity`.
+Each array contains strictly increasing, unique keys with required integer `frame` and finite
+numeric `value`. Frames must be inside the duration. `interpolation` defaults to `linear`; `hold`
+and smoothstep `smooth` are also supported. The left key controls its outgoing segment. Values
+are held outside the first/last key; an empty channel uses base layer metadata.
+
+Positions are absolute centers in document pixels (±1000000), scales are base-size multipliers
+(.001–1000), rotations are absolute clockwise degrees (±1000000, multiple turns allowed), and
+opacity is 0–1. Evaluated dimensions are clamped to 1–300000. Folders and adjustments support
+opacity and clips only. Linked placed masks follow the evaluated layer; independent masks retain
+their placement. Source PNGs and base transforms remain unchanged by playback.
+
+At most one track may reference each existing layer, with at most 40000 keys across the timeline.
+Null channels, invalid references, duplicate tracks, unordered keys and invalid values are
+rejected. The existing manifest byte limit still applies. Animation metadata participates in Undo
+and captured project saves; current frame, playback, panel visibility and zoom are session-only.
+Clearing animation from a v12 project does not downgrade its declared version. macOS support for
+v12 is not implemented; retaining its v11 reader limit prevents silently discarding animation.
+
+## Limits and earlier versions
 
 Limits: 30,000 pixels per canvas/image/mask side, 200 million pixels per surface, 10,000 layers, 4 MiB manifest, 512 MiB per encoded asset. Images and masks share one document pixel budget: `min(800_000_000, max(200_000_000, physicalMemoryBytes / 16))`. See `DocumentLimits.swift` and `ProjectStore.swift` for validation.
 

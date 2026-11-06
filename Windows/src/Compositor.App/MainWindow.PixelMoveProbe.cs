@@ -21,7 +21,7 @@ public sealed partial class MainWindow
         await FinishPixelMoveAsync(); await WaitForSelectionReadyAsync(); await WaitForFramesAsync();
         var expectedFrame = new CanvasCompositor(scene.Snapshot).Render();
         var expectedBytes = new byte[64 * 48 * 4]; SurfacePresentation.FillBgra(expectedFrame, expectedBytes, 64, 0, 0, 64, 48);
-        var actualBytes = fullTarget!.GetPixelBytes(); int firstDifference = -1;
+        var actualBytes = presented!.GetPixelBytes(); int firstDifference = -1;
         for (int i = 0; i < expectedBytes.Length; i++) if (expectedBytes[i] != actualBytes[i]) { firstDifference = i; break; }
         report["selectedPixelCommitFrameDiagnostic"] = new { firstDifference, expected = firstDifference < 0 ? -1 : expectedBytes[firstDifference],
             actual = firstDifference < 0 ? -1 : actualBytes[firstDifference], band = lastFrameProbe.Band, offset = scene.ActiveSelection?.OutlineOffset };

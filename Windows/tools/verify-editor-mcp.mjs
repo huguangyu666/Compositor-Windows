@@ -33,7 +33,7 @@ try {
   assert(!names.includes('editor_ai_tasks') && !names.includes('editor_ai_resume'), 'Retired provider tools remain advertised');
   const aiSchema = listed.result.tools.find(tool => tool.name === 'editor_ai_start').inputSchema.properties;
   assert.deepEqual(aiSchema.connection.enum, ['api', 'account'], 'Unexpected built-in provider');
-  for (const name of ['editor_state', 'editor_preview', 'editor_select', 'editor_ai_start', 'editor_ai_accept', 'editor_ai_cancel', 'editor_history', 'editor_save', 'editor_open', 'editor_export', 'editor_mask_color', 'editor_trim_layer'])
+  for (const name of ['editor_state', 'editor_timeline', 'editor_preview', 'editor_select', 'editor_ai_start', 'editor_ai_accept', 'editor_ai_cancel', 'editor_history', 'editor_save', 'editor_open', 'editor_export', 'editor_mask_color', 'editor_trim_layer'])
     assert(names.includes(name), `Missing live editor tool: ${name}`);
   for (const name of ['editor_layer_select', 'editor_layer_import', 'editor_layer_transform', 'editor_layer_reorder', 'editor_layer_duplicate', 'editor_layer_delete', 'editor_layer_rename', 'editor_layer_visibility', 'editor_layer_opacity', 'editor_layer_blend'])
     assert(names.includes(name), `Missing live layer tool: ${name}`);

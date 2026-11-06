@@ -104,10 +104,10 @@ public sealed partial class MainWindow
         return EditorResult(state);
     }
 
-    private async Task QueueEditorActionAsync(EditorDocument owner, JsonObject args, CancellationToken cancellation, Action apply)
+    private async Task QueueEditorActionAsync(EditorDocument owner, JsonObject args, CancellationToken cancellation, Action apply, bool allowTimeline = false)
     {
         cancellation.ThrowIfCancellationRequested();
-        RequireEditorTarget(args); RequireEditorIdle();
+        RequireEditorTarget(args); RequireEditorIdle(allowTimeline: allowTimeline);
         var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         bool waiting = true;
         QueueCanvasInput(owner, () =>
@@ -115,7 +115,7 @@ public sealed partial class MainWindow
             if (!waiting || cancellation.IsCancellationRequested) return;
             try
             {
-                RequireEditorTarget(args); RequireEditorIdle();
+                RequireEditorTarget(args); RequireEditorIdle(allowTimeline: allowTimeline);
                 apply();
                 completion.TrySetResult();
             }

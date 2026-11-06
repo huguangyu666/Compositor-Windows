@@ -2573,10 +2573,59 @@
   <data name="H_Batch" xml:space="preserve"><value>批量编辑</value></data>
   <data name="H_Pixels" xml:space="preserve"><value>编辑像素</value></data>
   <data name="V_McpAnimation.Text" xml:space="preserve"><value>AI 操作动画</value></data>
+  <data name="V_GpuRendering.Text" xml:space="preserve"><value>GPU 加速（自动回退）</value></data>
   <data name="Mcp_Creating" xml:space="preserve"><value>正在创建…</value></data>
   <data name="Mcp_Moving" xml:space="preserve"><value>正在变换…</value></data>
   <data name="Mcp_Editing" xml:space="preserve"><value>正在编辑…</value></data>
   <data name="Mcp_Deleting" xml:space="preserve"><value>正在删除…</value></data>
   <data name="Mcp_Batch" xml:space="preserve"><value>{0} 项操作…</value></data>
   <data name="Mcp_Done" xml:space="preserve"><value>已完成</value></data>
+  <data name="Layer_DefaultBackground" xml:space="preserve"><value>背景</value></data>
+  <data name="TL_Menu.Text" xml:space="preserve"><value>时间轴</value></data>
+  <data name="TL_Title" xml:space="preserve"><value>时间轴</value></data>
+  <data name="TL_Create" xml:space="preserve"><value>创建图层动画时间轴</value></data>
+  <data name="TL_Play" xml:space="preserve"><value>▶ 播放</value></data>
+  <data name="TL_Pause" xml:space="preserve"><value>Ⅱ 暂停</value></data>
+  <data name="TL_Previous" xml:space="preserve"><value>上一帧</value></data>
+  <data name="TL_Next" xml:space="preserve"><value>下一帧</value></data>
+  <data name="TL_Duration" xml:space="preserve"><value>时长（秒）</value></data>
+  <data name="TL_Fps" xml:space="preserve"><value>帧率</value></data>
+  <data name="TL_Loop" xml:space="preserve"><value>循环</value></data>
+  <data name="TL_Preview" xml:space="preserve"><value>动画预览</value></data>
+  <data name="TL_Export" xml:space="preserve"><value>导出 PNG 序列…</value></data>
+  <data name="TL_Close" xml:space="preserve"><value>收起时间轴</value></data>
+  <data name="TL_Tracks" xml:space="preserve"><value>动画轨道。拖动标尺定位时间、菱形移动关键帧、轨道边缘调整入点出点。空格播放，方向键逐帧。</value></data>
+  <data name="TL_Layers" xml:space="preserve"><value>图层 / 关键帧</value></data>
+  <data name="TL_In" xml:space="preserve"><value>入点（秒）</value></data>
+  <data name="TL_Out" xml:space="preserve"><value>出点（秒）</value></data>
+  <data name="TL_PositionX" xml:space="preserve"><value>中心 X</value></data>
+  <data name="TL_PositionY" xml:space="preserve"><value>中心 Y</value></data>
+  <data name="TL_ScaleX" xml:space="preserve"><value>水平缩放 %</value></data>
+  <data name="TL_ScaleY" xml:space="preserve"><value>垂直缩放 %</value></data>
+  <data name="TL_Rotation" xml:space="preserve"><value>旋转 °</value></data>
+  <data name="TL_Opacity" xml:space="preserve"><value>不透明度 %</value></data>
+  <data name="TL_Interpolation" xml:space="preserve"><value>关键帧后的过渡方式</value></data>
+  <data name="TL_Linear" xml:space="preserve"><value>线性</value></data>
+  <data name="TL_Smooth" xml:space="preserve"><value>缓入缓出</value></data>
+  <data name="TL_Hold" xml:space="preserve"><value>保持</value></data>
+  <data name="TL_AddKey" xml:space="preserve"><value>◇ 添加关键帧</value></data>
+  <data name="TL_DeleteKey" xml:space="preserve"><value>删除关键帧</value></data>
+  <data name="TL_ZoomIn" xml:space="preserve"><value>＋ 放大</value></data>
+  <data name="TL_ZoomOut" xml:space="preserve"><value>－ 缩小</value></data>
+  <data name="TL_Fit" xml:space="preserve"><value>适合时间轴</value></data>
+  <data name="TL_FinishEdit" xml:space="preserve"><value>请先结束当前编辑或暂停播放。</value></data>
+  <data name="TL_Invalid" xml:space="preserve"><value>此时间轴修改无效或会移除已有关键帧。请先增加时长或移动关键帧。</value></data>
+  <data name="TL_CancelExport" xml:space="preserve"><value>取消导出</value></data>
+  <data name="TL_ExportProgress" xml:space="preserve"><value>正在导出第 {0} / {1} 帧…</value></data>
+  <data name="TL_ExportCancelled" xml:space="preserve"><value>已取消导出，部分帧保留在 {0}</value></data>
+  <data name="TL_Exporting" xml:space="preserve"><value>正在导出动画帧…</value></data>
+  <data name="TL_Exported" xml:space="preserve"><value>PNG 序列已导出到 {0}</value></data>
+  <data name="TL_ExportFailed" xml:space="preserve"><value>无法导出动画帧。</value></data>
+  <data name="H_AnimationSettings" xml:space="preserve"><value>动画设置</value></data>
+  <data name="H_AnimationClip" xml:space="preserve"><value>裁剪动画图层时间</value></data>
+  <data name="H_AnimationKeyframe" xml:space="preserve"><value>动画关键帧</value></data>
+  <data name="H_AnimationDeleteKeyframe" xml:space="preserve"><value>删除关键帧</value></data>
+  <data name="H_AnimationMoveKeyframe" xml:space="preserve"><value>移动关键帧</value></data>
+  <data name="H_AnimationShiftTrack" xml:space="preserve"><value>移动动画图层时间</value></data>
+  <data name="H_AnimationClear" xml:space="preserve"><value>清除动画</value></data>
 </root>

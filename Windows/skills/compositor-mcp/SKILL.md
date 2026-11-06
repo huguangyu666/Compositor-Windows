@@ -60,6 +60,7 @@ no new-document tool; open an existing `.comp` or have the user create a blank d
 | Refine coverage | `editor_mask` preserves image pixels. Paint uses document coordinates and values 0–255; filters use mask-grid pixels. The current selection constrains edits by default. Enable a disabled mask explicitly before painting. |
 | Isolate colors | `editor_mask_color` takes flat 0–255 RGB triplets, creates a mask and refuses an existing mask. It reveals matching colors; this is not semantic subject segmentation. |
 | Remove transparent padding | `editor_trim_layer` preserves placement and scale. It supports raster layers with compatible masks, and refuses text/shapes, effects and independent masks. |
+| Animate layers | `editor_timeline`: settings, clip, keyframe, seek and preview. Positions are layer centers; scale 1 means the base size. Frame indices are integers, outFrame is exclusive. Seek and review with `editor_preview`; save keeps editable keys. Disable preview before ordinary layer/pixel edits. |
 
 Read [references/workflows.md](references/workflows.md) for photo grading, editable layout and
 mask examples. Derive the settings and coordinates from the actual image and current tool schemas.

@@ -84,6 +84,7 @@ public sealed partial class MainWindow
     private void rebind(ProjectWorkspaceTab tab)
     {
         if (tab.Document is not { } arrived) return;
+        StopTimelinePlayback();
         layerSelectionRequest++;
         layerSelectionPointerTarget = null;
         effectSelection = null;
@@ -95,6 +96,8 @@ public sealed partial class MainWindow
         fullTarget?.Dispose();
         fullTarget = null;
         presented = null;
+        gpuPreviewRenderer?.Dispose(); gpuPreviewRenderer = null;
+        gpuPreviewUnavailable = gpuFramePresented = false;
         pendingFullRender = true;
         viewport = new CanvasViewport(arrived.Snapshot.Manifest.Width, arrived.Snapshot.Manifest.Height);
         ResizeViewport();
@@ -150,6 +153,7 @@ public sealed partial class MainWindow
         if (staleOnArrival) OnExternalChange();
         UpdateTitle();
         UpdateDocSizeLabel();
+        ResetTimelineForDocument();
         RefreshAll();
     }
 
@@ -367,7 +371,7 @@ public sealed partial class MainWindow
             {
                 var size = source.Snapshot.Manifest;
                 workspace.AddTab(reuseEmpty: false);
-                OpenDocument(EditorDocument.Create(size.Width, size.Height));
+                OpenNewDocument(size.Width, size.Height);
             }
             else if (!SwitchProjectTab(destination)) return false;
             var copies = document!.ImportLayersFrom(source, [head]);
@@ -429,7 +433,7 @@ public sealed partial class MainWindow
             var leaving = workspace.Current;
             var tab = workspace.AddTab();
             if (!ReferenceEquals(tab, leaving)) parkOutgoing(leaving);
-            OpenDocument(EditorDocument.Create(wh.Width, wh.Height));
+            OpenNewDocument(wh.Width, wh.Height);
             await ImportFilesAsync(document!, [file], point: null);
         }
     }
@@ -735,6 +739,14 @@ public sealed partial class MainWindow
         finally { workspace.EndManaging(); }
     }
 
+    private void OpenNewDocument(int width = 1280, int height = 800)
+    {
+        var fresh = EditorDocument.Create(width, height);
+        fresh.Snapshot.Manifest.Layers[0].Name = Loc.T("Layer_DefaultBackground");
+        workspace.Current.DefaultName = Loc.T("M_Untitled");
+        OpenDocument(fresh);
+    }
+
     /// <summary>File &gt; New, the original's way: <c>newCanvas</c> always adds a tab — the untouched one
     /// on screen is never replaced, because with tabs there is nothing to discard and no prompt to ask.
     /// The leaving tab's view parks and its handlers come off before the swap binds the window to the
@@ -747,7 +759,7 @@ public sealed partial class MainWindow
         parkOutgoing(leaving);
         // The document lands on the selected (new) tab through the same swap the launch uses, so the
         // window's handlers, watcher and title all follow it.
-        OpenDocument(EditorDocument.Create());
+        OpenNewDocument();
         SetStatus(Loc.T("S_NewDoc"));
         await Task.CompletedTask;
     }
@@ -776,7 +788,7 @@ public sealed partial class MainWindow
             parkedViews.Remove(id);
             // The selected tab the registry moved on to binds now; when the list emptied, the
             // replacement fresh tab has no document yet, so the window opens one the way launch does.
-            if (workspace.Current.Document is null) OpenDocument(EditorDocument.Create());
+            if (workspace.Current.Document is null) OpenNewDocument();
             else rebind(workspace.Current);
                 return true;
         }

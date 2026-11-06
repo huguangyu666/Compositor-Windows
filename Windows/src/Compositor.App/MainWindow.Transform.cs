@@ -184,10 +184,14 @@ public sealed partial class MainWindow
         {
             foreach (var pair in transformFields)
             {
-                pair.Value.IsEnabled = !IsFileImporting && distortCompletion is null && value is not null && floatingTransform is not { Display: null } and not { Finishing: true };
-                if (pair.Value.FocusState == FocusState.Unfocused) pair.Value.Text = value is null ? "" : FormatTransform(TransformNumber(value, pair.Key));
+                pair.Value.IsEnabled = !TimelinePreviewActive && !timelineExporting && !IsFileImporting && distortCompletion is null && value is not null && floatingTransform is not { Display: null } and not { Finishing: true };
+                if (pair.Value.FocusState == FocusState.Unfocused)
+                {
+                    string text = value is null ? "" : FormatTransform(TransformNumber(value, pair.Key));
+                    if (pair.Value.Text != text) pair.Value.Text = text;
+                }
             }
-            transformSamplingCombo.IsEnabled = !IsFileImporting && distortCompletion is null && value is not null && floatingTransform is not { Display: null } and not { Finishing: true };
+            transformSamplingCombo.IsEnabled = !TimelinePreviewActive && !timelineExporting && !IsFileImporting && distortCompletion is null && value is not null && floatingTransform is not { Display: null } and not { Finishing: true };
             transformSamplingCombo.SelectedIndex = value is null ? -1 : (int)value.Sampling;
             PaintMaskCheck.IsEnabled = transformTargetCombo.IsEnabled = CanChangePaintTarget && SelectedLayer is { MaskFile: not null };
             transformTargetCombo.SelectedIndex = paintOnMask ? 1 : 0;
@@ -202,7 +206,7 @@ public sealed partial class MainWindow
     }
     private void RefreshTransformAvailability(bool force)
     {
-        var state = (Editing: IsFileImporting || IsGradientFinishing || floatingDuplicate is not null || floatingTransform is not null || transformInspectorEdit is not null || colorRangeSampling || selectionAmountPending || pixelMove is not null || pixelNudgePending > 0,
+        var state = (Editing: TimelinePreviewActive || timelineExporting || IsFileImporting || IsGradientFinishing || floatingDuplicate is not null || floatingTransform is not null || transformInspectorEdit is not null || colorRangeSampling || selectionAmountPending || pixelMove is not null || pixelNudgePending > 0,
             Layer: SelectedLayer?.Id, Count: selectedLayerIds.Count,
             HasMask: SelectedLayer?.MaskFile is not null);
         if (!force && transformAvailability == state) return;
@@ -295,6 +299,9 @@ public sealed partial class MainWindow
     }
     private void SetTransformDraft(LayerTransform value)
     {
+        // Pointer positions are rounded to document pixels. Repeated positions after
+        // rounding must not rebuild metadata, inspector controls or an entire frame.
+        if (transformCorners is null && value.Equals(transformInspectorValue)) return;
         transformInspectorValue = value; transformDraftRevision++; frameRevision++;
         // Wake the serial owner. It expands this tiny trigger to the previous/new draft footprints.
         if (floatingTransform is not null) MarkFloatingTransformDirty(value);

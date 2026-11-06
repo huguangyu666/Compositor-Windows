@@ -263,8 +263,18 @@ public static class Resampler
         {
             // Aliased draws must retain their established forward read/write order.
             if (!ReferenceEquals(source.Pixels, destination.Pixels) && Math.Abs(stepY) < taps)
-                DrawWeightedChannelRows(source, destination, x0, y0, x1, y1, taps,
-                    columnIndices, columnWeights, columnValid, rowIndices, rowWeights, rowValid);
+            {
+                // Large photo moves spend most of their remaining time in this exact HQ
+                // sampler. Bands share immutable tap tables but own their horizontal rows.
+                int bands = Math.Min(8, Math.Min(Environment.ProcessorCount, (y1 - y0) / 64));
+                if ((long)(x1 - x0) * (y1 - y0) >= 1 << 20 && bands > 1)
+                    Parallel.For(0, bands, band => DrawWeightedChannelRows(source, destination, x0,
+                        y0 + (y1 - y0) * band / bands, x1, y0 + (y1 - y0) * (band + 1) / bands, taps,
+                        columnIndices, columnWeights, columnValid, rowIndices, rowWeights, rowValid, y0));
+                else
+                    DrawWeightedChannelRows(source, destination, x0, y0, x1, y1, taps,
+                        columnIndices, columnWeights, columnValid, rowIndices, rowWeights, rowValid, y0);
+            }
             else
                 DrawWeightedChannels(source, destination, x0, y0, x1, y1, taps,
                     columnIndices, columnWeights, columnValid, rowIndices, rowWeights, rowValid);
@@ -306,7 +316,7 @@ public static class Resampler
     }
 
     private static void DrawWeightedChannelRows(SourceWindow source, Surface destination, int x0, int y0, int x1, int y1, int taps,
-        int[] columnIndices, float[] columnWeights, bool[] columnValid, int[] rowIndices, float[] rowWeights, bool[] rowValid)
+        int[] columnIndices, float[] columnWeights, bool[] columnValid, int[] rowIndices, float[] rowWeights, bool[] rowValid, int firstRow)
     {
         int width = x1 - x0;
         var rows = ArrayPool<Vector128<float>>.Shared.Rent(checked(width * taps));
@@ -316,8 +326,8 @@ public static class Resampler
         {
             for (int y = y0; y < y1; y++)
             {
-                if (!rowValid[y - y0]) continue;
-                int rowBase = (y - y0) * taps, targetRow = y * destination.Stride;
+                if (!rowValid[y - firstRow]) continue;
+                int rowBase = (y - firstRow) * taps, targetRow = y * destination.Stride;
                 for (int j = 0; j < taps; j++)
                 {
                     int sourceRow = rowIndices[rowBase + j], slot = sourceRow % taps;
@@ -398,7 +408,7 @@ public static class Resampler
 
     /// <summary>Tap indices (clamped) and filter weights for one output coordinate; the
     /// weights match the direct 2D convolution's kernel exactly.</summary>
-    private static void WriteTaps(int[] indices, float[] weights, int offset, double u, int limit, int taps)
+    internal static void WriteTaps(int[] indices, float[] weights, int offset, double u, int limit, int taps)
     {
         if (taps == 2)
         {
@@ -576,6 +586,8 @@ public static class Resampler
         }
         return 0f;
     }
+
+    internal static float CubicWeight(float t) => CatmullRom(t);
 
     private static float CatmullRom(float t)
     {

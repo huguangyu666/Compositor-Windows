@@ -1,8 +1,8 @@
 # Architecture
 
 The Windows port is a separate implementation of Compositor. Its project boundary is the .comp
-package; the macOS SwiftUI/AppKit source stays in the repository root and is not referenced by the
-Windows solution.
+package. This repository distributes the Windows implementation; the original SwiftUI/AppKit
+implementation is maintained upstream and is not referenced by the Windows solution.
 
 ## Projects
 
@@ -116,8 +116,12 @@ filtered rows for that draw. Global source-row tags distinguish slots; each vali
 before use, and pooled vectors are returned in finally. Aliases and non-overlapping rows keep forward
 sampling. See the row reuse report (local development reference) for exact-byte and allocation checks.
 
-The engine favors a reference-quality, deterministic implementation. It currently performs CPU
-work for canvas rendering and export; there is no GPU renderer or tile cache.
+The CPU engine remains the deterministic pixel reference and handles export. App additionally
+hosts a D3D11 SM5 renderer through Vortice on Win2D's device, sharing its final texture for display.
+It caches source/revision textures and known dirty uploads under an LRU memory budget. Ordinary,
+settled, affine-animation and draft composition attempt the GPU path; unavailable features,
+software adapters, memory pressure and device failures recover through CPU. There is no general
+tile cache. See [GPU rendering](gpu-rendering.md) for scope and limits.
 
 CanvasThumbnail ports the canvas-framed layer/mask thumbnail layout: 36/30-point slots fitted to
 the canvas and two raster pixels per point. Resampler and MaskDisplay place the source, with the

@@ -68,6 +68,9 @@ public sealed partial class EditorDocument
         }
         manifest.ActiveLayerId = source.Manifest.ActiveLayerId is { } active && rootCopies.TryGetValue(active, out var activeCopy)
             ? activeCopy : rootCopies.Values.First();
+        if (manifest.Timeline is { } timeline)
+            timeline.Tracks.AddRange(source.Manifest.Timeline!.Tracks.Where(track => mapping.ContainsKey(track.LayerId))
+                .Select(track => track.Clone(mapping[track.LayerId])));
         try { ProjectValidator.Validate(manifest); }
         catch (ProjectFormatException) { return null; }
         return new(new() { Manifest = manifest, Images = images, Masks = masks }, Array.AsReadOnly(rootCopies.Values.ToArray()),

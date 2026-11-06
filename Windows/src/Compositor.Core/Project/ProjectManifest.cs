@@ -81,6 +81,11 @@ public sealed class ProjectLayerRecord : IEquatable<ProjectLayerRecord>
     public override bool Equals(object? obj) => Equals(obj as ProjectLayerRecord);
 
     public override int GetHashCode() => Id.GetHashCode();
+
+    internal ProjectLayerRecord CopyForAnimation()
+    {
+        var copy = (ProjectLayerRecord)MemberwiseClone(); copy.Transform = TransformEdit.Copy(Transform); return copy;
+    }
 }
 
 /// <summary>A user-placed alignment line. Horizontal guides sit at a document Y; vertical at a document X.</summary>
@@ -106,20 +111,20 @@ public sealed class CanvasGuide : IEquatable<CanvasGuide>
 
 /// <summary>
 /// The manifest.json of a .comp package. Versions 1 through <see cref="CurrentVersion"/> load; new
-/// saves write <see cref="CurrentVersion"/>. Layers run bottom to top: the last layer draws on top.
+/// static documents use version 11; animation upgrades them to 12. Layers run bottom to top.
 /// </summary>
 public sealed class ProjectManifest
 {
     public const string FormatIdentifier = "com.compositor.project";
 
-    /// <summary>The format version new saves write.</summary>
-    public const int CurrentVersion = 11;
+    /// <summary>The newest supported format version.</summary>
+    public const int CurrentVersion = 12;
 
     [JsonRequired]
     public string Format { get; set; } = FormatIdentifier;
 
     [JsonRequired]
-    public int Version { get; set; } = CurrentVersion;
+    public int Version { get; set; } = 11;
 
     [JsonRequired]
     public string ColorSpace { get; set; } = "sRGB";
@@ -143,4 +148,6 @@ public sealed class ProjectManifest
 
     /// <summary>Alignment guides. Missing on versions 1–7.</summary>
     public List<CanvasGuide>? Guides { get; set; }
+
+    public ProjectTimeline? Timeline { get; set; }
 }

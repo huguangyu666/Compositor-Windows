@@ -73,7 +73,7 @@ public sealed partial class MainWindow
         HandleThumbnailClick(id, true, VirtualKeyModifiers.Menu); await WaitForFramesAsync(); RootGrid.UpdateLayout();
         Require(CurrentMaskAloneId == id && MaskAloneBadge.Visibility == Visibility.Visible && MaskAloneBadge.ActualHeight == 26
             && MaskAloneName.Text == SelectedLayer!.Name && !scene.CanUndo && paintOnMask, "Mask-alone view did not show its named badge without history.");
-        Require(fullTarget!.GetPixelBytes(12, 12, 1, 1).SequenceEqual(new byte[] { 0, 0, 0, 255 }), "The mask-alone fixture did not show grayscale coverage.");
+        Require(presented!.GetPixelBytes(12, 12, 1, 1).SequenceEqual(new byte[] { 0, 0, 0, 255 }), "The mask-alone fixture did not show grayscale coverage.");
         scene.RenameLayer(id, "Badge name"); await WaitForFramesAsync(); Require(MaskAloneName.Text == "Badge name", "The badge retained the old layer name.");
         OnUndo(this, new()); await WaitForFramesAsync(); Require(!scene.CanUndo, "Badge naming interfered with document Undo.");
         Invoke(MaskAloneCloseButton); await WaitForFramesAsync();

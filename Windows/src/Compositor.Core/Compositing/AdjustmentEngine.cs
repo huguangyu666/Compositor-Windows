@@ -1,3 +1,6 @@
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
+
 namespace Compositor.Core;
 
 /// <summary>
@@ -17,6 +20,11 @@ namespace Compositor.Core;
 /// </summary>
 public static class AdjustmentEngine
 {
+    // Independent point operations split large photo regions into rows. Small brush bands
+    // stay serial so scheduling does not dominate their pixel work.
+    internal const long ParallelPointPixels = 1 << 18;
+    internal static readonly ParallelOptions ParallelPointOptions = new() { MaxDegreeOfParallelism = Math.Min(8, Environment.ProcessorCount) };
+
     /// <summary>Applies the adjustment to the premultiplied surface region in place.</summary>
     public static void Apply(LayerAdjustment adjustment, Surface surface, int x0, int y0, int x1, int y1)
     {
@@ -72,7 +80,27 @@ public static class AdjustmentEngine
 
     // --- levels_apply (LevelsPixels.c), fed by the macOS float tables ---
 
-    private static void ApplyLevelsTables(Surface surface, int x0, int y0, int x1, int y1, float[] red, float[] green, float[] blue)
+    // The compositor uses this only for one mask on the same document pixel grid. Applying
+    // and blending each channel together avoids two full-size scratch copies per frame.
+    internal static bool TryApplyMaskedPoint(LayerAdjustment adjustment, MaskSurface mask, Surface surface, int x0, int y0, int x1, int y1)
+    {
+        switch (adjustment.Kind)
+        {
+            case AdjustmentKind.Exposure:
+                float[] table = ExposureTable(adjustment.ExposureSettings ?? new());
+                ApplyLevelsTables(surface, x0, y0, x1, y1, table, table, table, mask);
+                return true;
+            case AdjustmentKind.Curves:
+                ApplyCurvesSettings(adjustment.Curves, surface, x0, y0, x1, y1, mask);
+                return true;
+            case AdjustmentKind.Levels:
+                ApplyLevelsSettings(adjustment.Levels, surface, x0, y0, x1, y1, mask);
+                return true;
+            default: return false;
+        }
+    }
+
+    private static void ApplyLevelsTables(Surface surface, int x0, int y0, int x1, int y1, float[] red, float[] green, float[] blue, MaskSurface? mask = null)
     {
         float[][] tables = [red, green, blue];
         // Opaque pixels take a precomputed byte LUT per channel: at alpha 255 the table
@@ -90,37 +118,58 @@ public static class AdjustmentEngine
             }
             opaqueLuts[channel] = lut;
         }
-            for (int y = y0; y < y1; y++)
+        if ((long)(x1 - x0) * (y1 - y0) >= ParallelPointPixels)
+            Parallel.For(y0, y1, ParallelPointOptions, ApplyRow);
+        else
+            for (int y = y0; y < y1; y++) ApplyRow(y);
+
+        void ApplyRow(int y)
+        {
+            int row = y * surface.Stride;
+            for (int x = x0; x < x1; x++)
             {
-                int row = y * surface.Stride;
-                for (int x = x0; x < x1; x++)
+                byte coverage = mask?.Pixels[y * mask.Width + x] ?? 255;
+                if (coverage == 0) continue;
+                int index = row + x * 4;
+                float alpha = surface.Pixels[index + 3];
+                if (alpha == 0) continue;
+                if (alpha == 255f && coverage == 255)
                 {
-                    int index = row + x * 4;
-                    float alpha = surface.Pixels[index + 3];
-                    if (alpha == 0) continue;
-                    if (alpha == 255f)
+                    surface.Pixels[index] = opaqueLuts[0][surface.Pixels[index]];
+                    surface.Pixels[index + 1] = opaqueLuts[1][surface.Pixels[index + 1]];
+                    surface.Pixels[index + 2] = opaqueLuts[2][surface.Pixels[index + 2]];
+                    continue;
+                }
+                for (int channel = 0; channel < 3; channel++)
+                {
+                    byte original = surface.Pixels[index + channel];
+                    byte adjusted;
+                    if (alpha == 255f) adjusted = opaqueLuts[channel][original];
+                    else
                     {
-                        surface.Pixels[index] = opaqueLuts[0][surface.Pixels[index]];
-                        surface.Pixels[index + 1] = opaqueLuts[1][surface.Pixels[index + 1]];
-                        surface.Pixels[index + 2] = opaqueLuts[2][surface.Pixels[index + 2]];
-                        continue;
-                    }
-                    for (int channel = 0; channel < 3; channel++)
-                    {
-                        float tableX = Math.Min(255f, surface.Pixels[index + channel] * 255f / alpha);
+                        float tableX = Math.Min(255f, original * 255f / alpha);
                         int lo = (int)tableX;
                         int hi = lo < 255 ? lo + 1 : 255;
                         float[] table = tables[channel];
                         float result = table[lo] + (table[hi] - table[lo]) * (tableX - lo);
-                        surface.Pixels[index + channel] = (byte)Math.Clamp(MathF.Round(result * alpha, MidpointRounding.AwayFromZero), 0f, alpha);
+                        adjusted = (byte)Math.Clamp(MathF.Round(result * alpha, MidpointRounding.AwayFromZero), 0f, alpha);
                     }
+                    surface.Pixels[index + channel] = coverage == 255 ? adjusted
+                        : (byte)((adjusted * coverage + original * (255 - coverage) + 127) / 255);
                 }
             }
+        }
     }
 
-    private static void ApplyLevelsSettings(LevelsSettings settings, Surface surface, int x0, int y0, int x1, int y1)
+    private static void ApplyLevelsSettings(LevelsSettings settings, Surface surface, int x0, int y0, int x1, int y1, MaskSurface? mask = null)
     {
         if (settings.IsIdentity) return;
+        float[][] tables = LevelsTables(settings);
+        ApplyLevelsTables(surface, x0, y0, x1, y1, tables[0], tables[1], tables[2], mask);
+    }
+
+    internal static float[][] LevelsTables(LevelsSettings settings)
+    {
         float[][] tables = new float[3][];
         for (int channel = 0; channel < 3; channel++)
         {
@@ -132,10 +181,16 @@ public static class AdjustmentEngine
             }
             tables[channel] = table;
         }
-        ApplyLevelsTables(surface, x0, y0, x1, y1, tables[0], tables[1], tables[2]);
+        return tables;
     }
 
-    private static void ApplyCurvesSettings(CurvesSettings settings, Surface surface, int x0, int y0, int x1, int y1)
+    private static void ApplyCurvesSettings(CurvesSettings settings, Surface surface, int x0, int y0, int x1, int y1, MaskSurface? mask = null)
+    {
+        float[][] tables = CurvesTables(settings);
+        ApplyLevelsTables(surface, x0, y0, x1, y1, tables[0], tables[1], tables[2], mask);
+    }
+
+    internal static float[][] CurvesTables(CurvesSettings settings)
     {
         float[][] tables = new float[3][];
         for (int channel = 0; channel < 3; channel++)
@@ -148,7 +203,7 @@ public static class AdjustmentEngine
             }
             tables[channel] = table;
         }
-        ApplyLevelsTables(surface, x0, y0, x1, y1, tables[0], tables[1], tables[2]);
+        return tables;
     }
 
     /// <summary>The macOS ExposureSettings.table: sRGB → linear, exposure and offset, gamma, back.</summary>
@@ -297,37 +352,125 @@ public static class AdjustmentEngine
         float[] shadows = { (float)(settings.ShadowCyanRed / 100), (float)(settings.ShadowMagentaGreen / 100), (float)(settings.ShadowYellowBlue / 100) };
         float[] midtones = { (float)(settings.MidCyanRed / 100), (float)(settings.MidMagentaGreen / 100), (float)(settings.MidYellowBlue / 100) };
         float[] highlights = { (float)(settings.HighlightCyanRed / 100), (float)(settings.HighlightMagentaGreen / 100), (float)(settings.HighlightYellowBlue / 100) };
+        // Opaque photo channels have only 256 inputs. Retain the original float values
+        // until luminosity preservation and final rounding, so this is an exact lookup.
+        var units = new float[256];
+        float[][] opaque = [new float[256], new float[256], new float[256]];
+        for (int i = 0; i < 256; i++)
+        {
+            float value = units[i] = i / 255f;
+            for (int channel = 0; channel < 3; channel++) opaque[channel][i] = Shift(value, channel);
+        }
 
-        for (int y = y0; y < y1; y++)
+        if ((long)(x1 - x0) * (y1 - y0) >= ParallelPointPixels)
+            Parallel.For(y0, y1, ParallelPointOptions, ApplyRow);
+        else
+            for (int y = y0; y < y1; y++) ApplyRow(y);
+
+        void ApplyRow(int y)
         {
             int row = y * surface.Stride;
-            for (int x = x0; x < x1; x++)
+            int first = Avx2.IsSupported
+                ? ApplyOpaqueColorBalanceRow(surface.Pixels, row, x0, x1, units, opaque, settings.PreserveLuminosity) : x0;
+            for (int x = first; x < x1; x++)
             {
                 int index = row + x * 4;
                 float alpha = surface.Pixels[index + 3];
                 if (alpha == 0) continue;
-                float[] c = new float[3];
-                for (int i = 0; i < 3; i++) c[i] = Math.Min(255f, surface.Pixels[index + i] * 255f / alpha) / 255f;
-                float before = 0.299f * c[0] + 0.587f * c[1] + 0.114f * c[2];
-                for (int i = 0; i < 3; i++)
+                byte red = surface.Pixels[index], green = surface.Pixels[index + 1], blue = surface.Pixels[index + 2];
+                float r, g, b, before;
+                if (alpha == 255f)
                 {
-                    TonalWeights(c[i], out float s, out float m, out float h);
-                    c[i] = Math.Clamp(c[i] + shadows[i] * s + midtones[i] * m + highlights[i] * h, 0f, 1f);
+                    before = 0.299f * units[red] + 0.587f * units[green] + 0.114f * units[blue];
+                    r = opaque[0][red]; g = opaque[1][green]; b = opaque[2][blue];
+                }
+                else
+                {
+                    r = Math.Min(255f, red * 255f / alpha) / 255f;
+                    g = Math.Min(255f, green * 255f / alpha) / 255f;
+                    b = Math.Min(255f, blue * 255f / alpha) / 255f;
+                    before = 0.299f * r + 0.587f * g + 0.114f * b;
+                    r = Shift(r, 0); g = Shift(g, 1); b = Shift(b, 2);
                 }
                 if (settings.PreserveLuminosity)
                 {
-                    float after = 0.299f * c[0] + 0.587f * c[1] + 0.114f * c[2];
+                    float after = 0.299f * r + 0.587f * g + 0.114f * b;
                     if (after > 0.0001f)
                     {
                         float ratio = before / after;
-                        for (int i = 0; i < 3; i++) c[i] = Math.Clamp(c[i] * ratio, 0f, 1f);
+                        r = Math.Clamp(r * ratio, 0f, 1f);
+                        g = Math.Clamp(g * ratio, 0f, 1f);
+                        b = Math.Clamp(b * ratio, 0f, 1f);
                     }
                 }
-                for (int i = 0; i < 3; i++)
-                {
-                    surface.Pixels[index + i] = (byte)Math.Clamp(MathF.Round(c[i] * alpha, MidpointRounding.AwayFromZero), 0f, alpha);
-                }
+                surface.Pixels[index] = (byte)Math.Clamp(MathF.Round(r * alpha, MidpointRounding.AwayFromZero), 0f, alpha);
+                surface.Pixels[index + 1] = (byte)Math.Clamp(MathF.Round(g * alpha, MidpointRounding.AwayFromZero), 0f, alpha);
+                surface.Pixels[index + 2] = (byte)Math.Clamp(MathF.Round(b * alpha, MidpointRounding.AwayFromZero), 0f, alpha);
             }
+        }
+
+        float Shift(float value, int channel)
+        {
+            return ColorBalanceShift(value, shadows[channel], midtones[channel], highlights[channel]);
+        }
+    }
+
+    internal static float ColorBalanceShift(float value, float shadow, float midtone, float highlight)
+    {
+        TonalWeights(value, out float s, out float m, out float h);
+        return Math.Clamp(value + shadow * s + midtone * m + highlight * h, 0f, 1f);
+    }
+
+    // Eight opaque photo pixels share the same arithmetic, with independent lanes. Stop
+    // before a partial-alpha block; the scalar path also handles the row's short tail.
+    private static unsafe int ApplyOpaqueColorBalanceRow(byte[] pixels, int row, int x0, int x1, float[] units, float[][] opaque, bool preserve)
+    {
+        var mask = Vector256.Create(255);
+        var redWeight = Vector256.Create(.299f); var greenWeight = Vector256.Create(.587f); var blueWeight = Vector256.Create(.114f);
+        var one = Vector256.Create(1f);
+        int x = x0;
+        fixed (float* unitTable = units, redTable = opaque[0], greenTable = opaque[1], blueTable = opaque[2])
+        {
+            for (; x <= x1 - 8; x += 8)
+            {
+                int index = row + x * 4;
+                var packed = Vector256.LoadUnsafe(ref pixels[index]).AsInt32();
+                if (Avx2.MoveMask(Avx2.CompareEqual(Avx2.ShiftRightLogical(packed, 24), mask).AsByte()) != -1) break;
+                var red = Avx2.And(packed, mask);
+                var green = Avx2.And(Avx2.ShiftRightLogical(packed, 8), mask);
+                var blue = Avx2.And(Avx2.ShiftRightLogical(packed, 16), mask);
+                var r = Avx2.GatherVector256(redTable, red, 4);
+                var g = Avx2.GatherVector256(greenTable, green, 4);
+                var b = Avx2.GatherVector256(blueTable, blue, 4);
+                if (preserve)
+                {
+                    // Keep the scalar multiply/add order; fused operations change rounding.
+                    var before = Avx.Add(Avx.Add(Avx.Multiply(redWeight, Avx2.GatherVector256(unitTable, red, 4)),
+                        Avx.Multiply(greenWeight, Avx2.GatherVector256(unitTable, green, 4))),
+                        Avx.Multiply(blueWeight, Avx2.GatherVector256(unitTable, blue, 4)));
+                    var after = Avx.Add(Avx.Add(Avx.Multiply(redWeight, r), Avx.Multiply(greenWeight, g)), Avx.Multiply(blueWeight, b));
+                    var nonzero = Avx.CompareGreaterThan(after, Vector256.Create(.0001f));
+                    var denominator = Avx.BlendVariable(one, after, nonzero);
+                    var ratio = Avx.BlendVariable(one, Avx.Divide(before, denominator), nonzero);
+                    r = Avx.Max(Vector256<float>.Zero, Avx.Min(one, Avx.Multiply(r, ratio)));
+                    g = Avx.Max(Vector256<float>.Zero, Avx.Min(one, Avx.Multiply(g, ratio)));
+                    b = Avx.Max(Vector256<float>.Zero, Avx.Min(one, Avx.Multiply(b, ratio)));
+                }
+                var result = Avx2.Or(Avx2.Or(RoundChannel(r), Avx2.ShiftLeftLogical(RoundChannel(g), 8)),
+                    Avx2.Or(Avx2.ShiftLeftLogical(RoundChannel(b), 16), Vector256.Create(unchecked((int)0xff000000))));
+                result.AsByte().StoreUnsafe(ref pixels[index]);
+            }
+        }
+        return x;
+
+        static Vector256<int> RoundChannel(Vector256<float> value)
+        {
+            var scaled = Avx.Multiply(value, Vector256.Create(255f));
+            var floor = Avx.ConvertToVector256Int32WithTruncation(scaled);
+            // Adding .5 before truncation can round a value just below a midpoint up.
+            // Compare its exact fraction instead, matching Round(AwayFromZero).
+            var fraction = Avx.Subtract(scaled, Avx.ConvertToVector256Single(floor));
+            return Avx2.Subtract(floor, Avx.CompareGreaterThanOrEqual(fraction, Vector256.Create(.5f)).AsInt32());
         }
     }
 
@@ -397,7 +540,7 @@ public static class AdjustmentEngine
         }
     }
 
-    private static float[] BuildCube(HueSaturationSettings settings)
+    internal static float[] BuildCube(HueSaturationSettings settings)
     {
         // The macOS buildCube: every corner converted to HSL, adjusted, and back.
         var response = HueResponse(settings);
@@ -719,6 +862,27 @@ public static class AdjustmentEngine
     }
 
     private static float NoiseUnit(uint key) => (NoiseHash(key) >> 8) * (1f / 16777216f);
+
+    // The deterministic Box-Muller basis is independent of image pixels and Amount.
+    // GPU presentation reuses it instead of relying on driver-specific log/cos approximations.
+    internal static float[] GaussianNoiseBasis(int width, int height, uint seed)
+    {
+        var values = new float[checked(width * height * 4)];
+        Parallel.For(0, height, ParallelPointOptions, y =>
+        {
+            for (int x = 0; x < width; x++)
+            {
+                uint hash = NoiseHash(seed ^ NoiseHash((uint)x * 0x9e3779b9u ^ NoiseHash((uint)y * 0x85ebca6bu)));
+                for (uint channel = 0; channel < 3; channel++)
+                {
+                    uint key = hash + channel * 0x9e3779b9u;
+                    float u1 = NoiseUnit(key), u2 = NoiseUnit(key ^ 0x68e31da4u);
+                    values[(y * width + x) * 4 + channel] = MathF.Sqrt(-2f * MathF.Log(1f - u1)) * MathF.Cos(6.2831853f * u2);
+                }
+            }
+        });
+        return values;
+    }
 
     // --- Grain (AdjustPixels.c adjust_grain) ---
 

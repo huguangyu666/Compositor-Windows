@@ -37,8 +37,8 @@ public sealed partial class MainWindow
         if (!ReferenceEquals(original, scene.Snapshot.Images[id]) || scene.ActiveSelection is not null || !paintOnMask
             || scene.Snapshot.Masks[id].Pixels[0] != 0 || scene.Snapshot.Masks[id].Pixels[2048 * 4096 + 2048] != 255)
             throw new InvalidOperationException("Selection mask creation changed its source, selection or coverage incorrectly.");
-        if (fullTarget!.GetPixelBytes(0, 0, 1, 1).Any(value => value != 0)
-            || fullTarget.GetPixelBytes(2048, 2048, 1, 1).Any(value => value != 255))
+        if (presented!.GetPixelBytes(0, 0, 1, 1).Any(value => value != 0)
+            || presented.GetPixelBytes(2048, 2048, 1, 1).Any(value => value != 255))
             throw new InvalidOperationException("Selection mask GPU spot checks differ.");
         OnUndo(this, new()); await WaitForFramesAsync();
         if (scene.CanUndo || scene.Snapshot.Masks.ContainsKey(id) || !ReferenceEquals(selection, scene.ActiveSelection))

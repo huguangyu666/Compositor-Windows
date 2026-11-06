@@ -396,12 +396,9 @@ public sealed partial class MainWindow
             report["renderInputAndPublicationNoFailures"] = "passed";
             await VerifyInteractionCompletionsAsync(report);
             await VerifyDitherOwnershipAsync(report);
-            // The View menu's pixel-grid entry carried only an English literal, so a Chinese shell
-            // showed English there. x:Uid values come from the XAML resource map, which the app's
-            // own Loc loader cannot read, so the probe reports the loaded control's text: the
-            // tracked run on a zh-CN shell has to show the Chinese entry, not "Show Pixel Grid".
+            // Check the loaded XAML value against its localized resource, not just a nonempty literal.
             report["viewMenuPixelGridLabelObserved"] = PixelGridToggle.Text;
-            Require(!string.IsNullOrWhiteSpace(PixelGridToggle.Text), "The pixel-grid label lost its text.");
+            Require(PixelGridToggle.Text == Loc.T("V_ShowGrid/Text"), "The pixel-grid label ignored its localized resource.");
             report["viewMenuPixelGridLabelUsesItsResource"] = "passed";
             // Floating transform ends in keyboard-focus assertions that need the window to own the
             // foreground; running it last measures everything before it even when nobody is at the
@@ -423,7 +420,7 @@ public sealed partial class MainWindow
     {
         var expected = new CanvasCompositor(snapshot).Render(); var bytes = new byte[expected.Width * expected.Height * 4];
         SurfacePresentation.FillBgra(expected, bytes, expected.Width, 0, 0, expected.Width, expected.Height);
-        Require(fullTarget is not null && bytes.AsSpan().SequenceEqual(fullTarget.GetPixelBytes()), "Transform GPU upload differs from full composition.");
+        Require(presented is not null && bytes.AsSpan().SequenceEqual(presented.GetPixelBytes()), "Presented transform bytes differ from full composition.");
     }
 
     private async Task VerifyThumbnailInteractionsAsync(Dictionary<string, object> report)
@@ -586,7 +583,7 @@ public sealed partial class MainWindow
         var layer = snapshot.Manifest.Layers.Single(l => l.Id == id); var expected = new Surface(snapshot.Manifest.Width, snapshot.Manifest.Height);
         MaskDisplay.Draw(snapshot.Masks[id], layer.MaskPlacement ?? layer.Transform, expected, new(0, 0, expected.Width, expected.Height));
         var bytes = new byte[expected.Pixels.Length]; SurfacePresentation.FillBgra(expected, bytes, expected.Width, 0, 0, expected.Width, expected.Height);
-        Require(fullTarget is not null && bytes.AsSpan().SequenceEqual(fullTarget.GetPixelBytes()), "Solo mask GPU bytes differ from raw mask display.");
+        Require(presented is not null && bytes.AsSpan().SequenceEqual(presented.GetPixelBytes()), "Solo mask GPU bytes differ from raw mask display.");
     }
 
     private async Task VerifySoloMaskPerformanceAsync(Dictionary<string, object> report)

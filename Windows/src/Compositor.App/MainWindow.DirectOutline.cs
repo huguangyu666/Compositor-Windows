@@ -50,7 +50,13 @@ public sealed partial class MainWindow
 
     private void HandleCanvasResourceChange(CanvasCreateResourcesReason reason)
     {
-        if (!directOutlineEnabled || windowClosed || reason != CanvasCreateResourcesReason.NewDevice) return;
+        if (windowClosed || reason != CanvasCreateResourcesReason.NewDevice) return;
+        fullTarget?.Dispose(); fullTarget = null; presented = null;
+        gpuPreviewRenderer?.Dispose(); gpuPreviewRenderer = null;
+        gpuPreviewUnavailable = gpuFramePresented = false;
+        checkerBrush?.Dispose(); checkerBrush = null; checkerTile?.Dispose(); checkerTile = null;
+        frameRevision++; pendingFullRender = true; PumpRender();
+        if (!directOutlineEnabled) return;
         // Retire both published geometry and any result prepared for the old device.
         // Re-enter the same owner-checked worker so recovery cannot publish stale work.
         outlineCancellation?.Cancel();

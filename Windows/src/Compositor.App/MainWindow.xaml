@@ -42,6 +42,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <MenuBar x:Name="MenuBarRoot" Grid.Row="0">
@@ -242,6 +243,7 @@
                 <MenuFlyoutItem x:Uid="M_Delete" Text="Delete" Click="OnDeleteLayer" />
             </MenuBarItem>
             <MenuBarItem x:Uid="M_View" Title="View">
+                <ToggleMenuFlyoutItem x:Name="TimelineToggle" x:Uid="TL_Menu" Text="Timeline" Click="OnToggleTimeline" />
                 <MenuFlyoutItem x:Name="FitCanvasMenuItem" x:Uid="M_Fit" Text="Fit to Window" Click="OnFitToWindow" ToolTipService.ToolTip="Fit the whole canvas (Ctrl+0)">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="Number0" />
@@ -265,6 +267,7 @@
                 <MenuFlyoutSeparator />
                 <ToggleMenuFlyoutItem x:Name="PixelGridToggle" x:Uid="V_ShowGrid" Text="Show Pixel Grid" Click="OnShowPixelGrid" ToolTipService.ToolTip="Visible from 800%" />
                 <ToggleMenuFlyoutItem x:Name="McpAnimationToggle" x:Uid="V_McpAnimation" Text="AI Operation Animation" IsChecked="True" Click="OnToggleMcpAnimation" />
+                <ToggleMenuFlyoutItem x:Name="GpuRenderingToggle" x:Uid="V_GpuRendering" Text="GPU Acceleration (Automatic Fallback)" IsChecked="True" Click="OnToggleGpuRendering" />
                 <ToggleMenuFlyoutItem x:Name="RulersToggle" x:Uid="N_Rulers" Text="Show Rulers" Click="OnShowRulers">
                     <ToggleMenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Key="R" Modifiers="Control" /></ToggleMenuFlyoutItem.KeyboardAccelerators>
                 </ToggleMenuFlyoutItem>
@@ -353,7 +356,7 @@
                                 <ComboBoxItem x:Uid="L_GradientLinear" Content="Linear" />
                                 <ComboBoxItem x:Uid="L_GradientRadial" Content="Radial" />
                             </ComboBox>
-                            <ComboBox x:Name="GradientStyleCombo" Width="180" SelectedIndex="0" SelectionChanged="OnGradientOptionsChanged">
+                            <ComboBox x:Name="GradientStyleCombo" MinWidth="180" SelectedIndex="0" SelectionChanged="OnGradientOptionsChanged">
                                 <ComboBoxItem x:Uid="L_GradientTransparent" Content="Foreground to transparent" />
                                 <ComboBoxItem x:Uid="L_GradientBackground" Content="Foreground to background" />
                             </ComboBox>
@@ -851,7 +854,8 @@
             <Grid x:Name="DockedPanelHosts" Grid.Column="0" Grid.ColumnSpan="4" />
         </Grid>
 
-        <Grid Grid.Row="4" Padding="12,4" ColumnSpacing="10">
+        <Border x:Name="TimelineHost" Grid.Row="4" Visibility="Collapsed" Background="#FF242424" BorderBrush="#FF414141" BorderThickness="0,1,0,0" />
+        <Grid Grid.Row="5" Padding="12,4" ColumnSpacing="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" />

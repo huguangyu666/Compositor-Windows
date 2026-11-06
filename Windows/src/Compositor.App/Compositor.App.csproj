@@ -12,6 +12,7 @@
     <WindowsPackageType>None</WindowsPackageType>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
 
@@ -19,6 +20,8 @@
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.4.0" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
+    <PackageReference Include="Vortice.D3DCompiler" Version="3.8.3" />
+    <PackageReference Include="Vortice.Direct3D11" Version="3.8.3" />
   </ItemGroup>
 
   <!-- The system clipboard is written through the OLE (WinForms) clipboard: WinRT's
@@ -30,8 +33,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Compositor.Core\Compositor.Core.csproj" />
     <ProjectReference Include="..\Compositor.Renderer\Compositor.Renderer.csproj" />
-    <Content Include="..\..\third-party\CLIProxyAPI-LICENSE.txt" Link="third-party\CLIProxyAPI-LICENSE.txt"
-             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="..\..\third-party\CLIProxyAPI-LICENSE.txt" Link="third-party\CLIProxyAPI-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\..\third-party\Vortice-LICENSE.txt" Link="third-party\Vortice-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Shaders\*.bin" />
   </ItemGroup>
 
 </Project>

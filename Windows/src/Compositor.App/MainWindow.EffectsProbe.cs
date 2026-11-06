@@ -821,7 +821,7 @@ public sealed partial class MainWindow
         var expected = new CanvasCompositor(owner.Snapshot).Render();
         var bytes = new byte[expected.Width * expected.Height * 4];
         SurfacePresentation.FillBgra(expected, bytes, expected.Width, 0, 0, expected.Width, expected.Height);
-        if (fullTarget is null || !bytes.AsSpan().SequenceEqual(fullTarget.GetPixelBytes()))
+        if (presented is null || !bytes.AsSpan().SequenceEqual(presented.GetPixelBytes()))
             throw new InvalidOperationException("Uploaded GPU frame differs from full composition.");
     }
 

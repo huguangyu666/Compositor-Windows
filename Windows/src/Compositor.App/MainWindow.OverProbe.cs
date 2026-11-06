@@ -31,7 +31,7 @@ public sealed partial class MainWindow
                     await WaitForFramesAsync(); Volatile.Write(ref PremultipliedOver.DebugMixedVectors, vectors);
                     int before = presentedFrameCount; RenderCanvas(); await WaitForFramesAsync();
                     Require(presentedFrameCount > before, "Mixed-alpha measurement did not publish a fresh frame.");
-                    var bytes = fullTarget!.GetPixelBytes(0, 0, side, side);
+                    var bytes = presented!.GetPixelBytes(0, 0, side, side);
                     if (vectors) actual = bytes; else reference = bytes;
                     if (sample < 0) return;
                     (vectors ? newComposition : oldComposition).Add(lastFrameProbe.CompositionMs);
