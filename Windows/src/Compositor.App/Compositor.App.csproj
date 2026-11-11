@@ -48,4 +48,13 @@
     <EmbeddedResource Include="Shaders\*.bin" />
   </ItemGroup>
 
+  <!-- ONNX Runtime supplies DirectML as transitive Content. Keep that redistributable
+       instead of the SDK's second copy at the same app-local/bundle path. -->
+  <Target Name="PreferOnnxDirectMLRuntime" AfterTargets="AddMicrosoftWindowsAppSDKPayloadFilesFromMsix"
+          Condition="'$(WindowsAppSDKSelfContained)' == 'true' and '$(MicrosoftWindowsAppSDKMsixContent)' != ''">
+    <ItemGroup>
+      <None Remove="$(MicrosoftWindowsAppSDKMsixContent)\DirectML.dll" />
+    </ItemGroup>
+  </Target>
+
 </Project>
