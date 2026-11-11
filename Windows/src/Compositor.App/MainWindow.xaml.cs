@@ -91,6 +91,7 @@ public enum CanvasTool
     Eyedropper,
     Hand,
     Zoom,
+    ObjectSelect,
 }
 
 /// <summary>The crop frame's three gestures: drag out a new box, drag inside to move it,
@@ -295,7 +296,8 @@ public sealed partial class MainWindow : Window
         };
         Closed += (_, _) =>
         {
-            StopTimelinePlayback(); timelineExportCancellation?.Cancel();
+            InvalidateObjectSelectionImage(); objectSegmenter?.Dispose();
+            StopTimelinePlayback(); CancelTimelineDrag(); timelineExportCancellation?.Cancel();
             editorPipe?.Dispose();
             TrackEditorDocument(null);
             RetireAiEdit();
@@ -355,6 +357,7 @@ public sealed partial class MainWindow : Window
         CanvasTool.Crop => Loc.T("Tool_Crop"),
         CanvasTool.Shape => Loc.T("Tool_Shape"),
         CanvasTool.Wand => Loc.T("Tool_Wand"),
+        CanvasTool.ObjectSelect => Loc.T("Tool_ObjectSelect"),
         CanvasTool.Clone => Loc.T("Tool_Clone"),
         CanvasTool.Blur => Loc.T("Tool_Blur"),
         CanvasTool.Text => Loc.T("Tool_Text"),
@@ -401,6 +404,7 @@ public sealed partial class MainWindow : Window
         // leaves would otherwise be painted — and kept painted — by the tool the user just left.
         var previous = tool;
         tool = (CanvasTool)ToolCombo.SelectedIndex;
+        await FinishObjectSelectionForToolChangeAsync();
         await FinishTransformBeforeOutputAsync();
         // A later switch has already moved the field to its own tool; putting this one's back would
         // undo a choice the user made after this handler stopped mattering.
@@ -444,7 +448,9 @@ public sealed partial class MainWindow : Window
         CloneControls.Visibility = tool == CanvasTool.Clone ? Visibility.Visible : Visibility.Collapsed;
         BlurControls.Visibility = tool == CanvasTool.Blur ? Visibility.Visible : Visibility.Collapsed;
         LassoControls.Visibility = tool == CanvasTool.Lasso ? Visibility.Visible : Visibility.Collapsed;
-        SelectionControls.Visibility = tool is CanvasTool.RectSelect or CanvasTool.EllipseSelect or CanvasTool.Lasso or CanvasTool.Wand ? Visibility.Visible : Visibility.Collapsed;
+        SelectionControls.Visibility = tool is CanvasTool.RectSelect or CanvasTool.EllipseSelect or CanvasTool.Lasso or CanvasTool.Wand or CanvasTool.ObjectSelect ? Visibility.Visible : Visibility.Collapsed;
+        LassoAntialiasCheck.Visibility = tool == CanvasTool.ObjectSelect ? Visibility.Collapsed : Visibility.Visible;
+        RefreshObjectSelectionControls();
         GradientControls.Visibility = tool == CanvasTool.Gradient ? Visibility.Visible : Visibility.Collapsed;
         NavigationControls.Visibility = tool == CanvasTool.Zoom ? Visibility.Visible : Visibility.Collapsed;
         EyedropperControls.Visibility = tool == CanvasTool.Eyedropper ? Visibility.Visible : Visibility.Collapsed;
@@ -457,6 +463,7 @@ public sealed partial class MainWindow : Window
         RefreshQuickToolControls();
         RefreshAiActions();
         SetStatus(ToolHint(tool));
+        if (tool == CanvasTool.ObjectSelect) BeginObjectSelectionWarmUp();
         toolChangeApplied = request;
     }
 
@@ -473,6 +480,7 @@ public sealed partial class MainWindow : Window
         CanvasTool.Crop => Loc.T("S_ToolCropHint"),
         CanvasTool.Shape => Loc.T("S_ToolShapeHint"),
         CanvasTool.Wand => Loc.T("S_ToolWandHint"),
+        CanvasTool.ObjectSelect => Loc.T("OS_Hint"),
         CanvasTool.Clone => Loc.T("S_ToolCloneHint"),
         CanvasTool.Blur => Loc.T("S_ToolBlurHint"),
         CanvasTool.Text => Loc.T("S_ToolTextHint"),
@@ -502,6 +510,7 @@ public sealed partial class MainWindow : Window
 
     private void OpenDocument(EditorDocument newDocument, string? path = null)
     {
+        InvalidateObjectSelectionImage();
         StopTimelinePlayback();
         RetireBlendPreview(redraw: false);
         EndOpacityEdit();
@@ -708,6 +717,7 @@ public sealed partial class MainWindow : Window
 
     private void OnDocumentChanged()
     {
+        InvalidateObjectSelectionImage();
         if (!applyingTimeline) StopTimelinePlayback();
         RefreshTimeline();
         if (!applyingOpacity) EndOpacityEdit();
@@ -797,6 +807,7 @@ public sealed partial class MainWindow : Window
 
     private void OnDocumentPixelsChanged()
     {
+        InvalidateObjectSelectionImage();
         if (document?.ActiveTextDraft is not null) RefreshQuickTextControls();
         RetireBlendPreview(redraw: false);
         if (!applyingVisibilitySwipe) FinishVisibilitySwipe(closeHistory: false);
@@ -2648,6 +2659,13 @@ public sealed partial class MainWindow : Window
             return;
         }
 
+        if (tool == CanvasTool.ObjectSelect)
+        {
+            BeginObjectSelectionPointer(point, e.KeyModifiers);
+            if (objectSelectionPress is not null) { CanvasStage.Focus(FocusState.Pointer); CanvasStage.CapturePointer(e.Pointer); }
+            e.Handled = true; return;
+        }
+
         if (tool == CanvasTool.Lasso)
         {
             if (!e.GetCurrentPoint((UIElement)sender).Properties.IsRightButtonPressed) BeginLasso(point, e.KeyModifiers);
@@ -2762,6 +2780,7 @@ public sealed partial class MainWindow : Window
     private void OnCanvasPointerMoved(object sender, PointerRoutedEventArgs e)
     {
         if (e.Pointer.PointerDeviceType == Microsoft.UI.Input.PointerDeviceType.Touch) return;
+        if (objectSelectionPress is not null) { MoveObjectSelectionPointer(DocumentPoint(e)); e.Handled = true; return; }
         if (cameraRawGuideDraft is not null) { ContinueCameraRawGuide(DocumentPoint(e)); e.Handled = true; return; }
         if (cameraRawDrag is not null) { DragCameraRawTargeted(DocumentPoint(e)); e.Handled = true; return; }
         if (pixelMove is not null) { MovePixelsTo(viewport.ToDocument(StagePoint(e, CanvasStage)), e.KeyModifiers); e.Handled = true; return; }
@@ -2959,6 +2978,8 @@ public sealed partial class MainWindow : Window
     private async void OnCanvasPointerReleased(object sender, PointerRoutedEventArgs e)
     {
         if (e.Pointer.PointerDeviceType == Microsoft.UI.Input.PointerDeviceType.Touch) return;
+        if (objectSelectionPress is not null)
+        { EndObjectSelectionPointer(DocumentPoint(e)); CanvasStage.ReleasePointerCapture(e.Pointer); e.Handled = true; return; }
         if (document is null) return;
         if (cameraRawGuideDraft is not null)
         {
@@ -3272,6 +3293,7 @@ public sealed partial class MainWindow : Window
         // told to stand down while the panel is the responder: Space belongs to the focused button there,
         // and a letter typed into a field must not resize the brush.
         if (FloatingPanelHoldsFocus) return;
+        if (HandleObjectSelectionKey(args)) return;
         if (HandlePixelMoveKey(args)) return;
         if (HandleSelectionMoveKey(args)) return;
         if (HandleTransformKey(args)) return;
@@ -3804,7 +3826,7 @@ public sealed partial class MainWindow : Window
         var subject = document.SelectSubject();
         if (subject is null)
         {
-            SetStatus(AiSegmentation.Registered is null ? Loc.T("S_AiNotWired") : Loc.T("S_AiNoSubject"));
+            SetStatus(AiSegmentation.Registered is null ? Loc.T("OS_SubjectPending") : Loc.T("S_AiNoSubject"));
             return;
         }
         if (CanEditSelection) document.SetSelectionUndoable(subject);
@@ -3818,7 +3840,7 @@ public sealed partial class MainWindow : Window
         var subject = document.SelectSubject();
         if (subject is null)
         {
-            SetStatus(AiSegmentation.Registered is null ? Loc.T("S_AiNotWired") : Loc.T("S_AiNoSubject"));
+            SetStatus(AiSegmentation.Registered is null ? Loc.T("OS_SubjectPending") : Loc.T("S_AiNoSubject"));
             return;
         }
         // Remove Subject: clear the subject's pixels on the active layer, one undoable step.
@@ -4233,6 +4255,7 @@ public sealed partial class MainWindow : Window
     /// open filter dialog or an in-flight import out of sight.
     /// </summary>
     private bool ProjectEditsInFlight => document is { ActiveTextDraft: not null }
+        || ObjectSelectionActive
         || timelineExporting
         || gradientEdit is not null || transformInspectorEdit is not null || floatingTransform is not null
         || pixelMove is not null || floatingDuplicate is not null || pointerStroke is not null || placementDragActive
@@ -4359,6 +4382,7 @@ public sealed partial class MainWindow : Window
 
     private async void OnUndo(object sender, RoutedEventArgs e)
     {
+        if (ObjectSelectionActive) { CancelObjectSelection(); return; }
         if (timelineExporting) return;
         StopTimelinePlayback(); CommitTimelineFields();
         EndOpacityEdit();
@@ -4383,6 +4407,7 @@ public sealed partial class MainWindow : Window
 
     private async void OnRedo(object sender, RoutedEventArgs e)
     {
+        if (ObjectSelectionActive) { CancelObjectSelection(); return; }
         if (timelineExporting) return;
         StopTimelinePlayback(); CommitTimelineFields();
         EndOpacityEdit();

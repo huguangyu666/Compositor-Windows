@@ -5,11 +5,13 @@
     </Project>
     <Project Path="src/Compositor.Core/Compositor.Core.csproj" />
     <Project Path="src/Compositor.Renderer/Compositor.Renderer.csproj" />
+    <Project Path="src/Compositor.Segmentation/Compositor.Segmentation.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Compositor.App.Infrastructure.Tests/Compositor.App.Infrastructure.Tests.csproj" />
     <Project Path="tests/Compositor.Core.Tests/Compositor.Core.Tests.csproj" />
     <Project Path="tests/Compositor.Renderer.Tests/Compositor.Renderer.Tests.csproj" />
+    <Project Path="tests/Compositor.Segmentation.Tests/Compositor.Segmentation.Tests.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/Compositor.Mcp/Compositor.Mcp.csproj" />

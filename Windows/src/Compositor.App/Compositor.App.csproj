@@ -33,6 +33,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Compositor.Core\Compositor.Core.csproj" />
     <ProjectReference Include="..\Compositor.Renderer\Compositor.Renderer.csproj" />
+    <ProjectReference Include="..\Compositor.Segmentation\Compositor.Segmentation.csproj" />
+    <Content Include="..\..\third-party\MobileSAM-LICENSE.txt" Link="third-party\MobileSAM-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\..\third-party\SAM2-LICENSE.txt" Link="third-party\SAM2-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\..\third-party\ONNXRuntime-LICENSE.txt" Link="third-party\ONNXRuntime-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\..\third-party\ONNXRuntime-ThirdPartyNotices.txt" Link="third-party\ONNXRuntime-ThirdPartyNotices.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\..\third-party\Segmentation-NOTICE.txt" Link="third-party\Segmentation-NOTICE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <Content Include="..\..\third-party\OpenCV-GrabCut-LICENSE.txt" Link="third-party\OpenCV-GrabCut-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <Content Include="..\..\third-party\CLIProxyAPI-LICENSE.txt" Link="third-party\CLIProxyAPI-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <Content Include="..\..\third-party\Vortice-LICENSE.txt" Link="third-party\Vortice-LICENSE.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>

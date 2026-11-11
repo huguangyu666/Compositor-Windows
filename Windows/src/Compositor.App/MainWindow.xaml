@@ -628,8 +628,17 @@
                         <Rectangle x:Name="Handle7" Width="9" Height="9" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
                         <Ellipse x:Name="RotationHandleDot" Width="11" Height="11" Fill="White" Stroke="#FF4CC2FF" StrokeThickness="1" Visibility="Collapsed" />
                         <Path x:Name="SelectionOutline"
-                                   Stroke="#FF4CC2FF" StrokeDashArray="4 3" StrokeThickness="1"
-                                   Visibility="Collapsed" />
+                              StrokeThickness="1.25" IsHitTestVisible="False" Visibility="Collapsed">
+                            <Path.Stroke>
+                                <LinearGradientBrush x:Name="SelectionContourBrush" MappingMode="Absolute"
+                                                     SpreadMethod="Repeat" StartPoint="0,0" EndPoint="4,4">
+                                    <GradientStop Color="Black" Offset="0" />
+                                    <GradientStop Color="Black" Offset="0.5" />
+                                    <GradientStop Color="White" Offset="0.5" />
+                                    <GradientStop Color="White" Offset="1" />
+                                </LinearGradientBrush>
+                            </Path.Stroke>
+                        </Path>
                         <Polyline x:Name="LassoPreview" Stroke="#FFF2F2F2" StrokeThickness="1" Visibility="Collapsed" />
                         <Rectangle x:Name="DragPreview"
                                    Stroke="#FFF2F2F2" StrokeThickness="1"

@@ -45,6 +45,6 @@ public sealed partial class MainWindow
             SelectionSubtractButton.IsChecked = mode == LassoSelectionMode.Subtract;
         }
         finally { synchronizingSelectionMode = false; }
-        if (changed) CancelLasso();
+        if (changed) { CancelLasso(); RefreshObjectSelectionOptions(); }
     }
 }

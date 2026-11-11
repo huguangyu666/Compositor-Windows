@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory)][string]$FilePath,
-    [ValidateSet('', '--effects-perf', '--panel-perf', '--workspace-probe', '--navigation-probe', '--transform-probe', '--logging-probe', '--lifetime-probe', '--watcher-probe', '--mcp-interop-probe', '--recovery-probe', '--stress-matrix', '--retention-probe', '--paint-perf', '--direct-outline-probe', '--project-open-probe', '--project-save-probe', '--draft-exit-probe', '--ai-image-probe', '--localization-probe', '--timeline-probe', '--layer-drag-perf')][string]$Argument = '',
+    [ValidateSet('', '--effects-perf', '--panel-perf', '--workspace-probe', '--navigation-probe', '--transform-probe', '--logging-probe', '--lifetime-probe', '--watcher-probe', '--mcp-interop-probe', '--recovery-probe', '--stress-matrix', '--retention-probe', '--paint-perf', '--direct-outline-probe', '--project-open-probe', '--project-save-probe', '--draft-exit-probe', '--ai-image-probe', '--localization-probe', '--timeline-probe', '--layer-drag-perf', '--svg-import-probe', '--object-selection-probe')][string]$Argument = '',
     [switch]$Visible
 )
 $ErrorActionPreference = 'Stop'

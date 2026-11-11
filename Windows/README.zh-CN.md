@@ -13,3 +13,10 @@
 源码位于 `src/`，测试位于 `tests/`，解决方案为 `Compositor.Windows.slnx`。
 
 本版新增 [GPU 加速与 CPU 回退](docs/gpu-rendering.md)、[图层动画时间轴](docs/timeline.md)，并统一中英文自动适配。
+
+- Agent 可用自己的生图工具，再经 MCP 精确放入图层或回传选区修改预览，接受后一步撤销；软件无需填写 API Key。
+- 支持模型编写 SVG 并导入透明图层。
+- 可选本地 SAM 2.1 点选/框选对象，支持 DirectML/CPU 与空心圆光标。
+- 优化时间轴拖动与播放指针，帧内移动及时跟手。
+
+[External-agent generation](docs/agent-image-mcp.md) · [SVG](docs/svg-mcp.md) · [Object Selection](docs/object-selection-2026-11-06.md)

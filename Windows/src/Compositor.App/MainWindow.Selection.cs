@@ -32,7 +32,7 @@ public sealed partial class MainWindow
     private bool CanEditSelectionState => !TimelinePreviewActive && CanEditSelectionBaseState;
     private bool CanEditSelectionBaseState => !timelineExporting && !IsFileImporting && document is not null && selectionMove is null && pointerStroke is null && healingStroke is null && !healingFinishing
         && floatingDuplicate is null && floatingTransform is null && transformInspectorEdit is null && gradientEdit is null && !renamingLayer && !textDialogOpen
-        && !colorRangeSampling && !selectionAmountPending && StatusProgress.Visibility != Visibility.Visible;
+        && !ObjectSelectionActive && !colorRangeSampling && !selectionAmountPending && StatusProgress.Visibility != Visibility.Visible;
 
     private LassoSelectionMode SelectionModeAtPress(VirtualKeyModifiers modifiers) => modifiers.HasFlag(VirtualKeyModifiers.Menu)
         ? LassoSelectionMode.Subtract : modifiers.HasFlag(VirtualKeyModifiers.Shift) ? LassoSelectionMode.Add
@@ -55,6 +55,7 @@ public sealed partial class MainWindow
 
     private void OnSelectionChanged()
     {
+        if (!publishingSelection) CancelObjectSelection();
         RefreshAiActions();
         RetireBlendPreview();
         EndOpacityEdit();
@@ -96,8 +97,11 @@ public sealed partial class MainWindow
 
     private void UpdateSelectionStrokes()
     {
+        if (ObjectSelectionActive) RefreshObjectSelectionMarkers();
         double width = 1 / viewport.PointsPerPixel;
-        SelectionOutline.StrokeThickness = DragPreview.StrokeThickness = ShapePreviewEllipse.StrokeThickness = LassoPreview.StrokeThickness = width;
+        SelectionOutline.StrokeThickness = 1.25 * width;
+        SelectionContourBrush.EndPoint = new(4 * width, 4 * width);
+        DragPreview.StrokeThickness = ShapePreviewEllipse.StrokeThickness = LassoPreview.StrokeThickness = width;
     }
 
     private async void QueueSelectionWork(Func<Selection?, CancellationToken, Selection?> build, bool combinesPrevious, string status, bool undoable = true,

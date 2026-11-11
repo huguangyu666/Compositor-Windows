@@ -17,10 +17,10 @@ public sealed partial class MainWindow
 #endif
     private enum AiOperation { Remove, Replace, Expand }
 
-    private sealed class AiEditorSession(EditorDocument owner, HttpClient http)
+    private sealed class AiEditorSession(EditorDocument owner, HttpClient? http)
     {
         public readonly EditorDocument Owner = owner;
-        public readonly HttpClient Http = http;
+        public readonly HttpClient? Http = http;
         public readonly AiCredentialStore Store = new();
         public ChatGptAccount? Account;
         public CancellationTokenSource? Work;
@@ -34,6 +34,10 @@ public sealed partial class MainWindow
         public Action<string?, string, string, int, int, int, int>? Configure;
         public Action<IReadOnlyList<AiReferenceFile>, string>? ConfigureReferences;
         public Action<int>? SelectCandidate;
+        public bool External;
+        public string? InputDirectory;
+        public Action? RefreshExternal;
+        public Action<Surface, AiBitmapData>? PresentExternal;
         public readonly List<(Surface Layer, WriteableBitmap Preview)> Candidates = [];
     }
 
@@ -47,7 +51,7 @@ public sealed partial class MainWindow
         RefreshAiWorkingRegion();
         var selection = document?.ActiveSelection;
         bool selected = selection is { IsEmpty: false };
-        AiActions.Visibility = selected && aiEditor is null && tool is CanvasTool.RectSelect or CanvasTool.EllipseSelect or CanvasTool.Lasso or CanvasTool.Wand
+        AiActions.Visibility = selected && aiEditor is null && !ObjectSelectionActive && tool is CanvasTool.RectSelect or CanvasTool.EllipseSelect or CanvasTool.Lasso or CanvasTool.Wand or CanvasTool.ObjectSelect
             ? Visibility.Visible : Visibility.Collapsed;
         AiRemoveButton.IsEnabled = AiReplaceButton.IsEnabled = selected;
         double x = 16, y = Math.Max(8, CanvasStage.ActualHeight - 62);
@@ -72,7 +76,8 @@ public sealed partial class MainWindow
             session.Owner.Changed -= session.OnChanged;
             session.Owner.PixelsChanged -= session.OnChanged;
             session.Owner.SelectionChanged -= session.OnChanged;
-            session.Http.Dispose();
+            session.Http?.Dispose();
+            DeleteAgentInput(session);
         }
         AbandonFloatingPanel(AiPanelKey);
         AiPreviewHost.Visibility = Visibility.Collapsed;
@@ -238,7 +243,7 @@ public sealed partial class MainWindow
             var cancellation = new CancellationTokenSource(); session.Work = cancellation; Busy(true); message.Text = Loc.T("AI_SigningIn");
             try
             {
-                var oauth = new ChatGptOAuth(session.Http);
+                var oauth = new ChatGptOAuth(http);
                 var tokens = await oauth.SignInAsync(cancellation: cancellation.Token);
                 if (!Current() || cancellation.IsCancellationRequested) return;
                 session.Account ??= new ChatGptAccount(oauth, session.Store);
@@ -276,12 +281,12 @@ public sealed partial class MainWindow
                     if (!Uri.TryCreate(endpoint.Text, UriKind.Absolute, out var apiBase)) throw new ArgumentException(Loc.T("AI_EndpointInvalid"));
                     var apiKey = string.IsNullOrEmpty(key.Password) ? AiApiConnection.Load(session.Store)?.KeyFor(apiBase) : key.Password;
                     if (string.IsNullOrWhiteSpace(apiKey)) { settings.IsExpanded = true; message.Text = Loc.T("AI_KeyRequired"); return; }
-                    generateImage = new ImageGenerationClient(session.Http, apiKey, apiBase).GenerateAsync;
+                    generateImage = new ImageGenerationClient(http, apiKey, apiBase).GenerateAsync;
                 }
                 else
                 {
-                    session.Account ??= new ChatGptAccount(new ChatGptOAuth(session.Http), session.Store);
-                    generateImage = new ImageGenerationClient(session.Http, session.Account.GetTokensAsync).GenerateAsync;
+                    session.Account ??= new ChatGptAccount(new ChatGptOAuth(http), session.Store);
+                    generateImage = new ImageGenerationClient(http, session.Account.GetTokensAsync).GenerateAsync;
                 }
                 string instruction = prompt.Text;
                 string modelName = ModelId();

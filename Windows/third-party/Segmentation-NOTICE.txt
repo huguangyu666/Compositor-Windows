@@ -1,0 +1,44 @@
+Local Object Selection
+
+SAM 2.1 by Meta Platforms, Inc. and affiliates
+https://github.com/facebookresearch/sam2
+Apache License 2.0; see SAM2-LICENSE.txt.
+ONNX exports by ONNX Community
+https://huggingface.co/onnx-community/sam2.1-hiera-tiny-ONNX
+Pinned revision: 814a066640debee5a91e70aa401fb8e17e030503
+The Windows adapter follows the export's square image transform and multi-scale
+feature/prompt interface. All four optional FP32 model/data files are SHA-256 pinned
+and downloaded on demand, not bundled. The adapter retains one feature set for
+corrective clicks and supports DirectML/CPU execution with cancellation.
+
+MobileSAM by Chaoning Zhang and contributors
+https://github.com/ChaoningZhang/MobileSAM
+Apache License 2.0; see MobileSAM-LICENSE.txt.
+
+Segment Anything (SAM) by Meta Platforms, Inc. and affiliates
+https://github.com/facebookresearch/segment-anything
+Apache License 2.0. Prompt conventions, mask decoding and coordinate restoration
+follow this interface. Small-region cleanup follows utils/amg.py remove_small_regions,
+adapted for partial coverage, explicit prompt protection and bounded .NET flood traversal.
+The Windows adapter adds cancellation, premultiplied RGBA
+sampling, optional model installation and bounded image-feature reuse.
+
+ONNX exports by Acly
+https://huggingface.co/Acly/MobileSAM
+Pinned revision: 0d3b403339b4674a82493d5e97964dd78089ddc8
+The export model card identifies MIT; upstream MobileSAM/SAM attribution and
+Apache-2.0 terms are retained. Weights are downloaded on demand, not bundled.
+
+Microsoft ONNX Runtime, MIT License
+https://github.com/microsoft/onnxruntime
+See ONNXRuntime-LICENSE.txt and ONNXRuntime-ThirdPartyNotices.txt.
+Inference uses DirectML when available and falls back to CPU.
+
+Original-resolution narrow-band edge fitting
+The color mixture and contrast energy are adapted from OpenCV modules/imgproc/src/grabcut.cpp;
+the image graph solver is adapted from modules/imgproc/include/opencv2/imgproc/detail/gcgraph.hpp.
+Copyright (C) 2000 Intel Corporation, all rights reserved; see OpenCV-GrabCut-LICENSE.txt.
+https://github.com/opencv/opencv
+The native C# adaptation adds sampled deterministic color learning, a bounded uncertain border,
+prompt constraints, cancellation, residual reachability for free ties, and local RGB alpha
+estimation. It includes no OpenCV executable, library or additional model weights.

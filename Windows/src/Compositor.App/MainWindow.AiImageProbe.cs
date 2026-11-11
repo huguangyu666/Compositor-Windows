@@ -141,6 +141,7 @@ public sealed partial class MainWindow
             report["customApiSettingsCredentialsPreviewUndo"] = "passed";
             await VerifyLiveEditorMcpAsync(handler);
             report["liveMcpEditing"] = "passed";
+            report["agentImageExchangeWithoutEditorCredentials"] = "passed";
             report["status"] = "passed";
         }
         catch (Exception ex) { report["status"] = "failed"; report["error"] = ex.ToString(); }
@@ -292,6 +293,7 @@ public sealed partial class MainWindow
             await VerifyLiveLayerMcpAsync(Call);
             await VerifyAutomationMcpAsync(Call);
             await VerifyMaskReferenceMcpAsync(Call, handler);
+            await VerifyAgentImageMcpAsync(Call, handler);
         }
         finally
         {

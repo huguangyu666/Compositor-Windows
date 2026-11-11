@@ -5,7 +5,7 @@
 A free, open-source Windows image editor built with C# and WinUI 3. Compose layers, edit photos,
 and let an external AI agent operate the editor through MCP.
 
-**Public Beta · Windows x64.** [Download the Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261106).
+**Public Beta · Windows x64.** [Download the Beta](https://github.com/huguangyu666/Compositor-Windows/releases/tag/v1.0.0-beta.20261111).
 Run `Compositor.App.exe` directly; .NET and WinUI runtimes are bundled. The complete ZIP also
 includes the optional MCP server, agent skill, instructions and licenses.
 
@@ -30,9 +30,15 @@ saved the project and exported the image. The background artwork was generated s
 - Connect an MCP client to inspect the live canvas and edit layers, typography, selections and masks.
 - Watch a virtual AI cursor draw exact creation bounds before elements appear, with compact batch feedback.
 
+
+- Generate with the agent's own image tools and return PNGs through MCP, with precise placement, selection-protected previews and one Undo; no editor API key is required.
+- Import model-authored SVG as transparent raster layers.
+- Use optional local SAM 2.1 point/box object selection, DirectML/CPU inference and a hollow-circle cursor.
+- Scrub a smoother timeline with immediate subframe pointer movement and continuous playback indication.
+
 ## Let AI operate the editor
 
-The MCP server exposes **29 live editing tools and 6 saved-project tools**. Local editing uses
+The MCP server exposes **32 live editing tools and 6 saved-project tools**. Local editing uses
 the editor's normal operations and Undo history. The bundled
 [compositor-mcp skill](Windows/skills/compositor-mcp/SKILL.md) provides workflows for grading,
 layout, masks, AI preview and saving. See [connection and skill setup](Windows/docs/mcp.md).
@@ -106,3 +112,5 @@ The experimental account adapter references the OAuth/image protocol from
 Canvas GPU integration uses [Vortice.Windows](https://github.com/amerkoleci/Vortice.Windows)
 by Amer Koleci and contributors under its [MIT license](Windows/third-party/Vortice-LICENSE.txt),
 and [Win2D](https://github.com/microsoft/Win2D). Shader sources and compiled SM5 bytecode are included.
+
+Local object selection uses [SAM 2.1](https://github.com/facebookresearch/sam2), [ONNX Community exports](https://huggingface.co/onnx-community/sam2.1-hiera-tiny-ONNX), [MobileSAM](https://github.com/ChaoningZhang/MobileSAM) and [ONNX Runtime](https://github.com/microsoft/onnxruntime). Model weights download separately; dependency licenses and attribution are retained in [third-party notices](Windows/third-party/Segmentation-NOTICE.txt).

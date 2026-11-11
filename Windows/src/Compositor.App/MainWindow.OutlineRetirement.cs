@@ -55,7 +55,8 @@ public sealed partial class MainWindow
 
     private void RetireOutline(Geometry? geometry)
     {
-        if (geometry is null || ReferenceEquals(geometry, SelectionOutline.Data) || ReferenceEquals(geometry, selectionOutlineGeometry)
+        if (geometry is null || ReferenceEquals(geometry, SelectionOutline.Data)
+            || ReferenceEquals(geometry, selectionOutlineGeometry)
             || !retiredOutlineIdentities.Add(geometry)) return;
         // Keep the root alive until its native child collections have been emptied.
         // Releasing a large root wholesale makes WinUI delete every dependency object

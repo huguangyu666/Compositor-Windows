@@ -28,7 +28,6 @@ public sealed partial class MainWindow
     private readonly Dictionary<AnimationProperty, NumberBox> timelineFields = [];
     private readonly Dictionary<AnimationProperty, double> pendingTimelineValues = [];
     private readonly List<Button> timelineKeyButtons = [];
-    private DispatcherTimer timelineTimer = null!;
     private readonly Stopwatch timelineClock = new();
     private int timelineFrame, timelineStartFrame;
     private Guid? timelineLayer;
@@ -47,8 +46,6 @@ public sealed partial class MainWindow
 
     private void InitializeTimeline()
     {
-        timelineTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
-        timelineTimer.Tick += (_, _) => TickTimelinePlayback();
         var root = new Grid { RowSpacing = 0 };
         root.RowDefinitions.Add(new() { Height = GridLength.Auto });
         root.RowDefinitions.Add(new() { Height = GridLength.Auto });
@@ -92,14 +89,15 @@ public sealed partial class MainWindow
         {
             int delta = e.GetCurrentPoint(timelineCanvas).Properties.MouseWheelDelta;
             if (KeyHeld(VirtualKey.Control)) ZoomTimeline(delta > 0 ? 1.25 : .8);
-            else timelineVertical.Value = Math.Clamp(timelineVertical.Value - Math.Sign(delta) * 3, 0, timelineVertical.Maximum);
+            else timelineVertical.Value = Math.Clamp(timelineVertical.Value - delta / 120d * 3, 0, timelineVertical.Maximum);
             e.Handled = true;
         };
-        timelineEditor.Children.Add(timelineCanvas);
+        timelineEditor.Children.Add(CreateTimelineSurface());
         timelineVertical = new ScrollBar { Orientation = Orientation.Vertical, Width = 12, Minimum = 0, SmallChange = 1 };
         timelineVertical.ValueChanged += (_, _) => timelineCanvas.Invalidate(); Grid.SetColumn(timelineVertical, 1); timelineEditor.Children.Add(timelineVertical);
         timelineHorizontal = new ScrollBar { Orientation = Orientation.Horizontal, Height = 12, Minimum = 0, SmallChange = 1, Margin = new(TimelineNamesWidth, 0, 0, 0) };
-        timelineHorizontal.ValueChanged += (_, _) => timelineCanvas.Invalidate(); Grid.SetRow(timelineHorizontal, 1); timelineEditor.Children.Add(timelineHorizontal);
+        timelineHorizontal.ValueChanged += (_, _) => { RefreshTimelinePlayhead(restartAnimation: true); timelineCanvas.Invalidate(); };
+        Grid.SetRow(timelineHorizontal, 1); timelineEditor.Children.Add(timelineHorizontal);
         Grid.SetRow(timelineEditor, 2); root.Children.Add(timelineEditor);
         var details = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 8, Padding = new(12, 6, 12, 6) };
         timelineIn = TimelineNumber("TL_In", "TimelineIn", 0, 0, 9000, 74); timelineOut = TimelineNumber("TL_Out", "TimelineOut", 5, 0, 9000, 74);
@@ -156,14 +154,14 @@ public sealed partial class MainWindow
     private void ShowTimeline(bool visible)
     {
         if (ProjectEditsInFlight) { TimelineToggle.IsChecked = timelineVisible; SetStatus(Loc.T("TL_FinishEdit")); return; }
-        StopTimelinePlayback(); CommitTimelineFields(); timelineVisible = visible; TimelineToggle.IsChecked = visible;
+        StopTimelinePlayback(); CancelTimelineDrag(); CommitTimelineFields(); timelineVisible = visible; TimelineToggle.IsChecked = visible;
         TimelineHost.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         if (visible) { timelineLayer ??= selectedLayerId; ResizeTimeline(); RefreshTimeline(); FitTimeline(); }
         RefreshTimelineMode(); RenderCanvas();
     }
     private void ResetTimelineForDocument()
     {
-        StopTimelinePlayback(); pendingTimelineValues.Clear(); timelineDrag = null;
+        StopTimelinePlayback(); CancelTimelineDrag(); pendingTimelineValues.Clear();
         timelineDocumentId = document?.Snapshot.Manifest.DocumentId; timelineFrame = 0; timelineLayer = selectedLayerId;
         timelinePreview.IsChecked = true; timelineAppliedMode = null;
         timelineNeedsFit = true; ResizeTimeline();
@@ -183,6 +181,9 @@ public sealed partial class MainWindow
     {
         if (timelineCanvas is null) return;
         if (timelineDocumentId != document?.Snapshot.Manifest.DocumentId) { ResetTimelineForDocument(); return; }
+#if DEBUG
+        long refreshStart = Stopwatch.GetTimestamp(), refreshBytes = GC.GetAllocatedBytesForCurrentThread();
+#endif
         var timeline = Timeline; syncingTimeline = true;
         try
         {
@@ -207,16 +208,45 @@ public sealed partial class MainWindow
             {
                 field.IsEnabled = editable && layer is not null && document!.CanEditLayer(layer.Id, property == AnimationProperty.Opacity ? LayerLocks.None : LayerLocks.Position)
                     && (property == AnimationProperty.Opacity || !layer.IsGroupOrFalse && layer.Adjustment is null);
-                if (layer is not null && !pendingTimelineValues.ContainsKey(property)) field.Value = TimelineDisplayValue(property, TimelineValue(layer, track, property));
             }
             foreach (var button in timelineKeyButtons) button.IsEnabled = editable && layer is not null && document!.CanEditLayer(layer.Id, LayerLocks.None);
-            string interpolation = track is null ? "linear" : Enum.GetValues<AnimationProperty>().SelectMany(track.Keys).FirstOrDefault(key => key.Frame == timelineFrame)?.Interpolation ?? "linear";
-            timelineInterpolation.SelectedIndex = interpolation switch { "smooth" => 1, "hold" => 2, _ => 0 };
             timelineInterpolation.IsEnabled = editable && layer is not null;
-            UpdateTimelineTime(); RefreshTimelineScroll();
+            RefreshTimelineValues(layer, track); RefreshTimelineScroll();
         }
         finally { syncingTimeline = false; }
         RefreshTimelineMode();
+#if DEBUG
+        timelineRefreshProbe?.Invoke(Stopwatch.GetElapsedTime(refreshStart).TotalMilliseconds, GC.GetAllocatedBytesForCurrentThread() - refreshBytes);
+#endif
+    }
+    private void RefreshTimelinePosition()
+    {
+        var layer = document?.Snapshot.Manifest.Layers.FirstOrDefault(layer => layer.Id == timelineLayer);
+        var track = Timeline?.Tracks.FirstOrDefault(track => track.LayerId == timelineLayer);
+        syncingTimeline = true;
+        try { RefreshTimelineValues(layer, track); }
+        finally { syncingTimeline = false; }
+    }
+    private void RefreshTimelineValues(ProjectLayerRecord? layer, LayerAnimationTrack? track)
+    {
+        if (layer is not null)
+            foreach (var (property, field) in timelineFields)
+            {
+                if (pendingTimelineValues.ContainsKey(property)) continue;
+                double value = TimelineDisplayValue(property, TimelineValue(layer, track, property));
+                if (field.Value != value) field.Value = value;
+            }
+        string interpolation = "linear";
+        int highlighted = -1;
+        if (track is not null)
+            foreach (var property in timelineFields.Keys)
+                if (track.Keys(property).FirstOrDefault(key => key.Frame == timelineFrame) is { } key)
+                { interpolation = key.Interpolation; highlighted = timelineFrame; break; }
+        int index = interpolation switch { "smooth" => 1, "hold" => 2, _ => 0 };
+        if (timelineInterpolation.SelectedIndex != index) timelineInterpolation.SelectedIndex = index;
+        UpdateTimelineTime();
+        if (timelineDrag is { Kind: "key" } || timelineHighlightedFrame != highlighted) timelineCanvas.Invalidate();
+        timelineHighlightedFrame = highlighted;
     }
     private double TimelineValue(ProjectLayerRecord layer, LayerAnimationTrack? track, AnimationProperty property)
     {
@@ -272,15 +302,21 @@ public sealed partial class MainWindow
     private void SeekTimeline(int frame, bool stop = true)
     {
         if (Timeline is not { } timeline || timelineExporting) return;
+        bool stopped = stop && timelinePlaying;
         if (stop) { StopTimelinePlayback(); CommitTimelineFields(); }
+        timeline = Timeline!;
         frame = Math.Clamp(frame, 0, timeline.DurationFrames - 1);
-        if (timelineFrame != frame)
+        if (timelineFrame == frame) { if (stopped) RefreshTimeline(); return; }
+        timelineFrame = frame;
+        if (TimelinePreviewActive)
         {
-            timelineFrame = frame; RenderCanvas();
-            if (timelinePlaying && (TimelineX(frame) < TimelineNamesWidth || TimelineX(frame) > timelineCanvas.ActualWidth - 12))
-                timelineHorizontal.Value = Math.Clamp(frame - 1, 0, timelineHorizontal.Maximum);
+            // A seek changes time, not the document revision. Let the current frame
+            // publish while the serial worker coalesces later seeks into the next frame.
+            pendingFullRender = true; PumpRender();
         }
-        RefreshTimeline();
+        if (timelinePlaying && (TimelineX(frame) < TimelineNamesWidth || TimelineX(frame) > timelineCanvas.ActualWidth - 12))
+            timelineHorizontal.Value = Math.Clamp(frame - 1, 0, timelineHorizontal.Maximum);
+        if (stopped) RefreshTimeline(); else RefreshTimelinePosition();
     }
     private void ToggleTimelinePlayback()
     {
@@ -288,23 +324,32 @@ public sealed partial class MainWindow
         if (!CanEditTimeline || Timeline is not { } timeline) return;
         CommitTimelineFields(); timelinePreview.IsChecked = true; RefreshTimelineMode();
         if (timelineFrame >= timeline.DurationFrames - 1) timelineFrame = 0;
-        timelineStartFrame = timelineFrame; timelinePlaying = true; timelineClock.Restart(); timelineTimer.Start();
+        timelineStartFrame = timelineFrame; timelinePlaying = true; timelineClock.Restart();
+        CompositionTarget.Rendering += OnTimelinePlaybackFrame;
         timelinePlay.Content = Loc.T("TL_Pause"); RefreshTimeline(); RenderCanvas();
     }
     private void StopTimelinePlayback()
-    { timelinePlaying = false; timelineTimer?.Stop(); timelineClock.Stop(); if (timelinePlay is not null) timelinePlay.Content = Loc.T("TL_Play"); }
+    {
+        if (!timelinePlaying) return;
+        timelinePlaying = false; CompositionTarget.Rendering -= OnTimelinePlaybackFrame;
+        timelineClock.Stop(); timelinePlay.Content = Loc.T("TL_Play");
+        StopTimelinePlayheadAnimation(); RefreshTimelinePlayhead();
+    }
+    private void OnTimelinePlaybackFrame(object? sender, object args) => TickTimelinePlayback();
     private void TickTimelinePlayback()
     {
         if (!timelinePlaying || Timeline is not { } timeline || windowClosed) { StopTimelinePlayback(); return; }
         int frame = timelineStartFrame + (int)(timelineClock.Elapsed.TotalSeconds * timeline.FramesPerSecond);
-        if (frame >= timeline.DurationFrames && !timeline.Loop) { StopTimelinePlayback(); SeekTimeline(timeline.DurationFrames - 1, stop: false); return; }
-        if (!workerBusy) SeekTimeline(frame % timeline.DurationFrames, stop: false);
+        if (frame >= timeline.DurationFrames && !timeline.Loop)
+        { StopTimelinePlayback(); SeekTimeline(timeline.DurationFrames - 1, stop: false); RefreshTimeline(); return; }
+        SeekTimeline(frame % timeline.DurationFrames, stop: false);
     }
     private void UpdateTimelineTime()
     {
         int fps = Timeline?.FramesPerSecond ?? 24;
-        timelineTime.Text = $"{timelineFrame / fps / 60:00}:{timelineFrame / fps % 60:00}:{timelineFrame % fps:00}  /  {Timeline?.DurationFrames ?? 120}";
-        timelineCanvas.Invalidate();
+        string text = $"{timelineFrame / fps / 60:00}:{timelineFrame / fps % 60:00}:{timelineFrame % fps:00}  /  {Timeline?.DurationFrames ?? 120}";
+        if (timelineTime.Text != text) timelineTime.Text = text;
+        RefreshTimelinePlayhead();
     }
     private void RefreshTimelineScroll()
     {
@@ -316,7 +361,8 @@ public sealed partial class MainWindow
         double rows = Math.Max(1, (timelineCanvas.ActualHeight - TimelineRulerHeight) / TimelineTrackHeight);
         timelineVertical.ViewportSize = rows; timelineVertical.LargeChange = rows;
         timelineVertical.Maximum = Math.Max(0, (document?.LayerCount ?? 0) - rows);
-        timelineVertical.Value = Math.Min(timelineVertical.Value, timelineVertical.Maximum); timelineCanvas.Invalidate();
+        timelineVertical.Value = Math.Min(timelineVertical.Value, timelineVertical.Maximum);
+        RefreshTimelinePlayhead(restartAnimation: true); timelineCanvas.Invalidate();
     }
     private void ZoomTimeline(double factor)
     { timelinePixelsPerFrame = Math.Clamp(timelinePixelsPerFrame * factor, .02, 30); RefreshTimelineScroll(); }

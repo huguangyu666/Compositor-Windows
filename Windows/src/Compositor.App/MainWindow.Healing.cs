@@ -150,6 +150,7 @@ public sealed partial class MainWindow
 
     private void OnHealingPointerCanceled(object sender, PointerRoutedEventArgs args)
     {
+        if (objectSelectionPress is not null) { objectSelectionPress = null; RefreshObjectSelectionMarkers(); RefreshObjectSelectionControls(); }
         CancelFloatingPointerForFocus();
         CancelPixelMove(focusLoss: true);
         EndSelectionMove(); StopSelectionAutoscroll();

@@ -3,6 +3,50 @@
 Use these examples with the current schemas and fresh editor state. Symbolic tokens and IDs below
 must be replaced with actual returned values; they are not executable project identifiers.
 
+## External-agent image generation
+
+For new artwork, generate with the agent's own available tool, then import its local PNG with
+`editor_layer_import`. Supply x/y and both width/height when exact placement matters. These bounds
+describe the full source rectangle; default trimming preserves the visible artwork's position
+and scale. Use `trim=false` only when the original image grid is needed. Preview the isolated
+layer to check transparency; trimming removes zero-alpha padding, not a solid or faint background.
+
+For a contextual edit:
+
+1. Inspect state/canvas and set a selection for remove/replace. Expansion needs no selection.
+2. Call `editor_ai_prepare` with operation remove/replace/expand and expansion edges when needed.
+   Read `ai.requestId` and `ai.input` from the returned state. No key or editor cloud request occurs.
+3. Use `imagePath` and `maskPath` with the agent's own image tool. The mask uses alpha:
+   **transparent is editable, opaque is protected**, with partial alpha for soft boundaries.
+   Keep the full `width` × `height` canvas and its framing, not only the selection crop.
+4. Refresh state; call `editor_ai_import` with the prepared request ID and the generated local PNG.
+   Different output dimensions are resized to the full target. Software reapplies captured
+   coverage so protected original pixels remain unchanged. Import makes a preview, not an edit.
+5. Compare result/original, then accept the reviewed candidate with `editor_ai_accept`, or discard
+   with `editor_ai_cancel`, `discard=true`. Acceptance is one Undo; save/export separately.
+
+The editor displays waiting feedback and retains at most three candidates. Input files are
+temporary and are removed on accept/discard/source retirement; keep the session open until the
+image tool has finished reading them. The generated result file remains agent-owned. A document
+or selection change retires the request: do not paste an old result over a fresh selection without
+reviewing and preparing again. Editor cancellation cannot stop the agent's separate generation
+job. Tool access, charges and external upload permissions belong to that service; no free or
+universal Codex image entitlement is implied. The full workflow supports up to 16 megapixels.
+
+## Model-authored icons and diagrams
+
+Write self-contained SVG with a viewBox and explicit geometry, fill and stroke. Call
+`editor_layer_import_svg` with inline `svg`, output `width` and `height`, plus viewport `x`/`y`
+when placement matters. A local UTF-8 `.svg` `path` is an alternative to inline code. Transparent
+margins are cropped in place by default; use `trim=false` when the authored viewport must remain.
+Read state and review the imported layer with `editor_preview` before adding more work.
+
+Use paths, basic shapes, linear/radial gradients, clips and local #id references. Convert lettering
+to paths or add it separately with `editor_text`; SVG text, filters, stylesheets and embedded or
+external images are refused. Input is limited to 128 KiB UTF-8, output to 8192 per side and
+16,777,216 pixels within the document budget. The result is a normal raster layer, not editable
+vector paths; choose an adequate output resolution. Import is one Undo and does not save.
+
 ## Layer animation
 
 Create a timeline with `editor_timeline` `operation=settings`, for example 120 frames at 24 fps.
@@ -88,6 +132,26 @@ as editable layers. Use native align/distribute tools for repeated elements when
 matches the desired composition.
 
 ## Mask refinement and transparent assets
+
+For semantic object coverage, read `editor_state.objectSelection.installed`, inspect the canvas,
+then use `editor_select` with `mode=object`. The optional local model must be installed in the
+editor; do not try to download it through MCP. For example, on an 1800×1200 canvas:
+
+```json
+{
+  "mode": "object", "foregroundPoints": [[900, 600]],
+  "backgroundPoints": [[1710, 1140]],
+  "box": {"x": 270, "y": 240, "width": 1260, "height": 780},
+  "softEdges": true, "combine": "replace"
+}
+```
+
+Include fresh mutation identity fields. Each correction sends all points again, at most 64 total;
+unchanged image features are reused. A box alone is valid, but negative points alone are not.
+This creates a selection, not transparency: convert it to a layer mask with the native workflow
+when needed. Inspect edges and isolated previews. Do not call soft coverage hair matting or claim
+that one example establishes reliable automatic subject discovery. This operation stays outside
+`editor_batch` and uses one Undo per call.
 
 - Inspect `view=layer` and `view=mask` with the intended `layerId`. Use a detail `region` for edges;
   mask preview coordinates refer to the mask grid, not necessarily the full canvas.

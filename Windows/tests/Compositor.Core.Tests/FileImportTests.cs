@@ -6,6 +6,30 @@ namespace Compositor.Core.Tests;
 public class FileImportTests
 {
     [Fact]
+    public void PreparedRasterPlacementIsCopiedAndImportedInOneHistoryStep()
+    {
+        var owner = EditorDocument.Create(100, 80);
+        var placement = new LayerTransform { Origin = new(12.25, -4.5), Size = new(6, 4) };
+        Guid id;
+        using (var batch = owner.BeginFileImport())
+        {
+            var added = batch.AddImage(new Surface(6, 4), "SVG", placement);
+            id = added.Id;
+            Assert.Equal(placement, added.Transform);
+            Assert.NotSame(placement, added.Transform);
+        }
+        placement.Origin = new(90, 90);
+        Assert.True(owner.Undo());
+        Assert.Single(owner.Snapshot.Manifest.Layers);
+        Assert.False(owner.CanUndo);
+        Assert.True(owner.Redo());
+        Assert.Equal(new PointD(12.25, -4.5), owner.Snapshot.Manifest.Layers.Single(l => l.Id == id).Transform.Origin);
+        using var invalid = owner.BeginFileImport();
+        Assert.Throws<ArgumentException>(() => invalid.AddImage(new Surface(1, 1), "Invalid", new() { Size = new(0, 1) }));
+        Assert.Equal(2, owner.LayerCount);
+    }
+
+    [Fact]
     public void RasterUsesNaturalSizeAndFlooredCanvasCenter()
     {
         var owner = EditorDocument.Create(21, 13);

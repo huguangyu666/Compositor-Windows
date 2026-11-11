@@ -25,7 +25,8 @@ public sealed partial class MainWindow
     private int pixelNudgePending;
     private Task pixelNudgeWork = Task.CompletedTask;
     private PixelMoveRequest? CurrentPixelMoveRequest => pixelMove is { } move ? new(move, move.Offset, move.Revision, move.Finishing) : null;
-    private Selection? DisplayedSelection => pixelMove is { } move ? move.Original.Translated((int)move.Offset.X, (int)move.Offset.Y) : document?.ActiveSelection;
+    private Selection? DisplayedSelection => pixelMove is { } move ? move.Original.Translated((int)move.Offset.X, (int)move.Offset.Y)
+        : objectSelectionDraft?.Result ?? document?.ActiveSelection;
 
     private bool HandlePixelMovePress(PointD point, VirtualKeyModifiers modifiers)
     {

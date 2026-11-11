@@ -16,6 +16,7 @@ public sealed partial class MainWindow
             string root = Environment.GetEnvironmentVariable("COMPOSITOR_PREFERENCES_DIRECTORY")
                 ?? throw new InvalidOperationException("Use isolated preferences for the timeline probe.");
             Directory.CreateDirectory(root); await WaitForFramesAsync();
+            await MeasureTimelineInteractionAsync(report);
             var scene = EditorDocument.Create(640, 400);
             scene.FillPixels(scene.Snapshot.Manifest.Layers[0].Id, 18, 25, 40);
             scene.AddTextLayer(new LayerTextStyle { Content = "LAYERS IN MOTION", FontName = "Segoe UI", FontSize = 32,
@@ -41,6 +42,10 @@ public sealed partial class MainWindow
             Require(track.PositionX.Count == 2 && track.PositionX[1].Value == 500 && track.Opacity[1].Value == .55,
                 "Editing the keyframe fields did not persist the requested keys.");
             report["keyframeFieldsAndPreviewProtection"] = "passed";
+            await VerifyTimelineScrubbingAsync(report);
+            await VerifyIdleTimelineInputAsync(report);
+            await VerifyImmediateTimelinePointerAsync(report);
+            await VerifyTimelineDragInputAsync(report);
 
             string source = ManifestJson.Serialize(scene.Snapshot.Manifest); var history = scene.CurrentHistoryId;
             SeekTimeline(24); await WaitForFramesAsync();
@@ -134,8 +139,11 @@ public sealed partial class MainWindow
                 "Undoing timeline creation left base editing disabled.");
             OnRedo(this, new RoutedEventArgs()); await WaitForFramesAsync();
             Require(Timeline is not null && TimelinePreviewActive, "Redo did not restore the animation preview.");
-            ToggleTimelinePlayback(); OpenDocument(EditorDocument.Create(80, 60)); await WaitForFramesAsync();
-            Require(!timelinePlaying && !timelineTimer.IsEnabled && !TimelinePreviewActive, "Replacing a document left playback running.");
+            ToggleTimelinePlayback();
+            timelineDrag = (Guid.Empty, "seek", 0, 0, 0, timelineFrame, TimelineX(timelineFrame), 1u); QueueTimelineDrag(60);
+            OpenDocument(EditorDocument.Create(80, 60)); await WaitForFramesAsync(); await Task.Delay(40);
+            Require(!timelinePlaying && !timelineClock.IsRunning && !TimelinePreviewActive && !timelineDragFrameQueued && timelineFrame == 0,
+                "Replacing a document left playback or queued pointer input running.");
             report["undoRedoCreationAndDocumentLifecycle"] = "passed";
             report["sampleProject"] = saved; report["status"] = "passed";
         }

@@ -74,7 +74,14 @@ public sealed partial class MainWindow
                 text = layer.Text is null ? null : JsonSerializer.SerializeToNode(layer.Text, ManifestJson.Options),
                 adjustment = layer.Adjustment is null ? null : JsonSerializer.SerializeToNode(layer.Adjustment, ManifestJson.Options),
                 x = layer.Transform.Origin.X, y = layer.Transform.Origin.Y, width = layer.Transform.Size.Width, height = layer.Transform.Size.Height, rotation = layer.Transform.Rotation }),
-            ai = new { status = aiEditor?.Status ?? "idle", stage = aiEditor?.Stage ?? "idle", requestId = aiEditor?.RequestId, candidates = aiEditor?.Candidates.Count ?? 0 },
+            ai = new { status = aiEditor?.Status ?? "idle", stage = aiEditor?.Stage ?? "idle", requestId = aiEditor?.RequestId, candidates = aiEditor?.Candidates.Count ?? 0,
+                source = aiEditor is null ? null : aiEditor.External ? "agent" : "editor",
+                input = aiEditor is { External: true, Before: not null, InputDirectory: { } inputDirectory, Edit: { } agentEdit }
+                    ? new { imagePath = Path.Combine(inputDirectory, "input.png"), maskPath = Path.Combine(inputDirectory, "mask.png"),
+                        width = agentEdit.Width, height = agentEdit.Height, left = agentEdit.Left, top = agentEdit.Top,
+                        maskConvention = "transparent=edit, opaque=protect", resultLayout = "fullCanvas" } : null },
+            objectSelection = new { installed = ObjectSelectionModels.IsInstalled, backend = objectSegmenter?.Backend ?? "unloaded",
+                preview = objectSelectionDraft is not null, working = objectSelectionDraft?.Busy == true || objectModelInstalling },
         })!;
     }
 
@@ -119,6 +126,12 @@ public sealed partial class MainWindow
         }
         switch (name)
         {
+            case "editor_ai_prepare":
+                await PrepareAgentImageAsync(args, owner);
+                break;
+            case "editor_ai_import":
+                await ImportAgentImageAsync(args, owner);
+                break;
             case "editor_ai_start":
                 RequireEditorIdle();
                 string operation = args["operation"]?.GetValue<string>() ?? "";
@@ -191,6 +204,12 @@ public sealed partial class MainWindow
             case "editor_ai_cancel":
                 var cancelling = RequireEditorAi(args);
                 cancelling.Work?.Cancel();
+                if (cancelling.External && cancelling.Status is "preparing" or "running" or "waiting")
+                {
+                    cancelling.Status = cancelling.Stage = "cancelled";
+                    StopAiWorkingEffect();
+                    cancelling.RefreshExternal?.Invoke();
+                }
                 if (args["discard"]?.GetValue<bool>() == true) RetireAiEdit();
                 break;
             case "editor_history":

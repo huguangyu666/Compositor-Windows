@@ -1,6 +1,6 @@
 ---
 name: compositor-mcp
-description: Use Compositor for Windows through MCP to inspect and edit the live canvas, grade photos with editable adjustments, arrange text and layers, refine selections and masks, and review AI image edits. Use for image-editing tasks in Compositor, not for developing the app's source code.
+description: Use Compositor for Windows through MCP to edit the live canvas, grade photos, arrange text and layers, refine masks, and bring images generated with an agent's own tools into the editor. Use for image-editing tasks in Compositor, not for developing its source code.
 ---
 
 # Compositor MCP
@@ -53,10 +53,11 @@ no new-document tool; open an existing `.comp` or have the user create a blank d
 | --- | --- |
 | Inspect composition or edges | `editor_preview`: canvas, layer, mask, original or result; layer/mask require `layerId`. Start at `maxSide=1024`; use a `region` for details. Mask regions use mask-grid pixels, other regions use document pixels. |
 | Import and position an image | `editor_layer_import` accepts an absolute local PNG and centers it in the current folder; inspect state before `editor_layer_transform`. Preserve aspect ratio unless distortion is requested. |
+| Draw and import SVG | `editor_layer_import_svg` accepts either inline `svg` or a local UTF-8 `.svg` `path`, with output `width`/`height` and optional `x`/`y`/`name`. Requires viewBox. Supports paths/shapes/gradients/clips; no text/filters/images/stylesheets. Default `trim=true` removes transparent margins in place. Creates a raster layer in one Undo, without a cloud request; vector nodes/source are not retained. Use `editor_text` for typography. |
 | Change layer structure | `editor_layer_select`, rename, visibility, opacity, blend, reorder, duplicate or delete. `editor_layout` groups, ungroups, aligns, distributes or crops. Ungroup discards the folder's own mask/blend/opacity. |
 | Add editable typography | `editor_text`; omit `layerId` to create, supply it to update. Text colors are sRGB triplets in 0–1. Use `editor_layer_transform` to move existing text. |
 | Grade a photo | `editor_adjustment`; create with an advertised `kind`, update with `layerId`. `settings` patches exact camelCase fields from state and retains omitted fields. |
-| Select an area | `editor_select`: rectangle, ellipse, polygon, opaque grayscale mask, all, clear or feather. `combine` is replace/add/subtract. Imported selection masks match canvas dimensions. |
+| Select an area | `editor_select`: local `object` point/box selection, rectangle, ellipse, polygon, opaque grayscale mask, all, clear or feather. `combine` is replace/add/subtract. Object mode needs an installed optional model; supply all foreground/background prompts on each correction. Imported selection masks match canvas dimensions. |
 | Refine coverage | `editor_mask` preserves image pixels. Paint uses document coordinates and values 0–255; filters use mask-grid pixels. The current selection constrains edits by default. Enable a disabled mask explicitly before painting. |
 | Isolate colors | `editor_mask_color` takes flat 0–255 RGB triplets, creates a mask and refuses an existing mask. It reveals matching colors; this is not semantic subject segmentation. |
 | Remove transparent padding | `editor_trim_layer` preserves placement and scale. It supports raster layers with compatible masks, and refuses text/shapes, effects and independent masks. |
@@ -65,7 +66,22 @@ no new-document tool; open an existing `.comp` or have the user create a blank d
 Read [references/workflows.md](references/workflows.md) for photo grading, editable layout and
 mask examples. Derive the settings and coordinates from the actual image and current tool schemas.
 
-## Generative image edits
+## Images from the agent's own tools
+
+When an image tool is available to the agent, it can generate artwork without the editor's API
+key. Use `editor_layer_import` for new PNG assets; optional x/y/width/height place the full input
+rectangle, and transparent margins are trimmed afterward by default without moving the artwork.
+For selection edits or expansion, use `editor_ai_prepare` to capture input/mask paths, generate
+externally, then `editor_ai_import` to preview the PNG with the same request ID. Inspect and accept
+with the existing AI tools. See [the external generation workflow](references/workflows.md#external-agent-image-generation)
+for framing, mask convention and cancellation. Do not start `editor_ai_start` as well.
+
+Use the agent's actual available capabilities; do not claim every account has image generation
+or that it is free. Local preparation does not upload, but passing images to the agent's tool may.
+Use the user's existing service/upload authorization. If no image tool is available, choose a
+configured editor connection when authorized, or report the missing capability.
+
+## Editor-connected image generation
 
 Use local adjustments for ordinary photo grading. Start a cloud image edit when the user's task
 authorizes it; retain any existing authorization and budget. The editor sends the **full composite

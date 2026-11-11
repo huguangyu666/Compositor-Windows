@@ -67,8 +67,25 @@ public static partial class Program
             new() { ["layerId"] = Field("string", "Raster layer UUID") }, ["layerId"], true);
         yield return Tool("editor_layer_select", "Select one live layer, reveal its row and target its content. Clears mask/effect targeting; creates no content undo step.",
             new() { ["layerId"] = Field("string", "Layer UUID") }, ["layerId"], true);
-        yield return Tool("editor_layer_import", "Import a local PNG as a selected layer, centered on the canvas, in one undo step. Uses the current folder and document pixel budget. Does not save.",
-            new() { ["path"] = Field("string", "Absolute existing PNG path"), ["name"] = Field("string", "Optional layer name; defaults to the filename") }, ["path"], true);
+        yield return Tool("editor_layer_import", "Import a local PNG (including an image generated with the agent's own tools) as a selected layer in one Undo. Optional x/y/width/height place the full input rectangle before trimming; default is centered at source size. Fully transparent margins are trimmed by default while preserving visible artwork placement and nonzero alpha. No cloud request or editor API key. Uses the current folder, document pixel budget, target checks and creation animation. Does not save.",
+            new() { ["path"] = Field("string", "Absolute existing PNG path"), ["name"] = Field("string", "Optional layer name; defaults to the filename"),
+                ["x"] = Field("number", "Input rectangle left in document pixels, ±1000000; default centers rectangle"),
+                ["y"] = Field("number", "Input rectangle top in document pixels, ±1000000; default centers rectangle"),
+                ["width"] = Field("number", "Displayed input width, 1–300000; supply height too. Default source size"),
+                ["height"] = Field("number", "Displayed input height, 1–300000; supply width too"),
+                ["trim"] = Field("boolean", "Trim fully transparent margins without moving artwork; default true. False retains the full input grid") }, ["path"], true);
+        var svgImport = Tool("editor_layer_import_svg", "Draw SVG authored by the model and import it as a selected transparent raster layer in one Undo, without a cloud image request. Supply exactly one of svg code or a local .svg path, plus output width/height. Requires viewBox. Supports paths, basic shapes, gradients, clips and local #id reuse; no text, filters, scripts, CSS stylesheets or embedded/external images. Use editor_text for editable text. Transparent margins are trimmed by default while preserving artwork position. Original SVG/vector nodes are not stored in the project. Current folder, pixel budget, stale-target checks and creation animation apply. Does not save.",
+            new() { ["svg"] = new JsonObject { ["type"] = "string", ["minLength"] = 1, ["maxLength"] = 131072, ["description"] = "Self-contained SVG XML with viewBox, at most 128 KiB UTF-8; for example <svg viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='#ff8800'/></svg>" },
+                ["path"] = Field("string", "Alternative absolute local UTF-8 .svg path, at most 128 KiB; omit svg when using path"),
+                ["width"] = new JsonObject { ["type"] = "integer", ["minimum"] = 1, ["maximum"] = 8192, ["description"] = "Rasterized viewport width; width × height must not exceed 16777216 pixels" },
+                ["height"] = new JsonObject { ["type"] = "integer", ["minimum"] = 1, ["maximum"] = 8192, ["description"] = "Rasterized viewport height in document pixels" },
+                ["x"] = Field("number", "Viewport left in document pixels, ±1000000; default centers viewport"),
+                ["y"] = Field("number", "Viewport top in document pixels, ±1000000; default centers viewport"),
+                ["trim"] = Field("boolean", "Remove transparent margins without moving visible content, default true; false keeps the authored viewport"),
+                ["name"] = Field("string", "Optional layer name, 1–512 characters; default SVG or filename") }, ["width", "height"], true);
+        svgImport["inputSchema"]!["oneOf"] = new JsonArray(new JsonObject { ["required"] = new JsonArray("svg"), ["not"] = new JsonObject { ["required"] = new JsonArray("path") } },
+            new JsonObject { ["required"] = new JsonArray("path"), ["not"] = new JsonObject { ["required"] = new JsonArray("svg") } });
+        yield return svgImport;
         yield return Tool("editor_layer_transform", "Move, resize or rotate a visible layer or folder in one undo step using the editor's normal transform operation. Omitted fields retain their current values. Coordinates are unrotated bounds in document pixels; clockwise rotation is around their center. Linked masks follow.",
             new() { ["layerId"] = Field("string", "Layer UUID"), ["x"] = Field("number", "Left pixel, -1000000 to 1000000"),
                 ["y"] = Field("number", "Top pixel, -1000000 to 1000000"), ["width"] = Field("number", "Width, 1 to 300000"),
@@ -89,10 +106,14 @@ public static partial class Program
             new() { ["layerId"] = Field("string", "Layer UUID"), ["opacity"] = Field("number", "Opacity, 0 to 1") }, ["layerId", "opacity"], true);
         yield return Tool("editor_layer_blend", "Set the blend mode of a live non-folder layer in one undo step.",
             new() { ["layerId"] = Field("string", "Layer UUID"), ["blendMode"] = Choice(Enum.GetValues<LayerBlendMode>().Select(mode => RawEnumText.Resolve<LayerBlendMode>(mode.ToString())).ToArray()) }, ["layerId", "blendMode"], true);
-        yield return Tool("editor_select", "Set or combine an undoable rectangle, ellipse, polygon or opaque grayscale PNG mask selection. Black protects; white selects. Modes all/clear replace the selection; feather adds 0–250 pixels of feather to the current selection. Worker preparation preserves the native outline renderer.",
-            new() { ["mode"] = Choice("rectangle", "ellipse", "polygon", "mask", "feather", "all", "clear"), ["x"] = Field("integer", "Left pixel"), ["y"] = Field("integer", "Top pixel"),
+        yield return Tool("editor_select", "Set or combine an undoable geometric/PNG selection, or mode=object for local AI point/box selection. Object uses foregroundPoints/backgroundPoints [x,y] in document pixels, at most 64 total, and/or box={x,y,width,height}; each retry supplies all prompts and reuses image features. Install the optional model in the editor first; MCP never downloads it or uploads images. Black protects; white selects. all/clear replace; feather adds 0–250 pixels. One Undo; native outline renderer.",
+            new() { ["mode"] = Choice("rectangle", "ellipse", "polygon", "mask", "object", "feather", "all", "clear"), ["x"] = Field("integer", "Left pixel"), ["y"] = Field("integer", "Top pixel"),
                 ["width"] = Field("integer", "Positive width"), ["height"] = Field("integer", "Positive height"), ["combine"] = Choice("replace", "add", "subtract"),
                 ["feather"] = Field("integer", "Feather radius, 0–250"), ["path"] = Field("string", "Absolute canvas-sized opaque grayscale PNG for mode=mask"),
+                ["foregroundPoints"] = ObjectSelectionPoints("Points to include for mode=object"), ["backgroundPoints"] = ObjectSelectionPoints("Points to exclude for mode=object"),
+                ["softEdges"] = Field("boolean", "Object mask soft edges, default true; this is not hair matting"),
+                ["box"] = new JsonObject { ["type"] = "object", ["properties"] = new JsonObject { ["x"] = Field("number", "Left"), ["y"] = Field("number", "Top"),
+                    ["width"] = Field("number", "Positive width"), ["height"] = Field("number", "Positive height") }, ["required"] = new JsonArray("x", "y", "width", "height"), ["additionalProperties"] = false },
                 ["points"] = new JsonObject { ["type"] = "array", ["minItems"] = 3, ["maxItems"] = 4096, ["items"] = new JsonObject { ["type"] = "array", ["minItems"] = 2, ["maxItems"] = 2, ["items"] = new JsonObject { ["type"] = "number" } } } }, ["mode"], true);
         yield return Tool("editor_text", "Create editable text, or update an existing text layer, as one undo step. Creation requires content; layerId targets existing text. Colors are sRGB 0–1. Existing text placement is preserved; use layer_transform to move it.",
             new() { ["layerId"] = Field("string", "Existing text layer UUID; omit to create"), ["content"] = Field("string", "Text, up to 100000 UTF-16 characters"),
@@ -117,7 +138,14 @@ public static partial class Program
             new() { ["commands"] = new JsonObject { ["type"] = "array", ["minItems"] = 1, ["maxItems"] = 32, ["items"] = new JsonObject { ["type"] = "object",
                 ["properties"] = new JsonObject { ["tool"] = Field("string", "Local editing tool name"), ["arguments"] = new JsonObject { ["type"] = "object" }, ["as"] = Field("string", "Optional unique result alias") },
                 ["required"] = new JsonArray("tool", "arguments"), ["additionalProperties"] = false } } }, ["commands"], true);
-        yield return Tool("editor_ai_start", "Start one image-edit request using the editor's saved custom API connection or explicitly selected account. Uploads the canvas, selection and prompt; may incur provider charges. Returns a requestId immediately. Poll editor_state; preview before accepting. Never retries or applies automatically.",
+        yield return Tool("editor_ai_prepare", "Prepare a local image edit for an external agent's OWN image-generation tool. No editor API key, login or cloud request. Captures the full composite and frozen selection/expansion mask as temporary PNG files; returns ai.requestId and ai.input with absolute imagePath/maskPath, width/height and mask convention (transparent=edit, opaque=protect). Non-expand needs a nonempty selection. Keep the full canvas layout when generating; return the local result with editor_ai_import, preview, then accept. Inputs are removed on accept/discard/document changes. For a new standalone asset, use editor_layer_import instead.",
+            new() { ["operation"] = Choice("remove", "replace", "expand"),
+                ["left"] = Field("integer", "Expansion pixels, 0–8192"), ["right"] = Field("integer", "Expansion pixels, 0–8192"),
+                ["top"] = Field("integer", "Expansion pixels, 0–8192"), ["bottom"] = Field("integer", "Expansion pixels, 0–8192") }, [], true);
+        yield return Tool("editor_ai_import", "Import a local PNG generated by an external agent into its prepared edit, without a cloud request or history mutation. Requires the exact waiting/ready agent requestId. The image represents the FULL ai.input canvas and is resized if necessary; frozen selection/expansion coverage is reapplied locally to protect other pixels. Keeps up to three review candidates. Inspect editor_preview result/original, then editor_ai_accept or editor_ai_cancel. Does not delete the supplied result file or save the project.",
+            new() { ["requestId"] = Field("string", "Exact external-agent request ID from editor_ai_prepare/editor_state"),
+                ["path"] = Field("string", "Absolute local PNG path; full prepared canvas layout, at most 16 megapixels") }, ["requestId", "path"], true);
+        yield return Tool("editor_ai_start", "Start one image-edit request using the editor's saved custom API connection or explicitly selected account. Uploads the canvas, selection and prompt; may incur provider charges. Returns a requestId immediately. Poll editor_state; preview before accepting. Never retries or applies automatically. Agents using their own generation tools should use editor_ai_prepare/editor_ai_import instead.",
             new() { ["operation"] = Choice("remove", "replace", "expand"), ["prompt"] = Field("string", "Requested image edit; required for replace"),
                 ["model"] = Choice("gpt-image-2.5-sunburst", "gpt-image-2.5-flare"), ["connection"] = Choice("api", "account"),
                 ["resolution"] = Choice("auto"),
@@ -137,6 +165,12 @@ public static partial class Program
         yield return Tool("editor_open", "Open a saved .comp in the editor using normal project ownership. Refuses an unsaved current document or active draft; save it first.", new() { ["path"] = Field("string", "Absolute .comp directory") }, ["path"], true);
         yield return Tool("editor_export", "Export the live committed canvas, or one raster layer on transparency, to a PNG without saving the project. The destination folder must exist; refuses an existing destination.", new() { ["path"] = Field("string", "Absolute new .png file"), ["layerId"] = Field("string", "Optional raster layer UUID to isolate") }, ["path"], true);
     }
+
+    private static JsonObject ObjectSelectionPoints(string description) => new()
+    {
+        ["type"] = "array", ["description"] = description, ["maxItems"] = 64,
+        ["items"] = new JsonObject { ["type"] = "array", ["minItems"] = 2, ["maxItems"] = 2, ["items"] = new JsonObject { ["type"] = "number" } },
+    };
 
     private static async Task<JsonObject> CallEditorAsync(string name, JsonObject arguments)
     {

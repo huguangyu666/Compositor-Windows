@@ -2628,4 +2628,33 @@
   <data name="H_AnimationMoveKeyframe" xml:space="preserve"><value>移动关键帧</value></data>
   <data name="H_AnimationShiftTrack" xml:space="preserve"><value>移动动画图层时间</value></data>
   <data name="H_AnimationClear" xml:space="preserve"><value>清除动画</value></data>
+  <data name="Tool_ObjectSelect" xml:space="preserve"><value>对象选区</value></data>
+  <data name="OS_SubjectPending" xml:space="preserve"><value>一键选主体尚未接入，请用对象选区（Q）点击或框选对象。</value></data>
+  <data name="OS_Hint" xml:space="preserve"><value>点击或框选对象 · Alt 点击排除</value></data>
+  <data name="OS_Apply" xml:space="preserve"><value>确认 (Enter)</value></data>
+  <data name="OS_Cancel" xml:space="preserve"><value>取消</value></data>
+  <data name="OS_Reset" xml:space="preserve"><value>重新开始</value></data>
+  <data name="OS_Model" xml:space="preserve"><value>本地模型…</value></data>
+  <data name="OS_SoftEdges" xml:space="preserve"><value>柔和边缘</value></data>
+  <data name="OS_Feather" xml:space="preserve"><value>羽化 (px)</value></data>
+  <data name="OS_Working" xml:space="preserve"><value>正在识别对象…</value></data>
+  <data name="OS_Empty" xml:space="preserve"><value>未找到对象，请补一个包含点。</value></data>
+  <data name="OS_Refine" xml:space="preserve"><value>补点修正 · 换工具即可使用</value></data>
+  <data name="OS_Refining" xml:space="preserve"><value>选区已可用 · 正在细化边缘…</value></data>
+  <data name="OS_Preparing" xml:space="preserve"><value>正在准备本地模型…</value></data>
+  <data name="OS_PositiveFirst" xml:space="preserve"><value>先点击要包含的对象，或拖出一个框。</value></data>
+  <data name="OS_PointLimit" xml:space="preserve"><value>每份草稿最多 64 个点，请先确认或重新开始。</value></data>
+  <data name="OS_Error" xml:space="preserve"><value>对象选区：{0}</value></data>
+  <data name="OS_Applied" xml:space="preserve"><value>对象选区已确认 · 可一步撤销</value></data>
+  <data name="OS_InstallDescription" xml:space="preserve"><value>从 Hugging Face 下载可选的 SAM 2.1 Tiny 模型（约 156 MB），或导入包含两个 ONNX 和两个 ONNX_DATA 文件的文件夹。安装时会核对固定版本的 SHA-256。图片只在本机处理，兼容显卡使用 DirectML，也支持 CPU 回退。不需要 Python 或 API Key。也可继续导入旧版 MobileSAM。</value></data>
+  <data name="OS_Download" xml:space="preserve"><value>下载模型</value></data>
+  <data name="OS_Import" xml:space="preserve"><value>导入模型文件夹</value></data>
+  <data name="OS_DownloadProgress" xml:space="preserve"><value>正在安装本地模型… {0}%</value></data>
+  <data name="OS_ModelReady" xml:space="preserve"><value>本地对象选区模型已就绪。</value></data>
+  <data name="AI_AgentTitle" xml:space="preserve"><value>外部 Agent 图像编辑</value></data>
+  <data name="AI_AgentNote" xml:space="preserve"><value>由 Agent 使用自己的工具生图。Compositor 负责准备本地输入、预览结果并应用选区，无需填写软件里的 API Key。</value></data>
+  <data name="AI_AgentPreparing" xml:space="preserve"><value>正在准备本地输入…</value></data>
+  <data name="AI_AgentWaiting" xml:space="preserve"><value>正在等待 Agent 生成图片…</value></data>
+  <data name="AI_AgentImporting" xml:space="preserve"><value>正在准备 Agent 的结果…</value></data>
+  <data name="AI_AgentLayer" xml:space="preserve"><value>AI · Agent 图像</value></data>
 </root>

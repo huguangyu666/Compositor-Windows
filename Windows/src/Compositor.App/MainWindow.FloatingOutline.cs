@@ -113,7 +113,7 @@ public sealed partial class MainWindow
             finally { floatingOutlineWorkers--; }
             double prepareMs = prepare.Elapsed.TotalMilliseconds; var ui = Stopwatch.StartNew();
 #endif
-            Geometry? geometry = null; var group = paths.Length > 1 ? new GeometryGroup() : null;
+            Geometry? geometry = null; var group = paths.Length > 1 ? CreateSelectionOutlineGroup() : null;
             unpublishedGeometry = group;
             for (int i = 0; i < paths.Length; i++)
             {
@@ -124,11 +124,11 @@ public sealed partial class MainWindow
 #if DEBUG
                 var native = Stopwatch.StartNew();
 #endif
-                var child = (Geometry)XamlBindingHelper.ConvertValue(typeof(Geometry), paths[i]);
+                var child = ParseSelectionOutlineBatch(paths[i], group);
 #if DEBUG
                 parseMs += native.Elapsed.TotalMilliseconds; native.Restart();
 #endif
-                if (group is not null) group.Children.Add(child); else unpublishedGeometry = geometry = child;
+                if (group is null) unpublishedGeometry = geometry = child;
 #if DEBUG
                 addMs += native.Elapsed.TotalMilliseconds;
                 nativeActiveMs = parseMs + addMs;

@@ -246,7 +246,7 @@ public sealed partial class MainWindow
             var uiStarted = Stopwatch.StartNew();
 #endif
             Geometry? geometry = null;
-            var group = paths.Length > 1 ? new GeometryGroup() : null;
+            var group = paths.Length > 1 ? CreateSelectionOutlineGroup() : null;
             unpublishedGeometry = group;
             var batch = Stopwatch.StartNew();
             for (int i = 0; i < paths.Length; i++)
@@ -268,9 +268,8 @@ public sealed partial class MainWindow
 #if DEBUG
                 var nativeStarted = Stopwatch.StartNew();
 #endif
-                var child = (Geometry)XamlBindingHelper.ConvertValue(typeof(Geometry), paths[i]);
-                if (group is not null) group.Children.Add(child);
-                else unpublishedGeometry = geometry = child;
+                var child = ParseSelectionOutlineBatch(paths[i], group);
+                if (group is null) unpublishedGeometry = geometry = child;
 #if DEBUG
                 nativeBatches++;
                 maxBatchMs = Math.Max(maxBatchMs, nativeStarted.Elapsed.TotalMilliseconds);

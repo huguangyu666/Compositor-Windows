@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory)][string[]]$AppPath,
     [Parameter(Mandatory)][string]$LogDirectory,
     [Parameter(Mandatory)][string]$EvidencePrefix,
-    [ValidateSet('--logging-probe', '--lifetime-probe', '--watcher-probe', '--mcp-interop-probe', '--recovery-probe', '--transform-probe', '--navigation-probe', '--workspace-probe', '--panel-perf', '--effects-perf', '--stress-matrix', '--retention-probe', '--paint-perf', '--direct-outline-probe', '--project-open-probe', '--project-save-probe', '--draft-exit-probe', '--ai-image-probe', '--localization-probe', '--timeline-probe', '--layer-drag-perf')][string]$Argument = '--logging-probe',
+    [ValidateSet('--logging-probe', '--lifetime-probe', '--watcher-probe', '--mcp-interop-probe', '--recovery-probe', '--transform-probe', '--navigation-probe', '--workspace-probe', '--panel-perf', '--effects-perf', '--stress-matrix', '--retention-probe', '--paint-perf', '--direct-outline-probe', '--project-open-probe', '--project-save-probe', '--draft-exit-probe', '--ai-image-probe', '--localization-probe', '--timeline-probe', '--layer-drag-perf', '--svg-import-probe', '--object-selection-probe')][string]$Argument = '--logging-probe',
     [string]$ReportFile = 'logging-probe.json',
     [int]$ExpectedGroups = 0,
     [int]$TimeoutSeconds = 180,
@@ -66,7 +66,7 @@ $processes = @()
 $previousMcpExecutable = $env:COMPOSITOR_MCP_EXECUTABLE
 $previousForeground = $env:COMPOSITOR_PROBE_FOREGROUND
 $previousPreferences = $env:COMPOSITOR_PREFERENCES_DIRECTORY
-if ($Argument -in @('--ai-image-probe', '--localization-probe', '--timeline-probe', '--layer-drag-perf')) { $env:COMPOSITOR_PREFERENCES_DIRECTORY = Join-Path $logRoot 'preferences' }
+if ($Argument -in @('--ai-image-probe', '--localization-probe', '--timeline-probe', '--layer-drag-perf', '--svg-import-probe', '--object-selection-probe')) { $env:COMPOSITOR_PREFERENCES_DIRECTORY = Join-Path $logRoot 'preferences' }
 if ($RequireForeground) { $env:COMPOSITOR_PROBE_FOREGROUND = '1' }
 if ($Argument -in @('--mcp-interop-probe', '--ai-image-probe')) {
     # The editor has to be pointed at a built server rather than guess: ci/ builds MCP Release, while a
@@ -215,6 +215,8 @@ foreach ($entry in $processes) {
         '--retention-probe'  = @{ framePublication = 0; renderWorker = 0; ditherWorker = 0; recoveryCloseFault = 0 }
         '--paint-perf'       = @{ framePublication = 0; renderWorker = 0; ditherWorker = 0; recoveryCloseFault = 0 }
         '--layer-drag-perf'  = @{ framePublication = 0; renderWorker = 0; ditherWorker = 0; recoveryCloseFault = 0 }
+        '--svg-import-probe' = @{ framePublication = 0; renderWorker = 0; ditherWorker = 0; recoveryCloseFault = 0 }
+        '--object-selection-probe' = @{ framePublication = 0; renderWorker = 0; ditherWorker = 0; recoveryCloseFault = 0 }
         '--direct-outline-probe' = @{ framePublication = 0; renderWorker = 0; ditherWorker = 0; recoveryCloseFault = 0 }
     }
     foreach ($family in $declaredFaults[$Argument].Keys) {

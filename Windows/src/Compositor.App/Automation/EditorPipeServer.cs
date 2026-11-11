@@ -27,7 +27,7 @@ internal sealed class EditorPipeServer(Func<JsonObject, Task<JsonObject>> dispat
                 JsonObject response;
                 try
                 {
-                    if (line is null || line.Length > 65536 || JsonNode.Parse(line) is not JsonObject request)
+                    if (line is null || line.Length > 1024 * 1024 || JsonNode.Parse(line) is not JsonObject request)
                         throw new ArgumentException("Invalid editor request.");
                     response = await dispatch(request).WaitAsync(requestTimeout.Token).ConfigureAwait(false);
                 }

@@ -24,7 +24,7 @@ public sealed partial class MainWindow
         RetireOutline(source);
         Require(!retiredOutlineIdentities.Contains(source), "Retirement accepted the active root.");
         scene.SetSelection(original.Translated(3, 5));
-        Require(ReferenceEquals(source, SelectionOutline.Data), "Translation lost its retained root.");
+        Require(ReferenceEquals(source, SelectionOutline.Data), "Translation lost the retained contour.");
         RequireOutlineRuns(source, originalEdges);
         var rectangle = Selection.Rectangle(256, 256, 8, 8, 20, 20); scene.SetSelection(rectangle);
         await WaitForSelectionReadyAsync();

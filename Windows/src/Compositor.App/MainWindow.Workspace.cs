@@ -325,14 +325,14 @@ public sealed partial class MainWindow
     {
         // Group the rail without replacing the handler that owns drafts and parked brush tips.
         CanvasTool[] order = [CanvasTool.Move, CanvasTool.RectSelect, CanvasTool.EllipseSelect,
-            CanvasTool.Lasso, CanvasTool.Wand, CanvasTool.Crop, CanvasTool.Brush, CanvasTool.Eraser,
+            CanvasTool.Lasso, CanvasTool.Wand, CanvasTool.ObjectSelect, CanvasTool.Crop, CanvasTool.Brush, CanvasTool.Eraser,
             CanvasTool.Clone, CanvasTool.Healing, CanvasTool.Blur, CanvasTool.Eyedropper, CanvasTool.Gradient, CanvasTool.Text, CanvasTool.Shape,
             CanvasTool.Hand, CanvasTool.Zoom];
         Grid? toolGroup = null;
         int toolIndex = 0;
         foreach (var item in order)
         {
-            if (toolIndex is 0 or 6 or 12 or 15)
+            if (toolIndex is 0 or 7 or 13 or 16)
             {
                 if (toolGroup is not null) ToolButtons.Children.Add(new Border { Height = 1, Margin = new Thickness(6, 6, 6, 6), Background = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 65, 65, 65)) });
                 toolGroup = new Grid(); toolButtonGroups.Add(toolGroup); ToolButtons.Children.Add(toolGroup);
@@ -361,6 +361,7 @@ public sealed partial class MainWindow
         InitializeToolbarLayout();
         InitializeSelectionModes();
         InitializeQuickTools();
+        InitializeObjectSelection();
         InitializeLayerProtection();
         InitializeHistoryPanel();
         foreach (var kind in Enum.GetValues<AdjustmentKind>())
@@ -417,6 +418,7 @@ public sealed partial class MainWindow
     {
         CanvasTool.Move => "V", CanvasTool.RectSelect => "M", CanvasTool.EllipseSelect => "Shift+M",
         CanvasTool.Lasso => "L", CanvasTool.Wand => "W", CanvasTool.Crop => "C", CanvasTool.Brush => "B",
+        CanvasTool.ObjectSelect => "Q",
         CanvasTool.Eraser => "E", CanvasTool.Clone => "S", CanvasTool.Healing => "J", CanvasTool.Blur => "R",
         CanvasTool.Gradient => "G", CanvasTool.Text => "T", CanvasTool.Shape => "U", CanvasTool.Eyedropper => "I", CanvasTool.Hand => "H", CanvasTool.Zoom => "Z", _ => "",
     };
@@ -430,6 +432,7 @@ public sealed partial class MainWindow
             CanvasTool.EllipseSelect => "M7,3 Q3,4 3,8 M3,11 Q2,15 5,18 M8,21 Q12,23 16,21 M19,18 Q22,15 21,11 M21,8 Q20,4 16,3 M13,2 L10,2",
             CanvasTool.Lasso => "M6,17 C0,14 2,3 12,3 C23,3 25,15 17,17 C10,20 5,16 8,13 C11,11 13,17 9,20 L6,22",
             CanvasTool.Wand => "M4,21 L17,8 L20,11 L7,24 M3,4 L8,4 M5.5,1.5 L5.5,6.5 M17,2 L17,5 M21,6 L24,6",
+            CanvasTool.ObjectSelect => "M3,8 L3,3 L8,3 M16,3 L21,3 L21,8 M21,16 L21,21 L16,21 M8,21 L3,21 L3,16 M12,6 L14,10 L18,12 L14,14 L12,18 L10,14 L6,12 L10,10 Z",
             CanvasTool.Crop => "M6,1 L6,18 L23,18 M1,6 L18,6 L18,23 M9,15 L21,3",
             CanvasTool.Brush => "M10,15 C9,12 17,4 21,2 C23,5 16,13 13,16 Z M9,15 C2,14 7,21 2,22 C11,23 14,18 9,15 Z",
             CanvasTool.Eraser => "M2,15 L13,3 L22,11 L11,22 L8,22 Z M7,10 L16,18 M11,22 L23,22",

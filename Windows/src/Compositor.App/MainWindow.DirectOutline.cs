@@ -252,8 +252,9 @@ public sealed partial class MainWindow
         {
             drawing.Transform = directOutlinePlacement * Matrix3x2.CreateScale((float)viewport.PointsPerPixel)
                 * Matrix3x2.CreateTranslation((float)origin.X, (float)origin.Y);
-            drawing.DrawGeometry(geometry, Microsoft.UI.ColorHelper.FromArgb(255, 76, 194, 255),
-                (float)(1 / viewport.PointsPerPixel), directOutlineStroke);
+            drawing.DrawGeometry(geometry, Microsoft.UI.Colors.Black, (float)(2.5 / viewport.PointsPerPixel));
+            drawing.DrawGeometry(geometry, Microsoft.UI.Colors.White,
+                (float)(1.25 / viewport.PointsPerPixel), directOutlineStroke);
 #if DEBUG
             directOutlineDraws++;
 #endif

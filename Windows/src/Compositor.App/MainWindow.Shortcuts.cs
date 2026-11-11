@@ -33,6 +33,7 @@ public sealed partial class MainWindow
         ("canvas:Tool_Move", "Tool_Move", VirtualKey.V, CanvasTool.Move),
         ("canvas:Tool_RectSelect", "Tool_RectSelect", VirtualKey.M, CanvasTool.RectSelect),
         ("canvas:Tool_Wand", "Tool_Wand", VirtualKey.W, CanvasTool.Wand),
+        ("canvas:Tool_ObjectSelect", "Tool_ObjectSelect", VirtualKey.Q, CanvasTool.ObjectSelect),
         ("canvas:Tool_Crop", "Tool_Crop", VirtualKey.C, CanvasTool.Crop),
         ("canvas:Tool_Brush", "Tool_Brush", VirtualKey.B, CanvasTool.Brush),
         ("canvas:Tool_Eraser", "Tool_Eraser", VirtualKey.E, CanvasTool.Eraser),

@@ -19,14 +19,33 @@ namespace Compositor.App;
 public sealed class ViewportSurface : ContentControl
 {
     private InputSystemCursorShape? cursorShape;
+    private InputCursor? circleCursor;
+    private bool circleCursorUnavailable, usingCircleCursor;
     public ViewportSurface()
     {
         Template = (ControlTemplate)XamlReader.Load("<ControlTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' TargetType='ContentControl'><ContentPresenter Content='{TemplateBinding Content}' HorizontalContentAlignment='Stretch' VerticalContentAlignment='Stretch'/></ControlTemplate>");
+        Unloaded += (_, _) =>
+        {
+            ProtectedCursor = null; circleCursor?.Dispose(); circleCursor = null;
+            cursorShape = null; usingCircleCursor = circleCursorUnavailable = false;
+        };
     }
     internal void SetCursor(InputSystemCursorShape shape)
     {
-        if (cursorShape == shape) return;
-        cursorShape = shape; ProtectedCursor = InputSystemCursor.Create(shape);
+        if (!usingCircleCursor && cursorShape == shape) return;
+        usingCircleCursor = false; cursorShape = shape;
+        ProtectedCursor = InputSystemCursor.Create(shape);
+    }
+    internal void SetCircleCursor()
+    {
+        if (usingCircleCursor) return;
+        if (circleCursor is null && !circleCursorUnavailable)
+        {
+            try { circleCursor = CanvasCursors.CreateCircle(); }
+            catch (Exception ex) { circleCursorUnavailable = true; App.Log($"Circle cursor: {ex}", LogLevel.Diagnostic); }
+        }
+        if (circleCursor is null) { SetCursor(InputSystemCursorShape.Cross); return; }
+        ProtectedCursor = circleCursor; usingCircleCursor = true; cursorShape = null;
     }
 }
 
@@ -49,7 +68,8 @@ public sealed partial class MainWindow
     private double rulerGuidePosition;
     private static string RulersPreferencePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Compositor", "show-rulers.txt");
     private bool HasEditingGesture => pointerStroke is not null || placementDragActive || cropDragging || dragStart is not null
-        || rulerGuideOwner is not null || draggingGuideId is not null || healingPointerDown || gradientDragHandle >= 0 || lassoDrawing || selectionMove is not null || pixelMove is not null;
+        || rulerGuideOwner is not null || draggingGuideId is not null || healingPointerDown || gradientDragHandle >= 0 || lassoDrawing
+        || objectSelectionPress is not null || selectionMove is not null || pixelMove is not null;
 
     private void InitializeNavigation()
     {
@@ -60,7 +80,7 @@ public sealed partial class MainWindow
         CanvasStage.PointerReleased += OnViewportReleased;
         CanvasStage.PointerCanceled += (_, _) => { CancelFloatingPointerForFocus(); CancelPixelMove(focusLoss: true); EndSelectionMove(); StopSelectionAutoscroll(); CancelNavigation(); };
         CanvasStage.PointerCaptureLost += (_, _) => { CancelFloatingPointerForFocus(); CancelPixelMove(focusLoss: true); EndSelectionMove(); StopSelectionAutoscroll(); CancelNavigation(); };
-        CanvasStage.PointerExited += (_, _) => { rulerPointer = null; InvalidateRulers(); };
+        CanvasStage.PointerExited += (_, _) => { rulerPointer = null; objectSelectionCursorPoint = null; InvalidateRulers(); RefreshNavigationCursor(); };
         CanvasStage.PointerWheelChanged += OnViewportWheel;
         CanvasStage.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY | ManipulationModes.Scale;
         CanvasStage.ManipulationDelta += (_, args) =>
@@ -85,6 +105,7 @@ public sealed partial class MainWindow
             if (args.WindowActivationState == WindowActivationState.Deactivated)
             {
                 EndOpacityEdit();
+                objectSelectionCursorPoint = null;
                 spaceHeld = false; CancelFloatingPointerForFocus(); CancelPixelMove(focusLoss: true); EndSelectionMove(); StopSelectionAutoscroll(); CancelNavigation();
                 return;
             }
@@ -147,9 +168,13 @@ public sealed partial class MainWindow
         if (!BeginTemporaryPan(args.Key)) return false;
         args.Handled = true; return true;
     }
-    private void RefreshNavigationCursor() => CanvasStage.SetCursor(panLast is not null || selectionMove is not null ? InputSystemCursorShape.SizeAll
-        : spaceHeld || tool == CanvasTool.Hand ? InputSystemCursorShape.Hand
-        : tool is CanvasTool.Zoom or CanvasTool.Eyedropper ? InputSystemCursorShape.Cross : InputSystemCursorShape.Arrow);
+    private void RefreshNavigationCursor()
+    {
+        if (UseObjectSelectionCircleCursor()) { CanvasStage.SetCircleCursor(); return; }
+        CanvasStage.SetCursor(panLast is not null || selectionMove is not null ? InputSystemCursorShape.SizeAll
+            : spaceHeld || tool == CanvasTool.Hand ? InputSystemCursorShape.Hand
+            : tool is CanvasTool.Zoom or CanvasTool.Eyedropper ? InputSystemCursorShape.Cross : InputSystemCursorShape.Arrow);
+    }
 
     private static PointD StagePoint(PointerRoutedEventArgs args, UIElement stage)
     { var point = args.GetCurrentPoint(stage).Position; return new(point.X, point.Y); }
@@ -189,6 +214,8 @@ public sealed partial class MainWindow
     private void OnViewportMoved(object sender, PointerRoutedEventArgs args)
     {
         var point = StagePoint(args, CanvasStage); rulerPointer = point; InvalidateRulers();
+        objectSelectionCursorPoint = args.Pointer.PointerDeviceType == PointerDeviceType.Touch ? null : point;
+        RefreshNavigationCursor();
         if (!args.Handled && pixelMove is not null) { MovePixelsTo(viewport.ToDocument(point), args.KeyModifiers); args.Handled = true; return; }
         if (!args.Handled && selectionMove is not null)
         { MoveSelectionTo(viewport.ToDocument(point), args.KeyModifiers); TrackSelectionAutoscroll(point, args.KeyModifiers); args.Handled = true; return; }

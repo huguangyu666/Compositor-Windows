@@ -1,12 +1,14 @@
 # MCP integration
 
-See the [real MCP-made poster](../samples/README.md) for editable typography, an actual window capture
-and consolidated tool parameters. The companion skill also includes local photography-grading workflows.
+See [real MCP-made samples](../samples/README.md) for editable poster typography and local
+photography grading with Curves, Color Balance, a soft exposure mask and Undo. The guide includes
+actual window captures, before/after exports and consolidated tool parameters.
 
 Compositor.Mcp is a standalone stdio server with two tool families: live editor tools operate on
 the running window's document, selection, AI session and undo history; the original package tools
-operate on saved .comp folders. The editor provides image generation through its configured API
-or account connection. MCP itself does not supply a reasoning model.
+operate on saved .comp folders. Image generation can use the editor's configured API/account,
+or the external agent's own image tools through a local input/result exchange. MCP itself does
+not supply a reasoning or image model. See [external-agent image generation](agent-image-mcp.md).
 
 ## Companion skill
 
@@ -59,11 +61,13 @@ into shared `.comp` packages and saved-package tools do not have this local edit
 | `editor_preview` | Return an MCP PNG image: `view=canvas`, `result`, `original`, `layer`, or `mask`. Layer/mask views require `layerId`. `maxSide=64..2048`, default 1024. Optional `region={x,y,width,height}` crops document pixels, or raw mask-grid pixels for mask view. Mask previews are opaque grayscale. No upload or disk write. |
 | `editor_mask` | Refine a raster mask through native document-space `paint` points, mask-pixel `feather/expand/contract`, `invert`, opaque grayscale PNG `import`, `enable/disable` or `remove`. Gray values retain partial coverage. Brush value 0 hides, 255 reveals; radius .5–250, opacity greater than 0 through 1, hardness 0–1. Filters take amount 1–250. Import preserves the current mask grid and placement. The active selection constrains pixel edits by default (`respectSelection=false` ignores it). One Undo; source image pixels stay unchanged. |
 | `editor_mask_color` | Add an editable raster mask revealing matching colors. Requires `layerId`, 1–16 flat RGB triplets in `colors`, and optional `fuzziness=0..200` (default 40). Uses the existing binary Color Range algorithm, preserves source pixels, refuses an existing mask, and adds one undo step. |
-| `editor_select` | Undoable rectangle/ellipse (`x/y/width/height`), polygon (`points=[[x,y],…]`), or canvas-sized opaque grayscale PNG (`mode=mask`, `path`; black protects, white selects). `combine=replace/add/subtract`, `feather=0..250`; `mode=feather` softens the current selection. `all` and `clear` remain available. Preparation runs on a worker. |
+| `editor_select` | Undoable rectangle/ellipse (`x/y/width/height`), polygon (`points=[[x,y],…]`), canvas-sized opaque grayscale PNG (`mode=mask`, `path`; black protects, white selects), or local AI object selection (`mode=object`, `foregroundPoints`/`backgroundPoints`, optional `box`). Object mode uses document pixel coordinates, at most 64 points total, and `softEdges=true` by default. Original-image colors refine the boundary; soft edges estimate local boundary alpha. Additional object feather defaults to 0 and can be set explicitly. Install the optional model in the app first; MCP never downloads it or uploads image pixels. Each correction supplies all prompts and reuses unchanged image features. `combine=replace/add/subtract`, `feather=0..250`; `mode=feather` softens the current selection. `all` and `clear` remain available. Preparation runs on a worker. |
 | `editor_batch` | Atomically apply 1–32 local layer, text, adjustment, layout or geometric selection commands as one Undo, without recording intermediate full-document history. Each item has `tool`, `arguments`, and optional unique `as` alias; later layer IDs, including entries of `layerIds`, can use `$alias`. Returns `batchAliases`. Failure or a net-zero batch preserves content and redo. Import, mask-file reads, cloud jobs, history, save/open/export and nested batches are excluded. |
 | `editor_layout` | `group`, `ungroup`, `align`, `distribute` or `crop`, one Undo. Non-crop operations take 1–256 distinct `layerIds`; selected descendants of selected folders are carried once. Group accepts `name`; ungroup takes one folder and discards its own opacity/blend/mask, as the native command does. Align uses `alignment=left/center/right/top/middle/bottom`, `relativeTo=layers` (2+ roots, default) or `canvas` (1+). Distribute requires 3+ roots, `axis=horizontal/vertical`, `spacing=gaps` (default) or `centers`, keeping endpoints fixed. Geometry uses rotated placement bounds, includes hidden folder content and excludes effects. Linked masks follow; independent masks stay fixed. Crop takes integer `x/y/width/height` inside the canvas, preserving source image pixels and shifting guides, masks and selection. |
 | `editor_text` | Omit `layerId` and supply `content` to create editable text; otherwise edit existing text. Optional fontName/fontSize, sRGB `color=[r,g,b]` in 0–1, alignment Left/Center/Right, tracking/leading and boxWidth/boxHeight. x/y place new text. Existing text preserves placement and omitted style fields. One Undo. |
 | `editor_adjustment` | Create with an advertised `kind`, or update an existing `layerId`. `settings` patches the exact camelCase adjustment fields in state, including nested objects. Omitted fields are retained; invalid values publish nothing. One Undo. |
+| `editor_ai_prepare` | Capture the full canvas and frozen selection/expansion mask for an external agent. `operation=remove/replace/expand`, default replace; expand accepts `left/right/top/bottom`. Returns `ai.source=agent`, `status=waiting`, `requestId` and `input` paths/dimensions. Temporary files only; no editor API key, network request or Undo. |
+| `editor_ai_import` | Read a local generated PNG `path` for the exact prepared `requestId`. Reapply frozen coverage and show up to three review candidates; no history or cloud request. The PNG represents the full prepared canvas and is resized if needed. Review and use the existing accept/cancel tools. |
 | `editor_ai_start` | Start one `remove`, `replace` or `expand` request. Required `model` is an exact advertised ID. Uses saved `connection=api` by default; `account` must be explicit. Resolution is automatic (`resolution=auto`). Accepts prompt and left/right/top/bottom expansion pixels. Uploads inputs and can incur provider charges. |
 | `editor_ai_accept` | Accept matching `requestId` and optional zero-based `candidateIndex` as one layer/undo step. |
 | `editor_ai_cancel` | Cancel local waiting for matching `requestId`; `discard=true` also closes the preview. |
@@ -73,7 +77,8 @@ into shared `.comp` packages and saved-package tools do not have this local edit
 | `editor_export` | Export the committed canvas, or an isolated raster `layerId` on transparency, to a new absolute `.png` in an existing folder. |
 | `editor_trim_layer` | Crop a raster layer's transparent margins, including a same-grid attached mask, with unchanged placement and one Undo. Editable text/shapes, effects and independent masks are refused. |
 | `editor_layer_select` | Select `layerId`, expand its ancestor rows and target its content. Clears mask/effect targeting without creating content history. |
-| `editor_layer_import` | Import an absolute local PNG `path`, with optional `name`, centered on the canvas in the current folder. Selects the new layer; one Undo, no save. Uses the normal import validator and document budget. |
+| `editor_layer_import` | Import an absolute local PNG `path`, with optional `name`, in the current folder. Optional `x/y/width/height` place the full input rectangle; supply both dimensions or neither. Defaults to source size, centered. `trim=true` (default) crops fully transparent margins without moving visible artwork; false retains the full grid. One Undo; no cloud request or save. |
+| `editor_layer_import_svg` | Render model-authored `svg` code or an absolute UTF-8 `.svg` `path` into a transparent raster layer. Exactly one input is required, with integer output `width`/`height`; optional viewport `x`/`y`, `name` and `trim` (default true). Crops transparent margins without moving visible content. Uses the current folder, creation animation and one Undo. No cloud request or save; SVG source/vector nodes are not retained. |
 | `editor_layer_transform` | Set any of `x`, `y`, `width`, `height`, `rotation` for `layerId` in one Undo. Omitted fields retain their values. Uses the normal visible-layer/folder transform and linked-mask behavior. |
 | `editor_layer_reorder` | Place `layerId` at `position=top/bottom/above`; `above` requires `aboveLayerId`. Omitted `parentId` keeps the current folder; explicit null moves to the root. Selects the moved layer; one Undo. |
 | `editor_layer_duplicate` | Copy `layerId`, including folder descendants, editable content and masks; select the copied root. One Undo. |
@@ -169,7 +174,7 @@ rename, visibility, opacity, blend mode, combined transform/linked mask, reorder
 deletion; it checks exact Undo/Redo metadata, restored UI selection, invalid/stale requests,
 AI-preview exclusion and saved pixels. A separate custom API group checks editable endpoints,
 settings persistence, saved credentials, preview and Undo. All cloud responses are simulated.
-Discovery exposes 35 tools: 29 live tools and six package tools. Original package/watcher interoperability remains
+Discovery exposes 36 tools: 30 live tools and six package tools. Original package/watcher interoperability remains
 a separate probe.
 
 ## Build and launch

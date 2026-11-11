@@ -40,14 +40,16 @@ public sealed partial class EditorDocument
         public long RemainingPixels => Math.Max(0, Limits.DocumentPixelBudget
             - expected.Images.Sum(pair => pair.Value.PixelCount) - expected.Masks.Sum(pair => pair.Value.PixelCount));
 
-        public ProjectLayerRecord AddImage(Surface image, string name)
+        public ProjectLayerRecord AddImage(Surface image, string name, LayerTransform? placement = null)
         {
             RequireCurrent(); ArgumentNullException.ThrowIfNull(image);
+            if (placement is not null && !placement.IsValid) throw new ArgumentException("Invalid prepared image placement.", nameof(placement));
             var next = DetachedSnapshot(); var center = point ?? new PointD(next.Manifest.Width / 2d, next.Manifest.Height / 2d);
             var layer = new ProjectLayerRecord { Id = Guid.NewGuid(), Name = name, IsVisible = true, IsGroup = false,
                 Opacity = 1, BlendMode = LayerBlendMode.Normal, ParentId = ParentFor(next.Manifest),
-                Transform = new() { Origin = new(Math.Floor(center.X - image.Width / 2d), Math.Floor(center.Y - image.Height / 2d)),
-                    Size = new(image.Width, image.Height) } };
+                Transform = placement is null ? new() { Origin = new(Math.Floor(center.X - image.Width / 2d), Math.Floor(center.Y - image.Height / 2d)),
+                    Size = new(image.Width, image.Height) } : new() { Origin = placement.Origin, Size = placement.Size,
+                        Rotation = placement.Rotation, FlipX = placement.FlipX, FlipY = placement.FlipY, Sampling = placement.Sampling } };
             layer.ImageFile = ProjectValidator.Uuid(layer.Id) + ".png";
             next.Manifest.Layers.Add(layer); next.Manifest.ActiveLayerId = layer.Id; next.Images.Add(layer.Id, image);
             Publish(next); return layer;

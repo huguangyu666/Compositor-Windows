@@ -55,6 +55,10 @@ public partial class App : Application
             MainAppWindow = projectPath is null ? new MainWindow() : new MainWindow(projectPath);
             MainAppWindow.Activate();
 #if DEBUG
+            if (Environment.GetCommandLineArgs().Contains("--svg-import-probe") && MainAppWindow is MainWindow svgImportWindow)
+                svgImportWindow.DispatcherQueue.TryEnqueue(async () => await svgImportWindow.RunSvgImportProbeAsync());
+            if (Environment.GetCommandLineArgs().Contains("--object-selection-probe") && MainAppWindow is MainWindow objectSelectionWindow)
+                objectSelectionWindow.DispatcherQueue.TryEnqueue(async () => await objectSelectionWindow.RunObjectSelectionProbeAsync());
             if (Environment.GetCommandLineArgs().Contains("--layer-drag-perf") && MainAppWindow is MainWindow layerDragWindow)
                 layerDragWindow.DispatcherQueue.TryEnqueue(async () => await layerDragWindow.RunLayerDragPerfProbeAsync());
             if (Environment.GetCommandLineArgs().Contains("--timeline-probe") && MainAppWindow is MainWindow timelineWindow)

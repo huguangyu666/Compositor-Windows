@@ -15,6 +15,7 @@ public sealed partial class MainWindow
         using var deadline = new CancellationTokenSource(timeout);
         var cancellation = deadline.Token;
         Surface? imported = null;
+        LayerTransform? importPlacement = null;
         string? importName = null;
         if (name == "editor_layer_import")
         {
@@ -23,10 +24,13 @@ public sealed partial class MainWindow
             long remaining = Limits.DocumentPixelBudget - owner.Snapshot.Images.Values.Sum(image => image.PixelCount)
                 - owner.Snapshot.Masks.Values.Sum(mask => mask.PixelCount);
             if (remaining <= 0) throw new ArgumentException("The document has no remaining pixel budget.");
+            if ((args["width"] is null) != (args["height"] is null)) throw new ArgumentException("Supply both width and height, or neither.");
+            int canvasWidth = owner.Snapshot.Manifest.Width, canvasHeight = owner.Snapshot.Manifest.Height;
+            bool trim = args["trim"]?.GetValue<bool>() ?? true;
 #if DEBUG
             var preparation = editorLayerImportPreparationProbe;
 #endif
-            imported = await Task.Run(async () =>
+            (imported, importPlacement) = await Task.Run(async () =>
             {
 #if DEBUG
                 if (preparation is not null) await preparation;
@@ -35,7 +39,53 @@ public sealed partial class MainWindow
                 if (file.Length > Limits.AssetMaxBytes) throw new ArgumentException("The PNG exceeds the encoded asset limit.");
                 var bytes = new byte[checked((int)file.Length)];
                 await file.ReadExactlyAsync(bytes, cancellation);
-                return await WicImaging.DecodeSurfaceAsync(bytes, Limits.MaxSide, remaining, cancellation);
+                var image = await WicImaging.DecodeSurfaceAsync(bytes, Limits.MaxSide, remaining, cancellation);
+                double width = EditorLayerNumber(args, "width", image.Width), height = EditorLayerNumber(args, "height", image.Height);
+                var placement = new LayerTransform { Origin = new(EditorLayerNumber(args, "x", Math.Floor((canvasWidth - width) / 2)),
+                    EditorLayerNumber(args, "y", Math.Floor((canvasHeight - height) / 2))), Size = new(width, height) };
+                if (!placement.IsValid) throw new ArgumentException("Invalid PNG placement: finite x/y within ±1000000 and width/height 1–300000 are required.");
+                if (trim)
+                {
+                    try { return GrownLayerGrid.Trim(image, placement); }
+                    // A crop can fall below the format's minimum size or exceed its origin limits.
+                    catch (InvalidOperationException) { }
+                }
+                return (image, placement);
+            }, cancellation).WaitAsync(cancellation);
+        }
+        else if (name == "editor_layer_import_svg")
+        {
+            string? source = args["svg"]?.GetValue<string>();
+            string? path = args["path"]?.GetValue<string>();
+            if ((source is null) == (path is null)) throw new ArgumentException("Supply exactly one of svg code or an absolute .svg path.");
+            if (path is not null) path = EditorPath(path, ".svg");
+            importName = EditorLayerName(args["name"]?.GetValue<string>() ?? (path is null ? "SVG" : Path.GetFileNameWithoutExtension(path)));
+            int width = args["width"]?.GetValue<int>() ?? 0, height = args["height"]?.GetValue<int>() ?? 0;
+            bool trim = args["trim"]?.GetValue<bool>() ?? true;
+            var placement = new LayerTransform { Origin = new(EditorLayerNumber(args, "x", Math.Floor((owner.Snapshot.Manifest.Width - width) / 2d)),
+                EditorLayerNumber(args, "y", Math.Floor((owner.Snapshot.Manifest.Height - height) / 2d))), Size = new(width, height) };
+            if (!placement.IsValid) throw new ArgumentException("Invalid SVG bounds: finite x/y within ±1000000 and positive width/height are required.");
+            long remaining = Limits.DocumentPixelBudget - owner.Snapshot.Images.Values.Sum(image => image.PixelCount)
+                - owner.Snapshot.Masks.Values.Sum(mask => mask.PixelCount);
+#if DEBUG
+            var preparation = editorLayerImportPreparationProbe;
+#endif
+            (imported, importPlacement) = await Task.Run(async () =>
+            {
+#if DEBUG
+                if (preparation is not null) await preparation;
+#endif
+                if (path is not null)
+                {
+                    using var file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous);
+                    if (file.Length > SvgImport.MaxBytes) throw new ArgumentException("SVG files must not exceed 128 KiB.");
+                    var bytes = new byte[checked((int)file.Length)];
+                    await file.ReadExactlyAsync(bytes, cancellation);
+                    try { source = new System.Text.UTF8Encoding(false, true).GetString(bytes).TrimStart('\uFEFF'); }
+                    catch (System.Text.DecoderFallbackException ex) { throw new ArgumentException("The SVG file must use UTF-8 encoding.", ex); }
+                }
+                string xml = SvgImport.Prepare(source, width, height, remaining);
+                return SvgRasterizer.Render(xml, width, height, placement, trim, cancellation);
             }, cancellation).WaitAsync(cancellation);
         }
         cancellation.ThrowIfCancellationRequested();
@@ -44,7 +94,7 @@ public sealed partial class MainWindow
         if (imported is not null)
         {
             var manifest = owner.Snapshot.Manifest;
-            plan = new(new() { Origin = new(Math.Floor((manifest.Width - imported.Width) / 2d), Math.Floor((manifest.Height - imported.Height) / 2d)),
+            plan = new(importPlacement ?? new() { Origin = new(Math.Floor((manifest.Width - imported.Width) / 2d), Math.Floor((manifest.Height - imported.Height) / 2d)),
                 Size = new(imported.Width, imported.Height) }, "Mcp_Creating", Creating: true);
         }
         else if (Guid.TryParse(args["layerId"]?.GetValue<string>(), out var targetId)
@@ -70,10 +120,10 @@ public sealed partial class MainWindow
         {
             await QueueEditorActionAsync(owner, args, cancellation, () =>
             {
-                if (name == "editor_layer_import")
+                if (name is "editor_layer_import" or "editor_layer_import_svg")
                 {
                     using var batch = owner.BeginFileImport();
-                    var added = batch.AddImage(imported!, importName!);
+                    var added = batch.AddImage(imported!, importName!, importPlacement);
                     SelectEditorLayer(owner, added.Id);
                 }
                 else

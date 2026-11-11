@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
-      - name: Test Core, Renderer and App infrastructure
+      - name: Test Core, Renderer, App infrastructure and Segmentation
         shell: pwsh
         run: ./Windows/ci/test-windows.ps1
       - name: Publish self-contained x64 editor

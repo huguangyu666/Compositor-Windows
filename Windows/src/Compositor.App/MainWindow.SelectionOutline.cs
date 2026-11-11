@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using Compositor.Core;
+using Microsoft.UI.Xaml.Markup;
 using Microsoft.UI.Xaml.Media;
 
 namespace Compositor.App;
@@ -8,6 +9,16 @@ namespace Compositor.App;
 public sealed partial class MainWindow
 {
     private const int SelectionOutlineRunsPerBatch = 256;
+    private static GeometryGroup CreateSelectionOutlineGroup() => new();
+
+    private Geometry ParseSelectionOutlineBatch(string path, GeometryGroup? group)
+    {
+        // One spatial black/white brush spans every short run without resetting a dash
+        // pattern at each figure. Keep a single geometry across viewport/affine changes.
+        var foreground = (Geometry)XamlBindingHelper.ConvertValue(typeof(Geometry), path);
+        group?.Children.Add(foreground);
+        return foreground;
+    }
 
     private static string[] PrepareSelectionOutlinePaths(SelectionEdge[] edges, CancellationToken token)
     {

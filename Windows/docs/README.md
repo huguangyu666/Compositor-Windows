@@ -19,3 +19,10 @@
 The first public snapshot contains Windows source, tests, current guides and a reusable sample.
 Historical local probe logs and private sample material are not part of this repository. References
 to local development reports in the longer guides describe historical work, not current release gates.
+
+## November 11 additions
+
+- [External-agent image generation](agent-image-mcp.md)
+- [Model-authored SVG](svg-mcp.md)
+- [Local object selection](object-selection-2026-11-06.md)
+- [Timeline interaction improvements](timeline-2026-11-06.md#independent-time-pointer)

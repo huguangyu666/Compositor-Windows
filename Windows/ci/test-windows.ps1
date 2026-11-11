@@ -12,7 +12,7 @@ try {
         throw "The headless test entry point requires .NET SDK 9; resolved '$sdk'."
     }
     Write-Output "Windows headless tests: SDK $sdk"
-    foreach ($suite in @('App.Infrastructure', 'Core', 'Renderer')) {
+    foreach ($suite in @('App.Infrastructure', 'Core', 'Renderer', 'Segmentation')) {
         $project = Join-Path $portRoot "tests/Compositor.$suite.Tests/Compositor.$suite.Tests.csproj"
         & dotnet test $project --verbosity minimal --results-directory $ResultsDirectory --logger "trx;LogFileName=$suite.trx"
         if ($LASTEXITCODE -ne 0) { $failures.Add($suite) }

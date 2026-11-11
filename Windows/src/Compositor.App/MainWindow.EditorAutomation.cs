@@ -1,4 +1,5 @@
 using Compositor.Core;
+using Compositor.Segmentation;
 using System.Text.Json.Nodes;
 
 namespace Compositor.App;
@@ -37,12 +38,27 @@ public sealed partial class MainWindow
         {
             var manifest = ManifestJson.Deserialize(ManifestJson.Serialize(owner.Snapshot.Manifest));
             var current = owner.ActiveSelection;
+            ObjectSelectionRequest? objectRequest = null;
+            Task<Surface>? objectImage = null;
+            if (args["mode"]?.GetValue<string>() == "object")
+            {
+                objectRequest = ObjectSelectionRequest.Parse(args, manifest.Width, manifest.Height);
+                await ObjectSelectionModels.EnsureAsync(false, null, cancellation);
+                RequireEditorTarget(args); RequireEditorIdle();
+                objectImage = GetObjectSelectionImageAsync(owner, cancellation);
+                objectSegmenter ??= new(ObjectSelectionModels);
+            }
             selection = await Task.Run(async () =>
             {
 #if DEBUG
                 if (preparation is not null) await preparation;
 #endif
                 MaskSurface? mask = null;
+                if (objectRequest is not null)
+                {
+                    mask = await objectSegmenter!.SelectAsync(await objectImage!, objectRequest.Points, objectRequest.Box, objectRequest.SoftEdges, cancellation);
+                    return PrepareObjectSelection(manifest.Width, manifest.Height, current, args, mask, cancellation);
+                }
                 if (args["mode"]?.GetValue<string>() == "mask")
                 {
                     mask = await ReadEditorMaskAsync(EditorPath(args["path"]?.GetValue<string>(), ".png"), (long)manifest.Width * manifest.Height, cancellation);

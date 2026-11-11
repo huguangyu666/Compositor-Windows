@@ -3,6 +3,7 @@ using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Windows.Foundation;
 using Windows.System;
 
@@ -10,11 +11,17 @@ namespace Compositor.App;
 
 public sealed partial class MainWindow
 {
+    private int? pendingTimelineDragFrame;
+    private bool timelineDragFrameQueued;
+
     private void DrawTimeline(CanvasControl sender, CanvasDrawEventArgs e)
     {
         if (document is not { } owner || Timeline is not { } timeline) return;
         var draw = e.DrawingSession; double width = sender.ActualWidth, height = sender.ActualHeight;
         if (width <= TimelineNamesWidth || height <= TimelineRulerHeight) return;
+#if DEBUG
+        long drawStart = System.Diagnostics.Stopwatch.GetTimestamp(), drawBytes = GC.GetAllocatedBytesForCurrentThread();
+#endif
         using var font = new CanvasTextFormat { FontSize = 11, WordWrapping = CanvasWordWrapping.NoWrap, TrimmingGranularity = CanvasTextTrimmingGranularity.Character,
             VerticalAlignment = CanvasVerticalAlignment.Center };
         draw.FillRectangle(new Rect(0, 0, width, TimelineRulerHeight), Color(43, 43, 43));
@@ -31,46 +38,48 @@ public sealed partial class MainWindow
             }
         }
         var layers = owner.Snapshot.Manifest.Layers; var tracks = timeline.Tracks.ToDictionary(track => track.LayerId);
-        int first = (int)timelineVertical.Value, count = (int)Math.Ceiling((height - TimelineRulerHeight) / TimelineTrackHeight);
-        for (int row = first; row < Math.Min(layers.Count, first + count); row++)
+        int first = (int)timelineVertical.Value;
+        double fraction = timelineVertical.Value - first;
+        int count = (int)Math.Ceiling((height - TimelineRulerHeight) / TimelineTrackHeight + fraction);
+        using (fraction == 0 ? null : draw.CreateLayer(1, new Rect(0, TimelineRulerHeight, width, height - TimelineRulerHeight)))
         {
-            var layer = layers[layers.Count - row - 1]; double y = TimelineRulerHeight + (row - first) * TimelineTrackHeight;
-            bool selected = timelineLayer == layer.Id;
-            if (selected) draw.FillRectangle(new Rect(0, y, width, TimelineTrackHeight), Color(43, 53, 66));
-            draw.FillRectangle(new Rect(0, y, TimelineNamesWidth, TimelineTrackHeight), selected ? Color(43, 53, 66) : Color(37, 37, 37));
-            draw.DrawText((layer.IsGroupOrFalse ? "▸ " : "") + layer.Name, new Rect(12, y, TimelineNamesWidth - 22, TimelineTrackHeight),
-                layer.IsVisible ? Color(230, 230, 230) : Color(125, 125, 125), font);
-            draw.DrawLine(0, (float)(y + TimelineTrackHeight), (float)width, (float)(y + TimelineTrackHeight), Color(52, 52, 52));
-            int clipIn = tracks.GetValueOrDefault(layer.Id)?.InFrame ?? 0, clipOut = tracks.GetValueOrDefault(layer.Id)?.OutFrame ?? timeline.DurationFrames;
-            if (timelineDrag is { } drag && drag.Layer == layer.Id && drag.Kind is "in" or "out" or "clip") (clipIn, clipOut) = TimelineDragClip(drag);
-            using (draw.CreateLayer(1, new Rect(TimelineNamesWidth, y, width - TimelineNamesWidth, TimelineTrackHeight)))
+            for (int row = first; row < Math.Min(layers.Count, first + count); row++)
             {
-                double x0 = TimelineX(clipIn), x1 = TimelineX(clipOut);
-                draw.FillRoundedRectangle(new Rect(x0, y + 5, Math.Max(2, x1 - x0), TimelineTrackHeight - 10), 3, 3,
-                    selected ? Color(62, 111, 151) : Color(53, 77, 98));
-                draw.DrawLine((float)x0 + 3, (float)y + 10, (float)x0 + 3, (float)y + 20, Color(135, 177, 203), 2);
-                draw.DrawLine((float)x1 - 3, (float)y + 10, (float)x1 - 3, (float)y + 20, Color(135, 177, 203), 2);
-                if (tracks.TryGetValue(layer.Id, out var track))
+                var layer = layers[layers.Count - row - 1]; double y = TimelineRulerHeight + (row - first - fraction) * TimelineTrackHeight;
+                bool selected = timelineLayer == layer.Id;
+                if (selected) draw.FillRectangle(new Rect(0, y, width, TimelineTrackHeight), Color(43, 53, 66));
+                draw.FillRectangle(new Rect(0, y, TimelineNamesWidth, TimelineTrackHeight), selected ? Color(43, 53, 66) : Color(37, 37, 37));
+                draw.DrawText((layer.IsGroupOrFalse ? "▸ " : "") + layer.Name, new Rect(12, y, TimelineNamesWidth - 22, TimelineTrackHeight),
+                    layer.IsVisible ? Color(230, 230, 230) : Color(125, 125, 125), font);
+                draw.DrawLine(0, (float)(y + TimelineTrackHeight), (float)width, (float)(y + TimelineTrackHeight), Color(52, 52, 52));
+                int clipIn = tracks.GetValueOrDefault(layer.Id)?.InFrame ?? 0, clipOut = tracks.GetValueOrDefault(layer.Id)?.OutFrame ?? timeline.DurationFrames;
+                if (timelineDrag is { } drag && drag.Layer == layer.Id && drag.Kind is "in" or "out" or "clip") (clipIn, clipOut) = TimelineDragClip(drag);
+                using (draw.CreateLayer(1, new Rect(TimelineNamesWidth, y, width - TimelineNamesWidth, TimelineTrackHeight)))
                 {
-                    foreach (int frame in Enum.GetValues<AnimationProperty>().SelectMany(track.Keys).Select(key => key.Frame).Distinct())
+                    double x0 = TimelineX(clipIn), x1 = TimelineX(clipOut);
+                    draw.FillRoundedRectangle(new Rect(x0, y + 5, Math.Max(2, x1 - x0), TimelineTrackHeight - 10), 3, 3,
+                        selected ? Color(62, 111, 151) : Color(53, 77, 98));
+                    draw.DrawLine((float)x0 + 3, (float)y + 10, (float)x0 + 3, (float)y + 20, Color(135, 177, 203), 2);
+                    draw.DrawLine((float)x1 - 3, (float)y + 10, (float)x1 - 3, (float)y + 20, Color(135, 177, 203), 2);
+                    if (tracks.TryGetValue(layer.Id, out var track))
                     {
-                        double x = TimelineX(timelineDrag is { Kind: "key" } moving && moving.Layer == layer.Id && moving.Key == frame ? timelineFrame : frame);
-                        if (x < TimelineNamesWidth - 8 || x > width + 8) continue;
-                        var ink = selected && frame == timelineFrame ? Color(255, 215, 102) : Color(223, 232, 239);
-                        float cx = (float)x, cy = (float)(y + TimelineTrackHeight / 2);
-                        draw.DrawLine(cx, cy - 4, cx + 4, cy, ink, 2); draw.DrawLine(cx + 4, cy, cx, cy + 4, ink, 2);
-                        draw.DrawLine(cx, cy + 4, cx - 4, cy, ink, 2); draw.DrawLine(cx - 4, cy, cx, cy - 4, ink, 2);
+                        foreach (int frame in Enum.GetValues<AnimationProperty>().SelectMany(track.Keys).Select(key => key.Frame).Distinct())
+                        {
+                            double x = TimelineX(timelineDrag is { Kind: "key" } moving && moving.Layer == layer.Id && moving.Key == frame ? timelineFrame : frame);
+                            if (x < TimelineNamesWidth - 8 || x > width + 8) continue;
+                            var ink = selected && frame == timelineFrame ? Color(255, 215, 102) : Color(223, 232, 239);
+                            float cx = (float)x, cy = (float)(y + TimelineTrackHeight / 2);
+                            draw.DrawLine(cx, cy - 4, cx + 4, cy, ink, 2); draw.DrawLine(cx + 4, cy, cx, cy + 4, ink, 2);
+                            draw.DrawLine(cx, cy + 4, cx - 4, cy, ink, 2); draw.DrawLine(cx - 4, cy, cx, cy - 4, ink, 2);
+                        }
                     }
                 }
             }
         }
         draw.DrawLine((float)TimelineNamesWidth, 0, (float)TimelineNamesWidth, (float)height, Color(70, 70, 70));
-        float playhead = (float)TimelineX(timelineFrame);
-        if (playhead >= TimelineNamesWidth && playhead <= width)
-        {
-            draw.DrawLine(playhead, 0, playhead, (float)height, Color(85, 195, 255), 1.5f);
-            draw.FillRectangle(playhead - 4, 0, 8, 7, Color(85, 195, 255));
-        }
+#if DEBUG
+        timelineDrawProbe?.Invoke(System.Diagnostics.Stopwatch.GetElapsedTime(drawStart).TotalMilliseconds, GC.GetAllocatedBytesForCurrentThread() - drawBytes);
+#endif
     }
 
     private void OnTimelinePressed(object sender, PointerRoutedEventArgs e)
@@ -85,7 +94,8 @@ public sealed partial class MainWindow
         }
         else
         {
-            int row = (int)timelineVertical.Value + (int)((y - TimelineRulerHeight) / TimelineTrackHeight);
+            if (y < TimelineRulerHeight) return;
+            int row = (int)(timelineVertical.Value + (y - TimelineRulerHeight) / TimelineTrackHeight);
             if (row < 0 || row >= owner.LayerCount) return;
             var layer = owner.Snapshot.Manifest.Layers[owner.LayerCount - row - 1]; timelineLayer = layer.Id;
             if (selectedLayerId != layer.Id) SelectEditorLayer(owner, layer.Id);
@@ -99,15 +109,49 @@ public sealed partial class MainWindow
             SeekTimeline(key ?? TimelineAt(x));
             timelineDrag = (layer.Id, kind, start, end, key ?? -1, timelineFrame, x, e.Pointer.PointerId);
         }
-        timelineCanvas.CapturePointer(e.Pointer); RefreshTimeline(); e.Handled = true;
+        MoveTimelineDrag(x); timelineCanvas.CapturePointer(e.Pointer); RefreshTimeline(); e.Handled = true;
     }
     private void OnTimelineMoved(object sender, PointerRoutedEventArgs e)
     {
         if (timelineDrag is not { } drag || drag.Pointer != e.Pointer.PointerId) return;
-        double x = e.GetCurrentPoint(timelineCanvas).Position.X;
-        if (drag.Kind is "seek" or "key") SeekTimeline(TimelineAt(x), stop: false);
-        else { timelineDrag = drag with { Anchor = TimelineAt(x) }; timelineCanvas.Invalidate(); }
+        MoveTimelineDrag(e.GetCurrentPoint(timelineCanvas).Position.X);
         e.Handled = true;
+    }
+    private void MoveTimelineDrag(double x)
+    {
+        if (timelineDrag is not { } drag) return;
+        if (drag.Kind == "seek") MoveTimelinePlayhead(x);
+        else if (drag.Kind == "key") MoveTimelinePlayhead(TimelineX(drag.Key) + x - drag.X);
+        QueueTimelineDrag(TimelineDragAt(x));
+    }
+    private int TimelineDragAt(double x) => timelineDrag is { Kind: "key" } drag
+        ? Math.Clamp(drag.Key + (int)Math.Round((x - drag.X) / timelinePixelsPerFrame), 0, (Timeline?.DurationFrames ?? 1) - 1)
+        : TimelineAt(x);
+    private void QueueTimelineDrag(int frame)
+    {
+        if (timelineDrag is not { } drag) return;
+        pendingTimelineDragFrame = frame;
+        if (timelineDragFrameQueued) return;
+        if (frame == (drag.Kind is "seek" or "key" ? timelineFrame : drag.Anchor))
+        { pendingTimelineDragFrame = null; return; }
+        timelineDragFrameQueued = true; CompositionTarget.Rendering += OnTimelineDragFrame;
+    }
+    private void OnTimelineDragFrame(object? sender, object args) => FlushTimelineDrag();
+    private void FlushTimelineDrag()
+    {
+        if (timelineDragFrameQueued) CompositionTarget.Rendering -= OnTimelineDragFrame;
+        timelineDragFrameQueued = false;
+        int? frame = pendingTimelineDragFrame; pendingTimelineDragFrame = null;
+        if (windowClosed || frame is null || timelineDrag is not { } drag) return;
+        if (drag.Kind is "seek" or "key") SeekTimeline(frame.Value, stop: false);
+        else if (drag.Anchor != frame)
+        { timelineDrag = drag with { Anchor = frame.Value }; timelineCanvas.Invalidate(); }
+    }
+    private void CancelTimelineDrag()
+    {
+        if (timelineDragFrameQueued) CompositionTarget.Rendering -= OnTimelineDragFrame;
+        timelineDragFrameQueued = false; pendingTimelineDragFrame = null; timelineDrag = null;
+        timelinePointerX = null; RefreshTimelinePlayhead();
     }
     private (int In, int Out) TimelineDragClip((Guid Layer, string Kind, int Start, int End, int Key, int Anchor, double X, uint Pointer) drag)
     {
@@ -123,8 +167,17 @@ public sealed partial class MainWindow
     }
     private void OnTimelineReleased(object sender, PointerRoutedEventArgs e)
     {
+        if (timelineDrag is not { } drag || drag.Pointer != e.Pointer.PointerId) return;
+        // Release can arrive before the scheduled display frame. Commit its exact position.
+        MoveTimelineDrag(e.GetCurrentPoint(timelineCanvas).Position.X);
+        CompleteTimelineDrag(); timelineCanvas.ReleasePointerCapture(e.Pointer);
+        e.Handled = true;
+    }
+    private void CompleteTimelineDrag()
+    {
+        FlushTimelineDrag();
         if (timelineDrag is not { } drag || document is not { } owner) return;
-        timelineDrag = null; timelineCanvas.ReleasePointerCapture(e.Pointer);
+        CancelTimelineDrag();
         if (drag.Kind == "key" && drag.Key != timelineFrame)
             TimelineChange(() => owner.MoveAnimationKeys(drag.Layer, drag.Key, timelineFrame, Enum.GetValues<AnimationProperty>()));
         else if (drag.Kind is "in" or "out" or "clip")
@@ -133,10 +186,10 @@ public sealed partial class MainWindow
             if (drag.Kind == "clip") TimelineChange(() => owner.ShiftAnimationTrack(drag.Layer, range.In - drag.Start));
             else TimelineChange(() => owner.SetAnimationClip(drag.Layer, range.In, range.Out));
         }
-        RefreshTimeline(); e.Handled = true;
+        RefreshTimeline();
     }
     private void OnTimelineCancelled(object sender, PointerRoutedEventArgs e)
-    { if (timelineDrag is { } drag && drag.Pointer == e.Pointer.PointerId) { timelineDrag = null; timelineCanvas.Invalidate(); } }
+    { if (timelineDrag is { } drag && drag.Pointer == e.Pointer.PointerId) { CancelTimelineDrag(); timelineCanvas.Invalidate(); } }
     private void OnTimelineKeyDown(object sender, KeyRoutedEventArgs e)
     {
         if (e.Key == VirtualKey.Space) { ToggleTimelinePlayback(); e.Handled = true; }

@@ -4,6 +4,13 @@ The Windows editor is a focused compositing tool. It covers the first editing lo
 .comp project, place raster layers, adjust their appearance, paint, crop, and export. It does not
 yet aim to reproduce every Photoshop or macOS Compositor panel.
 
+## SVG through MCP
+
+External AI agents can also draw self-contained SVG and import it through MCP as a transparent
+raster layer, with optional exact dimensions/placement, automatic transparent-margin trimming
+and one Undo. See [SVG import](svg-mcp.md). SVG text, filters and editable vector nodes are not
+supported; use the editor's editable text tool for typography.
+
 ## Interface language
 
 The interface follows the Windows display language at startup. Chinese language variants use
@@ -79,7 +86,15 @@ layers for position, scale and rotation.
 
 **Animation preview** keeps ordinary pixel/transform edits disabled while viewing the animation.
 Turn it off, or close the timeline, to edit the base artwork. Preview playback and seeking do not
-change source pixels or add history. Undo/Redo and Save remain available. Reopening an animated
+change source pixels or add history. Playback follows display refresh; if rendering is slower,
+pending frames are skipped to keep time. Scrubbing shows completed frames and settles on the
+last requested time. Seeking with preview off leaves the base canvas unchanged.
+High-frequency dragging uses the latest pointer position per display frame; releasing keeps the
+exact final time. Keyframes keep their grab offset, and each keyframe or clip drag undoes in one step.
+The blue time pointer follows subframe mouse motion immediately and snaps to a frame on release.
+During playback it moves continuously; the image preview still advances at the timeline frame rate
+and the available rendering speed.
+Undo/Redo and Save remain available. Reopening an animated
 project restores the timeline at frame zero. New layers without tracks remain visible throughout.
 Canvas crop/size, image size and canvas flip carry position/rotation keys into the new document
 coordinates. Merging or deleting layers removes their tracks; Undo restores them.
@@ -411,6 +426,37 @@ Selections can:
 
 Selection operations are not saved in the project. Magic Wand, Color Range, Expand, Contract,
 Feather, and Lasso are available.
+
+**Object Selection (Q)** runs SAM 2.1 Tiny locally on the visible composite canvas. Existing MobileSAM
+installations remain compatible; **Local model… → Download model** upgrades to SAM 2.1. Click an object
+or drag a box around it; further clicks include areas and Alt-clicks exclude areas. The draft uses
+the normal dashed contour around the object, with no photo tint or persistent prompt dots. A
+black-and-white hollow circle follows the pointer over the image; its center is the click location.
+Dragging still shows a selection box. Choose New/Add/Subtract to
+combine with the selection that existed when the
+draft started. A usable contour appears first; after 120 ms without new input, the app refines
+its edges in the background. **Confirm / Enter**, or switching to another editing tool, uses the
+latest ready selection as one Undo step. Switching while a result is pending waits for that result.
+**Cancel / Escape** or Undo discards the draft and preserves the original selection and redo history. Start over clears
+the prompts. Tiny disconnected speckles and enclosed pinholes are cleaned from the result;
+substantial gaps, canvas openings and explicitly included/excluded small regions are retained.
+The model boundary is fitted to the original image with a narrow-band color/contrast graph cut.
+**Soft edges** estimates fractional coverage from nearby foreground/background colors. Additional
+**Feather (px)** is optional (0–250, default 0); changing it reuses the prepared mask. Turning Soft
+edges off keeps the fitted boundary with binary coverage. The contour stays sharp while actual
+coverage is used when painting or creating a mask. This is local edge fitting, not hair matting.
+
+The first use offers a roughly 156 MB model download or an offline model folder import. Files are
+SHA-256 verified. No image is uploaded, no API key or Python installation is needed. Compatible
+GPUs use DirectML for image encoding, with a CPU prompt decoder. Unavailable or failed GPU encoding falls back to CPU.
+Choosing Q starts preparing an already installed model and the current image in the background;
+first-time model initialization still takes time. Continuous corrections reuse image features.
+See [local object selection](object-selection-2026-11-06.md) for file names,
+measurements and MCP examples.
+
+One-click **Select Subject (AI)** and **Remove Subject (AI)** remain unconnected; the macOS original
+uses Apple Vision. Windows object selection needs a point or box. Hair refinement and automatic
+whole-scene subject discovery are not implemented in this stage.
 
 The marquee, lasso and wand options include a feather amount (1–250 pixels), Feather, Inverse
 and Deselect. Feather uses the existing selection worker and one Undo step. Feather and Deselect
@@ -835,6 +881,14 @@ expansion were accepted, undone and saved/reloaded on October 28. Account genera
 experimental and needs its own authenticated acceptance.
 
 ## External editing
+
+Codex and other agents with their own image tools can generate a PNG and send it to Compositor
+through MCP, without configuring the editor's API key. New artwork can be placed at exact bounds
+and automatically trimmed to remove transparent padding. For selection edits/expansion, the
+editor prepares local canvas/mask files, waits for the agent's result, then offers original/result
+comparison and **Accept as new layer**. Acceptance is one Undo; protected original pixels stay
+unchanged. The external-agent panel has no connection settings. The agent's service determines
+its own tool availability, upload policy and charges. See [the workflow](agent-image-mcp.md).
 
 Agents can now refine existing layer masks with the native mask brush or gray-preserving edge
 filters, inspect grayscale masks and cropped layer details, and Undo the change. Original image

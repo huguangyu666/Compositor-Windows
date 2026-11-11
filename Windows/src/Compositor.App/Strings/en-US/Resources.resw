@@ -2628,4 +2628,33 @@
   <data name="H_AnimationMoveKeyframe" xml:space="preserve"><value>Move keyframe</value></data>
   <data name="H_AnimationShiftTrack" xml:space="preserve"><value>Move animation layer</value></data>
   <data name="H_AnimationClear" xml:space="preserve"><value>Clear animation</value></data>
+  <data name="Tool_ObjectSelect" xml:space="preserve"><value>Object Selection</value></data>
+  <data name="OS_SubjectPending" xml:space="preserve"><value>One-click subject discovery is not available yet. Use Object Selection (Q) to click or box an object.</value></data>
+  <data name="OS_Hint" xml:space="preserve"><value>Click or drag a box · Alt-click to exclude</value></data>
+  <data name="OS_Apply" xml:space="preserve"><value>Confirm (Enter)</value></data>
+  <data name="OS_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="OS_Reset" xml:space="preserve"><value>Start over</value></data>
+  <data name="OS_Model" xml:space="preserve"><value>Local model…</value></data>
+  <data name="OS_SoftEdges" xml:space="preserve"><value>Soft edges</value></data>
+  <data name="OS_Feather" xml:space="preserve"><value>Feather (px)</value></data>
+  <data name="OS_Working" xml:space="preserve"><value>Finding object…</value></data>
+  <data name="OS_Empty" xml:space="preserve"><value>No object found. Add an include point.</value></data>
+  <data name="OS_Refine" xml:space="preserve"><value>Add points · Switch tools to use</value></data>
+  <data name="OS_Refining" xml:space="preserve"><value>Selection ready · Refining edges…</value></data>
+  <data name="OS_Preparing" xml:space="preserve"><value>Preparing local model…</value></data>
+  <data name="OS_PositiveFirst" xml:space="preserve"><value>Start with an include point or drag a box.</value></data>
+  <data name="OS_PointLimit" xml:space="preserve"><value>Up to 64 points per draft. Confirm or start over.</value></data>
+  <data name="OS_Error" xml:space="preserve"><value>Object selection: {0}</value></data>
+  <data name="OS_Applied" xml:space="preserve"><value>Object selection confirmed · One Undo</value></data>
+  <data name="OS_InstallDescription" xml:space="preserve"><value>Download the optional SAM 2.1 Tiny model (about 156 MB) from Hugging Face, or import a folder containing its two ONNX and two ONNX_DATA files. Files are checked against the pinned SHA-256 hashes. Your images stay on this computer. Compatible GPUs use DirectML; CPU fallback is available. No Python or API key is needed. Legacy MobileSAM folders can still be imported.</value></data>
+  <data name="OS_Download" xml:space="preserve"><value>Download model</value></data>
+  <data name="OS_Import" xml:space="preserve"><value>Import model folder</value></data>
+  <data name="OS_DownloadProgress" xml:space="preserve"><value>Installing local model… {0}%</value></data>
+  <data name="OS_ModelReady" xml:space="preserve"><value>Local Object Selection model is ready.</value></data>
+  <data name="AI_AgentTitle" xml:space="preserve"><value>External agent image edit</value></data>
+  <data name="AI_AgentNote" xml:space="preserve"><value>The agent generates the image with its own tools. Compositor only prepares local input, previews the result and applies your selection. No editor API key is needed.</value></data>
+  <data name="AI_AgentPreparing" xml:space="preserve"><value>Preparing local input…</value></data>
+  <data name="AI_AgentWaiting" xml:space="preserve"><value>Waiting for the agent's image…</value></data>
+  <data name="AI_AgentImporting" xml:space="preserve"><value>Preparing the agent's result…</value></data>
+  <data name="AI_AgentLayer" xml:space="preserve"><value>AI · Agent image</value></data>
 </root>

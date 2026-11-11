@@ -95,6 +95,8 @@ public sealed partial class MainWindow
     private void RefreshQuickToolControls()
     {
         if (!quickToolsReady) return;
+        quickFeatherAmount.Visibility = quickFeatherApply.Visibility = quickInvertSelection.Visibility = quickDeselect.Visibility
+            = tool == CanvasTool.ObjectSelect ? Visibility.Collapsed : Visibility.Visible;
         bool selected = document?.ActiveSelection is { IsEmpty: false };
         quickFeatherAmount.IsEnabled = quickFeatherApply.IsEnabled = quickDeselect.IsEnabled = selected && CanEditSelectionState;
         quickInvertSelection.IsEnabled = document is not null && CanEditSelectionState;
